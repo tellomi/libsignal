@@ -180,6 +180,39 @@ fn TESTING_ConnectionManager_newLocalOverride(
     )
 }
 
+/// Tellomi: connect to a self-hosted Signal-Server at `hostname` (see `net_env::custom_server_env`).
+/// An empty `rootCertificateDer` means "use the platform trust store".
+#[bridge_fn(jni = false, ffi = false)]
+fn TESTING_ConnectionManager_newCustomServer(
+    userAgent: String,
+    hostname: String,
+    chatPort: AsType<NonZeroU16, u16>,
+    cdsiPort: AsType<NonZeroU16, u16>,
+    svr2Port: AsType<NonZeroU16, u16>,
+    svrBPort: AsType<NonZeroU16, u16>,
+    rootCertificateDer: &[u8],
+    http_version: u8,
+) -> ConnectionManager {
+    let ports = net_env::LocalhostEnvPortConfig {
+        chat_port: chatPort.into_inner(),
+        cdsi_port: cdsiPort.into_inner(),
+        svr2_port: svr2Port.into_inner(),
+        svrb_port: svrBPort.into_inner(),
+    };
+    let http_version = match http_version {
+        1 => HttpVersion::Http1_1,
+        2 => HttpVersion::Http2,
+        _ => panic!("invalid HTTP version {http_version}"),
+    };
+    let env = net_env::custom_server_env(&hostname, ports, rootCertificateDer, http_version);
+    ConnectionManager::new_from_static_environment(
+        env,
+        userAgent.as_str(),
+        Default::default(),
+        BuildVariant::Production,
+    )
+}
+
 #[bridge_fn]
 fn TESTING_ConnectionManager_isUsingProxy(manager: &ConnectionManager) -> i32 {
     match manager.is_using_proxy() {
