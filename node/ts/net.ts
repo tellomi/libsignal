@@ -187,15 +187,17 @@ export class Net {
       const c = options.customServer;
       const DISCARD_PORT = 9;
       this._connectionManager = newNativeHandle(
-        Native.TESTING_ConnectionManager_newCustomServer(
-          options.userAgent,
+        Native.ConnectionManager_newCustomServer(
           c.hostname,
           c.chatPort,
           c.cdsiPort ?? DISCARD_PORT,
           c.svr2Port ?? DISCARD_PORT,
           c.svrBPort ?? DISCARD_PORT,
           c.rootCertificateDer ?? new Uint8Array(0),
-          c.httpVersion ?? 2
+          c.httpVersion ?? 2,
+          options.userAgent,
+          new BridgedStringMap(new Map<string, string>()),
+          BuildVariant.Production
         )
       );
     } else if (options.localTestServer) {

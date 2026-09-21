@@ -12,6 +12,7 @@ pub use libsignal_bridge_types::net::{
     BuildVariant, ConnectionManager, Environment, TokioAsyncContext,
 };
 use libsignal_core::LogSafeDisplay;
+use libsignal_net::infra::route::HttpVersion;
 use libsignal_net::connect_state::infer_proxy_mode_for_config;
 use libsignal_net::infra::route::ConnectionProxyConfig;
 
@@ -102,6 +103,41 @@ fn ConnectionManager_new(
 ) -> ConnectionManager {
     ConnectionManager::new(
         environment.into_inner(),
+        user_agent.as_str(),
+        remote_config.take(),
+        build_variant.into_inner(),
+    )
+}
+
+/// Tellomi: a ConnectionManager for a self-hosted Signal-Server (see `libsignal_net::env::custom_server_env`).
+/// `root_certificate_der` empty = platform trust store. `http_version` is 1 or 2.
+#[bridge_fn]
+fn ConnectionManager_newCustomServer(
+    hostname: String,
+    chat_port: AsType<NonZeroU16, u16>,
+    cdsi_port: AsType<NonZeroU16, u16>,
+    svr2_port: AsType<NonZeroU16, u16>,
+    svrb_port: AsType<NonZeroU16, u16>,
+    root_certificate_der: &[u8],
+    http_version: u8,
+    user_agent: String,
+    remote_config: &mut BridgedStringMap,
+    build_variant: AsType<BuildVariant, u8>,
+) -> ConnectionManager {
+    let ports = libsignal_net::env::CustomServerPorts {
+        chat: chat_port.into_inner(),
+        cdsi: cdsi_port.into_inner(),
+        svr2: svr2_port.into_inner(),
+        svrb: svrb_port.into_inner(),
+    };
+    let http_version = match http_version {
+        1 => HttpVersion::Http1_1,
+        _ => HttpVersion::Http2,
+    };
+    let root = (!root_certificate_der.is_empty()).then_some(root_certificate_der);
+    let env = libsignal_net::env::custom_server_env(&hostname, ports, root, http_version);
+    ConnectionManager::new_from_static_environment(
+        env,
         user_agent.as_str(),
         remote_config.take(),
         build_variant.into_inner(),
