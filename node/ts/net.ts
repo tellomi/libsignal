@@ -107,13 +107,30 @@ export class TokioAsyncContext {
 export type NetConstructorOptions = Readonly<
   | {
       localTestServer?: false;
+      customServer?: undefined;
       env: Environment;
       userAgent: string;
       remoteConfig?: Map<string, string>;
       buildVariant?: BuildVariant;
     }
   | {
+      /** Tellomi: a self-hosted Signal-Server at an arbitrary hostname. */
+      customServer: {
+        hostname: string;
+        chatPort: number;
+        cdsiPort?: number;
+        svr2Port?: number;
+        svrBPort?: number;
+        /** DER of the root to trust; omit to use the platform trust store (e.g. Let's Encrypt). */
+        rootCertificateDer?: Uint8Array<ArrayBuffer>;
+        httpVersion?: 1 | 2;
+      };
+      userAgent: string;
+      localTestServer?: false;
+    }
+  | {
       localTestServer: true;
+      customServer?: undefined;
       userAgent: string;
       TESTING_localServer_chatPort: number;
       TESTING_localServer_cdsiPort: number;
@@ -166,7 +183,22 @@ export class Net {
   constructor(private readonly options: NetConstructorOptions) {
     this.asyncContext = new TokioAsyncContext(Native.TokioAsyncContext_new());
 
-    if (options.localTestServer) {
+    if (options.customServer) {
+      const c = options.customServer;
+      const DISCARD_PORT = 9;
+      this._connectionManager = newNativeHandle(
+        Native.TESTING_ConnectionManager_newCustomServer(
+          options.userAgent,
+          c.hostname,
+          c.chatPort,
+          c.cdsiPort ?? DISCARD_PORT,
+          c.svr2Port ?? DISCARD_PORT,
+          c.svrBPort ?? DISCARD_PORT,
+          c.rootCertificateDer ?? new Uint8Array(0),
+          c.httpVersion ?? 2
+        )
+      );
+    } else if (options.localTestServer) {
       this._connectionManager = newNativeHandle(
         Native.TESTING_ConnectionManager_newLocalOverride(
           options.userAgent,
@@ -233,7 +265,10 @@ export class Net {
     listener: ConnectionEventsListener,
     options?: { languages?: string[]; abortSignal?: AbortSignal }
   ): Promise<UnauthenticatedChatConnection> {
-    const env = this.options.localTestServer ? undefined : this.options.env;
+    const env =
+      this.options.localTestServer || this.options.customServer
+        ? undefined
+        : this.options.env;
     return UnauthenticatedChatConnection.connect(
       this.asyncContext,
       this._connectionManager,
@@ -591,9 +626,10 @@ export class Net {
    * @see {@link SvrB}
    */
   svrB(auth: Readonly<ServiceAuth>): SvrB {
-    const env = this.options.localTestServer
-      ? Environment.Staging
-      : this.options.env;
+    const env =
+      this.options.localTestServer || this.options.customServer
+        ? Environment.Staging
+        : this.options.env;
     return new SvrB(this.asyncContext, this._connectionManager, auth, env);
   }
 
@@ -608,9 +644,10 @@ export class Net {
    * @see {@link Svr2}
    */
   svr2(auth: Readonly<ServiceAuth>): Svr2 {
-    const env = this.options.localTestServer
-      ? Environment.Staging
-      : this.options.env;
+    const env =
+      this.options.localTestServer || this.options.customServer
+        ? Environment.Staging
+        : this.options.env;
     return new Svr2(this.asyncContext, this._connectionManager, auth, env);
   }
 }

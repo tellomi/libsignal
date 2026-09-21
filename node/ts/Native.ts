@@ -2595,6 +2595,16 @@ type NativeFunctions = {
   TESTING_ConnectionManager_isUsingProxy: (
     manager: Wrapper<ConnectionManager>
   ) => number;
+  TESTING_ConnectionManager_newCustomServer: (
+    userAgent: string,
+    hostname: string,
+    chatPort: number,
+    cdsiPort: number,
+    svr2Port: number,
+    svrBPort: number,
+    rootCertificateDer: Uint8Array<ArrayBuffer>,
+    http_version: number
+  ) => ConnectionManager;
   TESTING_ConnectionManager_newLocalOverride: (
     userAgent: string,
     chatPort: number,
@@ -3879,6 +3889,7 @@ const {
   TESTING_ClearRegistrationLockTests,
   TESTING_ConfirmUsernameTests,
   TESTING_ConnectionManager_isUsingProxy,
+  TESTING_ConnectionManager_newCustomServer,
   TESTING_ConnectionManager_newLocalOverride,
   TESTING_ConvertOptionalUuid,
   TESTING_CopyBackupMediaTests,
@@ -4640,6 +4651,7 @@ export {
   TESTING_ClearRegistrationLockTests,
   TESTING_ConfirmUsernameTests,
   TESTING_ConnectionManager_isUsingProxy,
+  TESTING_ConnectionManager_newCustomServer,
   TESTING_ConnectionManager_newLocalOverride,
   TESTING_ConvertOptionalUuid,
   TESTING_CopyBackupMediaTests,
