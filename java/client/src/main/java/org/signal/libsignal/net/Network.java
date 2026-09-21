@@ -17,6 +17,7 @@ import org.signal.libsignal.internal.BridgedStringMap;
 import org.signal.libsignal.internal.CompletableFuture;
 import org.signal.libsignal.internal.Native;
 import org.signal.libsignal.internal.NativeHandleGuard;
+import org.signal.libsignal.internal.NativeTesting;
 import org.signal.libsignal.internal.TokioAsyncContext;
 import org.signal.libsignal.net.internal.ConnectChatBridge;
 
@@ -93,6 +94,39 @@ public class Network {
       BuildVariant buildVariant) {
     this.tokioAsyncContext = new TokioAsyncContext();
     this.connectionManager = new ConnectionManager(env, userAgent, remoteConfig, buildVariant);
+  }
+
+  private Network(ConnectionManager connectionManager) {
+    this.tokioAsyncContext = new TokioAsyncContext();
+    this.connectionManager = connectionManager;
+  }
+
+  /**
+   * Tellomi: connect to a self-hosted Signal-Server instead of Signal's own staging/production
+   * environments (whose hostnames and root certificates are compiled into libsignal-net).
+   *
+   * <p>CDSI, SVR2 and SVR-B are pointed at the discard port (RFC 863): a self-hosted deployment has
+   * no enclaves, so those services must fail fast rather than reach Signal's.
+   *
+   * @param hostname the chat server's hostname, e.g. {@code chat.tellomi.app}; resolved through DNS
+   *     and required to negotiate TLS 1.3
+   * @param rootCertificateDer a DER-encoded root certificate to trust, or an empty array to use the
+   *     platform trust store (which is what a publicly issued certificate needs)
+   */
+  public static Network forCustomServer(
+      String userAgent, String hostname, int chatPort, byte[] rootCertificateDer) {
+    final int DISCARD_PORT = 9;
+    final int HTTP_2 = 2;
+    return new Network(
+        new ConnectionManager(
+            userAgent,
+            hostname,
+            chatPort,
+            DISCARD_PORT,
+            DISCARD_PORT,
+            DISCARD_PORT,
+            rootCertificateDer,
+            HTTP_2));
   }
 
   /**
@@ -403,6 +437,30 @@ public class Network {
                   map ->
                       Native.ConnectionManager_new(env.value, userAgent, map, buildVariant.value)));
       this.environment = env;
+    }
+
+    /** Tellomi: see {@link Network#forCustomServer}. */
+    private ConnectionManager(
+        String userAgent,
+        String hostname,
+        int chatPort,
+        int cdsiPort,
+        int svr2Port,
+        int svrBPort,
+        byte[] rootCertificateDer,
+        int httpVersion) {
+      super(
+          NativeTesting.TESTING_ConnectionManager_newCustomServer(
+              userAgent,
+              hostname,
+              chatPort,
+              cdsiPort,
+              svr2Port,
+              svrBPort,
+              rootCertificateDer,
+              httpVersion));
+      // Only used to pick key-transparency parameters, which a self-hosted server doesn't serve.
+      this.environment = Environment.STAGING;
     }
 
     private void setProxy(

@@ -182,7 +182,8 @@ fn TESTING_ConnectionManager_newLocalOverride(
 
 /// Tellomi: connect to a self-hosted Signal-Server at `hostname` (see `net_env::custom_server_env`).
 /// An empty `rootCertificateDer` means "use the platform trust store".
-#[bridge_fn(jni = false, ffi = false)]
+/// Also exposed to JNI: Signal-Android has no other way to reach a non-Signal chat server.
+#[bridge_fn(ffi = false)]
 fn TESTING_ConnectionManager_newCustomServer(
     userAgent: String,
     hostname: String,
