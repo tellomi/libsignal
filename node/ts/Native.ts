@@ -1465,6 +1465,18 @@ type NativeFunctions = {
     remote_config: Wrapper<BridgedStringMap>,
     build_variant: number
   ) => ConnectionManager;
+  ConnectionManager_newCustomServer: (
+    hostname: string,
+    chat_port: number,
+    cdsi_port: number,
+    svr2_port: number,
+    svrb_port: number,
+    root_certificate_der: Uint8Array<ArrayBuffer>,
+    http_version: number,
+    user_agent: string,
+    remote_config: Wrapper<BridgedStringMap>,
+    build_variant: number
+  ) => ConnectionManager;
   ConnectionManager_on_network_change: (
     connection_manager: Wrapper<ConnectionManager>
   ) => void;
@@ -3928,6 +3940,7 @@ const {
   ComparableBackup_ReadUnencrypted,
   ConnectionManager_clear_proxy,
   ConnectionManager_new,
+  ConnectionManager_newCustomServer,
   ConnectionManager_on_network_change,
   ConnectionManager_set_censorship_circumvention_enabled,
   ConnectionManager_set_invalid_proxy,
@@ -4721,6 +4734,7 @@ export {
   ComparableBackup_ReadUnencrypted,
   ConnectionManager_clear_proxy,
   ConnectionManager_new,
+  ConnectionManager_newCustomServer,
   ConnectionManager_on_network_change,
   ConnectionManager_set_censorship_circumvention_enabled,
   ConnectionManager_set_invalid_proxy,

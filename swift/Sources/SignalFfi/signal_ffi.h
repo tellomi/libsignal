@@ -4266,6 +4266,19 @@ SignalFfiError* signal_connection_manager_new(
   SignalMutPointerBridgedStringMap remote_config,
   uint8_t build_variant
 );
+SignalFfiError* signal_connection_manager_new_custom_server(
+  SignalMutPointerConnectionManager* out,
+  const int8_t* hostname,
+  uint16_t chat_port,
+  uint16_t cdsi_port,
+  uint16_t svr2_port,
+  uint16_t svrb_port,
+  SignalBorrowedBuffer root_certificate_der,
+  uint8_t http_version,
+  const int8_t* user_agent,
+  SignalMutPointerBridgedStringMap remote_config,
+  uint8_t build_variant
+);
 SignalFfiError* signal_connection_manager_on_network_change(
   SignalConstPointerConnectionManager connection_manager
 );
