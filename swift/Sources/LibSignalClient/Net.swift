@@ -74,6 +74,38 @@ public class Net {
         )
     }
 
+    /// Tellomi: a self-hosted Signal-Server reachable at `hostname` (the Omnibus host, e.g. `grpc.chat.tellomi.app`).
+    ///
+    /// `rootCertificateDer` = the DER of the root to trust; `nil` uses the platform trust store (Let's Encrypt works).
+    /// CDSI / SVR2 / SVRB ports may point at nothing yet; the corresponding features are simply unavailable.
+    public init(
+        customServerHostname hostname: String,
+        chatPort: UInt16 = 443,
+        cdsiPort: UInt16 = 9,
+        svr2Port: UInt16 = 9,
+        svrbPort: UInt16 = 9,
+        rootCertificateDer: [UInt8]? = nil,
+        httpVersion: UInt8 = 2,
+        userAgent: String,
+        buildVariant: BuildVariant = .production,
+        remoteConfig: [String: String] = [:]
+    ) {
+        self.environment = .staging
+        self.asyncContext = TokioAsyncContext()
+        self.connectionManager = ConnectionManager(
+            customServerHostname: hostname,
+            chatPort: chatPort,
+            cdsiPort: cdsiPort,
+            svr2Port: svr2Port,
+            svrbPort: svrbPort,
+            rootCertificateDer: rootCertificateDer ?? [],
+            httpVersion: httpVersion,
+            userAgent: userAgent,
+            remoteConfig: remoteConfig,
+            buildVariant: buildVariant
+        )
+    }
+
     /// Sets the proxy host to be used for all new connections (until overridden).
     ///
     /// Sets a server to be used to proxy all new outgoing connections. The proxy can be
@@ -472,6 +504,34 @@ internal class ConnectionManager: NativeHandleOwner<SignalMutPointerConnectionMa
             failOnError {
                 try invokeFnReturningValueByPointer(.init()) {
                     signal_connection_manager_new($0, env.rawValue, userAgent, remoteConfig, buildVariant.rawValue)
+                }
+            }
+        }
+        self.init(owned: NonNull(handle)!)
+    }
+
+    /// Tellomi: see ``Net/init(customServerHostname:chatPort:cdsiPort:svr2Port:svrbPort:rootCertificateDer:httpVersion:userAgent:buildVariant:remoteConfig:)``.
+    convenience init(
+        customServerHostname hostname: String,
+        chatPort: UInt16,
+        cdsiPort: UInt16,
+        svr2Port: UInt16,
+        svrbPort: UInt16,
+        rootCertificateDer: [UInt8],
+        httpVersion: UInt8,
+        userAgent: String,
+        remoteConfig: [String: String],
+        buildVariant: Net.BuildVariant
+    ) {
+        let handle = remoteConfig.withBridgedStringMap { remoteConfig in
+            rootCertificateDer.withUnsafeBorrowedBuffer { rootDer in
+                failOnError {
+                    try invokeFnReturningValueByPointer(.init()) {
+                        signal_connection_manager_new_custom_server(
+                            $0, hostname, chatPort, cdsiPort, svr2Port, svrbPort, rootDer, httpVersion,
+                            userAgent, remoteConfig, buildVariant.rawValue
+                        )
+                    }
                 }
             }
         }

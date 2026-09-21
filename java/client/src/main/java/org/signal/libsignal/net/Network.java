@@ -96,6 +96,38 @@ public class Network {
   }
 
   /**
+   * Tellomi: a self-hosted Signal-Server reachable at {@code hostname} (the Omnibus host, e.g.
+   * {@code grpc.chat.tellomi.app}).
+   *
+   * @param rootCertificateDer the DER of the root to trust, or {@code null} for the platform trust
+   *     store (a Let's Encrypt certificate works out of the box)
+   * @param httpVersion 1 or 2 (the Omnibus speaks HTTP/2)
+   */
+  public static Network customServer(
+      String hostname,
+      int chatPort,
+      byte[] rootCertificateDer,
+      int httpVersion,
+      String userAgent,
+      Map<String, String> remoteConfig,
+      BuildVariant buildVariant) {
+    return new Network(
+        new ConnectionManager(
+            hostname,
+            chatPort,
+            rootCertificateDer == null ? new byte[0] : rootCertificateDer,
+            httpVersion,
+            userAgent,
+            remoteConfig,
+            buildVariant));
+  }
+
+  private Network(ConnectionManager connectionManager) {
+    this.tokioAsyncContext = new TokioAsyncContext();
+    this.connectionManager = connectionManager;
+  }
+
+  /**
    * Get the SVR-B (Secure Value Recovery for Backups) service for this network instance.
    *
    * @param username The username for authenticating with the SVR-B service.
@@ -403,6 +435,33 @@ public class Network {
                   map ->
                       Native.ConnectionManager_new(env.value, userAgent, map, buildVariant.value)));
       this.environment = env;
+    }
+
+    /** Tellomi: see {@link Network#customServer}. CDSI / SVR2 / SVRB point at the discard port. */
+    private ConnectionManager(
+        String hostname,
+        int chatPort,
+        byte[] rootCertificateDer,
+        int httpVersion,
+        String userAgent,
+        Map<String, String> remoteConfig,
+        BuildVariant buildVariant) {
+      super(
+          new BridgedStringMap(remoteConfig)
+              .guardedMap(
+                  map ->
+                      Native.ConnectionManager_newCustomServer(
+                          hostname,
+                          chatPort,
+                          9,
+                          9,
+                          9,
+                          rootCertificateDer,
+                          httpVersion,
+                          userAgent,
+                          map,
+                          buildVariant.value)));
+      this.environment = Environment.STAGING;
     }
 
     private void setProxy(

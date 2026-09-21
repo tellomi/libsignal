@@ -1114,3 +1114,115 @@ mod test {
         );
     }
 }
+
+// ---- Tellomi: self-hosted Signal-Server at an arbitrary hostname -------------------------------
+
+/// Ports of the self-hosted services (the CDSI / SVR2 / SVRB ones may point at nothing yet).
+#[derive(Clone, Copy, Debug)]
+pub struct CustomServerPorts {
+    pub chat: NonZeroU16,
+    pub cdsi: NonZeroU16,
+    pub svr2: NonZeroU16,
+    pub svrb: NonZeroU16,
+}
+
+const CUSTOM_SERVER_RAFT_CONFIG: &attest::svr2::RaftConfig = &attest::svr2::RaftConfig {
+    min_voting_replicas: 3,
+    max_voting_replicas: 9,
+    super_majority: 0,
+    group_id: 0,
+    attestation_timeout: 604800,
+    db_version: 2,
+    simulated: false,
+};
+const CUSTOM_SERVER_ENCLAVE_ID: &[u8] = b"tellomi-no-enclave";
+const CUSTOM_SERVER_KEYTRANS_CONFIG: KeyTransConfig = KeyTransConfig {
+    signing_key_material: &[0; 32],
+    vrf_key_material: &[0; 32],
+    auditor_key_material: &[&[0; 32]],
+};
+
+fn custom_server_domain_config(
+    service: ServiceName,
+    hostname: &'static str,
+    port: NonZeroU16,
+    root_certificate_der: Option<&[u8]>,
+    http_version: HttpVersion,
+) -> DomainConfig {
+    DomainConfig {
+        ip_v4: &[],
+        ip_v6: &[],
+        connect: ConnectionConfig {
+            service,
+            hostname,
+            port,
+            cert: match root_certificate_der {
+                Some(der) => RootCertificates::FromDer(std::borrow::Cow::Owned(der.to_vec())),
+                None => RootCertificates::Native,
+            },
+            min_tls_version: Some(SslVersion::TLS1_3),
+            http_version: Some(http_version),
+            confirmation_header_name: None,
+            proxy: None,
+        },
+    }
+}
+
+/// An [`Env`] for a self-hosted Signal-Server reachable at `hostname` (e.g. `grpc.chat.tellomi.app`).
+///
+/// Unlike the built-in Signal environments there are no static fallback IPs (plain DNS), TLS 1.3
+/// is required, and when `root_certificate_der` is `None` the platform trust store is used, so a
+/// publicly-trusted certificate (e.g. Let's Encrypt) works out of the box. CDSI / SVR2 / SVRB get
+/// placeholder enclave parameters: those services are not part of a Tellomi deployment yet.
+pub fn custom_server_env(
+    hostname: &str,
+    ports: CustomServerPorts,
+    root_certificate_der: Option<&[u8]>,
+    http_version: HttpVersion,
+) -> Env<'static> {
+    // `Env<'static>` needs a `&'static str`; one small leak per ConnectionManager is acceptable.
+    let hostname: &'static str = Box::leak(hostname.to_owned().into_boxed_str());
+    let dc = |service, port| {
+        custom_server_domain_config(service, hostname, port, root_certificate_der, http_version)
+    };
+    Env {
+        chat_domain_config: dc(ServiceName("chat"), ports.chat),
+        chat_ws_config: RECOMMENDED_CHAT_WS_CONFIG,
+        cdsi: EnclaveEndpoint {
+            domain_config: dc(ServiceName("cdsi"), ports.cdsi),
+            ws_config: RECOMMENDED_WS_CONFIG,
+            params: EndpointParams {
+                mr_enclave: MrEnclave::new(CUSTOM_SERVER_ENCLAVE_ID),
+                raft_config: (),
+            },
+        },
+        svr2: Svr2Env {
+            current: EnclaveEndpoint {
+                domain_config: dc(ServiceName("svr2"), ports.svr2),
+                ws_config: RECOMMENDED_WS_CONFIG,
+                params: EndpointParams {
+                    mr_enclave: MrEnclave::new(CUSTOM_SERVER_ENCLAVE_ID),
+                    raft_config: CUSTOM_SERVER_RAFT_CONFIG,
+                },
+            },
+            previous: None,
+        },
+        svr_b: SvrBEnv::new(
+            [
+                Some(EnclaveEndpoint {
+                    domain_config: dc(ServiceName("svrb"), ports.svrb),
+                    ws_config: RECOMMENDED_WS_CONFIG,
+                    params: EndpointParams {
+                        mr_enclave: MrEnclave::new(CUSTOM_SERVER_ENCLAVE_ID),
+                        raft_config: CUSTOM_SERVER_RAFT_CONFIG,
+                    },
+                }),
+                None,
+                None,
+            ],
+            [None, None, None],
+        ),
+        keytrans_config: CUSTOM_SERVER_KEYTRANS_CONFIG,
+        reflector_providers: || &[],
+    }
+}

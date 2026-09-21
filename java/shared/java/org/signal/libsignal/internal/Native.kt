@@ -815,6 +815,20 @@ internal object Native {
   ): ObjectHandle
 
   @JvmStatic
+  public external fun ConnectionManager_newCustomServer(
+    hostname: String,
+    chatPort: Int,
+    cdsiPort: Int,
+    svr2Port: Int,
+    svrbPort: Int,
+    rootCertificateDer: ByteArray,
+    httpVersion: Int,
+    userAgent: String,
+    remoteConfig: ObjectHandle,
+    buildVariant: Int,
+  ): ObjectHandle
+
+  @JvmStatic
   public external fun ConnectionManager_on_network_change(connectionManager: ObjectHandle): Unit
 
   @JvmStatic
