@@ -158,18 +158,6 @@ public object NativeTesting {
   public external fun TESTING_ConnectionManager_isUsingProxy(manager: ObjectHandle): Int
 
   @JvmStatic
-  public external fun TESTING_ConnectionManager_newCustomServer(
-    userAgent: String,
-    hostname: String,
-    chatPort: Int,
-    cdsiPort: Int,
-    svr2Port: Int,
-    svrBPort: Int,
-    rootCertificateDer: ByteArray,
-    httpVersion: Int,
-  ): ObjectHandle
-
-  @JvmStatic
   public external fun TESTING_ConvertOptionalUuid(present: Boolean): UUID?
 
   @JvmStatic

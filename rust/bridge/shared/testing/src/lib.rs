@@ -25,8 +25,7 @@ pub mod convert;
 pub mod crypto;
 pub mod message_backup;
 pub mod net;
-// Tellomi: also needed for jni — `TESTING_ConnectionManager_newCustomServer` is exposed to Android.
-#[cfg(any(feature = "node", feature = "jni"))]
+#[cfg(feature = "node")]
 pub mod net_env;
 pub mod protocol;
 pub mod types;
