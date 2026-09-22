@@ -52,7 +52,7 @@ jobs:
           TARGET='${{ inputs.tag }}'
           if [ -z "$TARGET" ]; then
             # 只在「上游有的 tag」里挑（fork 自己打的 v0.100.0-tellomi.2 之类不算）；按版本号排序（去掉可有可无的 v 前缀，storage-service 2026-08 起 tag 不带 v）
-            git ls-remote --tags --refs upstream | sed 's|.*refs/tags/||' | grep -viE 'beta|rc|hotfix|alpha|nightly' > /tmp/upstream-tags.txt
+            git ls-remote --tags --refs upstream | sed 's|.*refs/tags/||' | grep -viE 'beta|rc|hotfix|alpha|nightly' | grep -E '^v?[0-9]+(\.[0-9]+)*$' > /tmp/upstream-tags.txt  # 只认纯版本号 tag（libsignal 的 ts-0.3.3、Desktop 的 @signalapp/types@… 不算）
             BEST=$(sed 's/^v//' /tmp/upstream-tags.txt | sort -V | tail -1)
             TARGET=$(grep -xE "v?$(printf '%s' "$BEST" | sed 's/[.]/\\./g')" /tmp/upstream-tags.txt | head -1)
           fi
