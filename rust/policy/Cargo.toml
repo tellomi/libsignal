@@ -1,0 +1,28 @@
+#
+# Copyright (C) 2026 Tellomi.
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+
+[package]
+name = "tellomi-policy"
+authors.workspace = true
+license.workspace = true
+rust-version = "1.85"
+version = "0.1.0"
+edition = "2024"
+description = "Tellomi Policy Engine: reserved / brand / impersonation / regional lexicon matching for public identity fields (ADR-0062)"
+
+[lints]
+workspace = true
+
+[dependencies]
+aho-corasick = { workspace = true }
+displaydoc = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+unicode-normalization = { workspace = true }
+unicode-security = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
