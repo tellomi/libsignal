@@ -1,0 +1,148 @@
+# Tellomi: 上游出新 release tag 后自动开「候选 rebase PR」（tellomi/tellomi#995）。
+# 只做机械部分：找最新非 beta/rc/hotfix tag → 把我们在 `tellomi` 分支上的补丁 rebase 到它 → 零冲突就推 `sync/<tag>` 并开 PR，
+# 有冲突就开 Issue 列出冲突文件。永远不自动合并；「合不合理」由人审 PR（审核清单见 PR 正文）。
+# 同一份文件放在每个 tellomi/* fork 的 `tellomi` 分支；上游仓库从 fork 的 parent 自动取，不用改。
+name: tellomi-upstream-rebase
+on:
+  schedule:
+    - cron: '0 2 * * 1' # 每周一 10:00（北京）
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '指定上游 tag（留空 = 最新非 beta/rc/hotfix）'
+        required: false
+        default: ''
+      dry_run:
+        description: '只演练：不推分支、不开 PR/Issue，只在日志里给结果'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+concurrency: tellomi-upstream-rebase
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OURS: tellomi
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tellomi
+          fetch-depth: 0
+      - name: 取上游 tags
+        run: |
+          set -euo pipefail
+          PARENT=$(gh api "repos/$GITHUB_REPOSITORY" --jq .parent.full_name)
+          [ -n "$PARENT" ] || { echo "::error::$GITHUB_REPOSITORY 不是 fork，没有 parent"; exit 1; }
+          git remote add upstream "https://github.com/$PARENT.git"
+          git fetch -q upstream --tags
+          git fetch -q upstream main 2>/dev/null || git fetch -q upstream master
+          echo "PARENT=$PARENT" >> "$GITHUB_ENV"
+      - name: 定基线与目标
+        id: pick
+        run: |
+          set -euo pipefail
+          UPSTREAM_HEAD=$(git rev-parse upstream/main 2>/dev/null || git rev-parse upstream/master)
+          BASE_COMMIT=$(git merge-base "$OURS" "$UPSTREAM_HEAD")
+          BASE=$(git describe --tags --abbrev=0 "$BASE_COMMIT")
+          TARGET='${{ inputs.tag }}'
+          if [ -z "$TARGET" ]; then
+            # head 提前关管道会让 grep 收 SIGPIPE，pipefail 下整条假红：这一行关掉 pipefail
+            set +o pipefail; TARGET=$(git tag --sort=-creatordate | grep -viE 'beta|rc|hotfix|alpha|nightly' | head -1); set -o pipefail
+          fi
+          git rev-parse -q --verify "refs/tags/$TARGET" >/dev/null || { echo "::error::tag 不存在：$TARGET"; exit 1; }
+          OURS_N=$(git rev-list --count "$BASE_COMMIT..$OURS" --no-merges)
+          UP_N=$(git rev-list --count "$BASE..$TARGET")
+          echo "基线 $BASE（$BASE_COMMIT）· 目标 $TARGET · 我们的补丁 $OURS_N 个 · 上游新增 $UP_N 个提交"
+          {
+            echo "base=$BASE"; echo "base_commit=$BASE_COMMIT"; echo "target=$TARGET"
+            echo "ours_n=$OURS_N"; echo "up_n=$UP_N"
+            if [ "$BASE" = "$TARGET" ]; then echo "skip=true"; else echo "skip=false"; fi
+          } >> "$GITHUB_OUTPUT"
+          [ "$BASE" != "$TARGET" ] || echo "::notice::已对齐上游最新 tag $TARGET，无事可做"
+      - name: 试 rebase
+        id: rebase
+        if: steps.pick.outputs.skip == 'false'
+        run: |
+          set -uo pipefail
+          git config user.name  'tellomi-upstream-rebase'
+          git config user.email 'bot@tellomi.app'
+          T='${{ steps.pick.outputs.target }}'; B='${{ steps.pick.outputs.base }}'
+          git checkout -q -b "sync/$T" "$OURS"
+          if git rebase --onto "$T" "$B" 2>&1 | tail -20; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+            git diff --stat "$T..HEAD" > /tmp/diffstat.txt
+            git log --oneline "$T..HEAD" > /tmp/ours.txt
+            echo "零冲突：$(wc -l < /tmp/ours.txt) 个补丁落在 $T 上"; cat /tmp/diffstat.txt
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            git diff --name-only --diff-filter=U > /tmp/conflicts.txt || true
+            STOPPED=$(git log -1 --format='%h %s' REBASE_HEAD 2>/dev/null || echo '?')
+            echo "stopped=$STOPPED" >> "$GITHUB_OUTPUT"
+            echo "::warning::rebase 在补丁「$STOPPED」处冲突："; cat /tmp/conflicts.txt
+            git rebase --abort || true
+          fi
+      - name: 推分支 + 开 / 更新 PR
+        if: steps.pick.outputs.skip == 'false' && steps.rebase.outputs.ok == 'true' && inputs.dry_run != true
+        run: |
+          set -euo pipefail
+          T='${{ steps.pick.outputs.target }}'; B='${{ steps.pick.outputs.base }}'
+          git push -q --force-with-lease origin "sync/$T"
+          BODY=$(cat <<EOF
+          自动生成（\`tellomi-upstream-rebase\`）：把 \`$OURS\` 上的 **${{ steps.pick.outputs.ours_n }} 个补丁** 从 \`$B\` rebase 到上游 **\`$T\`**（上游新增 ${{ steps.pick.outputs.up_n }} 个提交，零冲突）。
+          上游 release：https://github.com/$PARENT/releases/tag/$T · 对比：https://github.com/$PARENT/compare/$B...$T
+
+          ## 我们的全部改动（= 审查面，\`git diff $T..sync/$T --stat\`）
+          \`\`\`
+          $(cat /tmp/diffstat.txt)
+          \`\`\`
+          <details><summary>补丁列表</summary>
+
+          \`\`\`
+          $(cat /tmp/ours.txt)
+          \`\`\`
+          </details>
+
+          ## 合并前清单（tellomi/tellomi#995；docs/signal/VERSIONS.md「升级」）
+          - [ ] 上游 release notes：安全修复 / 协议变更 / 最低客户端版本 三类看过
+          - [ ] 上面 diff 逐文件过一遍；上游改到了我们改过的文件 → 逐文件看
+          - [ ] 本机真跑：构建 + 本地栈 / 模拟器注册闭环 + 残留审计 + 常量漂移 全绿
+          - [ ] 合并方式：\`$OURS\` 分支 fast-forward 到本分支（不 force）；超级仓库改 submodule 指针 + VERSIONS.md + upstream-check.sh 钉住值，走 PR + 对方 review
+          EOF
+          )
+          N=$(gh pr list --head "sync/$T" --base "$OURS" --state open --json number --jq '.[0].number')
+          if [ -n "$N" ]; then
+            gh pr edit "$N" --body "$BODY"; echo "已更新 PR #$N"
+          else
+            TITLE="上游同步候选：$B → $T（${{ steps.pick.outputs.ours_n }} 个补丁零冲突）"
+            if ! gh pr create --head "sync/$T" --base "$OURS" --title "$TITLE" --body "$BODY"; then
+              # 组织未开「Allow GitHub Actions to create and approve pull requests」时 GITHUB_TOKEN 开不了 PR：退回开 Issue，分支已推好，人点一下开 PR。
+              echo "::warning::GITHUB_TOKEN 不能开 PR（组织设置），改开 Issue"
+              LINK="https://github.com/$GITHUB_REPOSITORY/compare/$OURS...sync/$T?expand=1"
+              N=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number --jq '.[0].number')
+              if [ -n "$N" ]; then gh issue comment "$N" --body "分支已更新：$LINK"; else gh issue create --title "$TITLE" --body "分支 \`sync/$T\` 已推好，开 PR：$LINK"$'\n\n'"$BODY"; fi
+            fi
+          fi
+      - name: 冲突 → 开 / 更新 Issue
+        if: steps.pick.outputs.skip == 'false' && steps.rebase.outputs.ok == 'false' && inputs.dry_run != true
+        run: |
+          set -euo pipefail
+          T='${{ steps.pick.outputs.target }}'; B='${{ steps.pick.outputs.base }}'
+          TITLE="上游同步冲突：$B → $T"
+          BODY=$(cat <<EOF
+          自动生成（\`tellomi-upstream-rebase\`）：把 \`$OURS\` 的补丁 rebase 到 \`$T\` 时在补丁「${{ steps.rebase.outputs.stopped }}」处冲突。需要人工在本机解：
+          \`\`\`
+          git fetch upstream --tags && git checkout -b sync/$T $OURS && git rebase --onto $T $B
+          \`\`\`
+          ## 冲突文件
+          \`\`\`
+          $(cat /tmp/conflicts.txt)
+          \`\`\`
+          上游对比：https://github.com/$PARENT/compare/$B...$T
+          EOF
+          )
+          N=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number --jq '.[0].number')
+          if [ -n "$N" ]; then gh issue comment "$N" --body "$BODY"; else gh issue create --title "$TITLE" --body "$BODY"; fi
