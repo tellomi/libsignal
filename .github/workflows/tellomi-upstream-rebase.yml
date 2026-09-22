@@ -40,23 +40,22 @@ jobs:
           [ -n "$PARENT" ] || { echo "::error::$GITHUB_REPOSITORY 不是 fork，没有 parent"; exit 1; }
           git remote add upstream "https://github.com/$PARENT.git"
           git fetch -q upstream --tags
-          git fetch -q upstream main 2>/dev/null || git fetch -q upstream master
           echo "PARENT=$PARENT" >> "$GITHUB_ENV"
       - name: 定基线与目标
         id: pick
         run: |
           set -euo pipefail
-          UPSTREAM_HEAD=$(git rev-parse upstream/main 2>/dev/null || git rev-parse upstream/master)
-          BASE_COMMIT=$(git merge-base "$OURS" "$UPSTREAM_HEAD")
-          # 基线 = merge-base 上最近的「纯版本号 release tag」：Desktop 在同一条历史上还打 @signalapp/mock-server@26.0.0 这类包 tag，libsignal 有 ts-0.3.3，都要排掉；带 - 的（beta / rc / 我们自己的 v0.100.0-tellomi.2）也排掉
-          BASE=$(git describe --tags --abbrev=0 --match 'v[0-9]*' --match '[0-9]*' --exclude '*-*' "$BASE_COMMIT")
+          # 上游「纯版本号 release tag」按版本降序（去掉可有可无的 v 前缀比较；storage-service 2026-08 起 tag 不带 v；libsignal 的 ts-0.3.3、Desktop 的 @signalapp/types@… 不算；带 - 的 beta/rc/自打 tag 不算）
+          git ls-remote --tags --refs upstream | sed 's|.*refs/tags/||' | grep -E '^v?[0-9]+(\.[0-9]+)*$' > /tmp/upstream-tags.txt
+          sed 's/^v//' /tmp/upstream-tags.txt | sort -rV | while read -r v; do grep -xE "v?$(printf '%s' "$v" | sed 's/[.]/\\./g')" /tmp/upstream-tags.txt | head -1 || true; done > /tmp/upstream-tags-sorted.txt
+          # 基线 = 上游 tag 里「是 tellomi 分支祖先」的最新一个。不用 merge-base upstream/main：Signal-Desktop 的 main 早就不是主干（release 在 8.27.x 这类分支上），merge-base 会退到 2021 的 v5.12.2
+          BASE=""; BASE_COMMIT=""
+          while read -r t; do
+            if git merge-base --is-ancestor "$t" "$OURS"; then BASE="$t"; BASE_COMMIT=$(git rev-parse "$t^{commit}"); break; fi
+          done < /tmp/upstream-tags-sorted.txt
+          [ -n "$BASE" ] || { echo "::error::找不到是 $OURS 祖先的上游 release tag"; exit 1; }
           TARGET='${{ inputs.tag }}'
-          if [ -z "$TARGET" ]; then
-            # 只在「上游有的 tag」里挑（fork 自己打的 v0.100.0-tellomi.2 之类不算）；按版本号排序（去掉可有可无的 v 前缀，storage-service 2026-08 起 tag 不带 v）
-            git ls-remote --tags --refs upstream | sed 's|.*refs/tags/||' | grep -viE 'beta|rc|hotfix|alpha|nightly' | grep -E '^v?[0-9]+(\.[0-9]+)*$' > /tmp/upstream-tags.txt  # 只认纯版本号 tag（libsignal 的 ts-0.3.3、Desktop 的 @signalapp/types@… 不算）
-            BEST=$(sed 's/^v//' /tmp/upstream-tags.txt | sort -V | tail -1)
-            TARGET=$(grep -xE "v?$(printf '%s' "$BEST" | sed 's/[.]/\\./g')" /tmp/upstream-tags.txt | head -1)
-          fi
+          [ -n "$TARGET" ] || TARGET=$(head -1 /tmp/upstream-tags-sorted.txt)
           git rev-parse -q --verify "refs/tags/$TARGET" >/dev/null || { echo "::error::tag 不存在：$TARGET"; exit 1; }
           OURS_N=$(git rev-list --count "$BASE_COMMIT..$OURS" --no-merges)
           UP_N=$(git rev-list --count "$BASE..$TARGET")
@@ -117,18 +116,20 @@ jobs:
           - [ ] 合并方式：\`$OURS\` 分支 fast-forward 到本分支（不 force）；超级仓库改 submodule 指针 + VERSIONS.md + upstream-check.sh 钉住值，走 PR + 对方 review
           EOF
           )
-          N=$(gh pr list --head "sync/$T" --base "$OURS" --state open --json number --jq '.[0].number')
-          if [ -n "$N" ]; then
-            gh pr edit "$N" --body "$BODY"; echo "已更新 PR #$N"
+          LINK="https://github.com/$GITHUB_REPOSITORY/compare/$OURS...sync/$T?expand=1"
+          TITLE="上游同步候选：$B → $T（${{ steps.pick.outputs.ours_n }} 个补丁零冲突）"
+          { echo "## $TITLE"; echo; echo "分支 \`sync/$T\` 已推好 → 开 PR：$LINK"; echo; echo "$BODY"; } >> "$GITHUB_STEP_SUMMARY"
+          # 开 PR / Issue 都是尽力而为：组织没开「Allow GitHub Actions to create and approve pull requests」且 GITHUB_TOKEN 被限成只读时，
+          # 两个都会 "Resource not accessible by integration"。分支与 summary 已经是完整交付；Mac 上的 upstream-watch.sh 每月会把各 fork 的 sync/* 分支列进超级仓库 Issue。
+          N=$(gh pr list --head "sync/$T" --base "$OURS" --state open --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -n "$N" ]; then gh pr edit "$N" --body "$BODY" >/dev/null && echo "已更新 PR #$N"
+          elif gh pr create --head "sync/$T" --base "$OURS" --title "$TITLE" --body "$BODY" 2>/tmp/pr.err; then echo "已开 PR"
           else
-            TITLE="上游同步候选：$B → $T（${{ steps.pick.outputs.ours_n }} 个补丁零冲突）"
-            if ! gh pr create --head "sync/$T" --base "$OURS" --title "$TITLE" --body "$BODY"; then
-              # 组织未开「Allow GitHub Actions to create and approve pull requests」时 GITHUB_TOKEN 开不了 PR：退回开 Issue，分支已推好，人点一下开 PR。
-              echo "::warning::GITHUB_TOKEN 不能开 PR（组织设置），改开 Issue"
-              LINK="https://github.com/$GITHUB_REPOSITORY/compare/$OURS...sync/$T?expand=1"
-              N=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number --jq '.[0].number')
-              if [ -n "$N" ]; then gh issue comment "$N" --body "分支已更新：$LINK"; else gh issue create --title "$TITLE" --body "分支 \`sync/$T\` 已推好，开 PR：$LINK"$'\n\n'"$BODY"; fi
-            fi
+            echo "::warning::GITHUB_TOKEN 开不了 PR（$(cat /tmp/pr.err | head -1)）；试开 Issue"
+            N=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number --jq '.[0].number' 2>/dev/null || true)
+            if [ -n "$N" ]; then gh issue comment "$N" --body "分支已更新：$LINK" >/dev/null && echo "已评论 Issue #$N"
+            elif gh issue create --title "$TITLE" --body "分支 \`sync/$T\` 已推好，开 PR：$LINK"$'\n\n'"$BODY" 2>/tmp/issue.err; then echo "已开 Issue"
+            else echo "::warning::Issue 也开不了（$(head -1 /tmp/issue.err)）。分支已推：$LINK（配 secrets.TELLOMI_BOT_TOKEN 可解）"; fi
           fi
       - name: 冲突 → 开 / 更新 Issue
         if: steps.pick.outputs.skip == 'false' && steps.rebase.outputs.ok == 'false' && inputs.dry_run != true
@@ -148,5 +149,8 @@ jobs:
           上游对比：https://github.com/$PARENT/compare/$B...$T
           EOF
           )
-          N=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number --jq '.[0].number')
-          if [ -n "$N" ]; then gh issue comment "$N" --body "$BODY"; else gh issue create --title "$TITLE" --body "$BODY"; fi
+          { echo "## $TITLE"; echo; echo "$BODY"; } >> "$GITHUB_STEP_SUMMARY"
+          N=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -n "$N" ]; then gh issue comment "$N" --body "$BODY" >/dev/null || echo "::warning::Issue 评论失败（GITHUB_TOKEN 权限），看本次 job summary"
+          else gh issue create --title "$TITLE" --body "$BODY" || echo "::warning::开不了 Issue（GITHUB_TOKEN 权限），冲突清单在本次 job summary"; fi
+          exit 1  # 冲突本身就是需要人处理的失败
