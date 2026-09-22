@@ -42,6 +42,16 @@ mod pin {
     bridge_as_handle!(PinHash);
 }
 
+/// Tellomi: the policy engine is held across the bridge as an opaque handle — clients load the
+/// lexicon once at startup and keep the engine for the life of the process (ADR-0062).
+mod policy {
+    use ::tellomi_policy::PolicyEngine;
+
+    use crate::*;
+
+    bridge_as_handle!(PolicyEngine);
+}
+
 pub mod incremental_mac;
 pub mod message_backup;
 

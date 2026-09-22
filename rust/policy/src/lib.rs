@@ -30,5 +30,5 @@ pub mod normalize;
 pub use engine::{Hit, LoadError, PolicyEngine, Verdict};
 pub use lexicon::{
     AllowEntry, Envelope, EnvelopeInput, Field, LexiconPayload, Match, Outcome, Region, Rule,
-    SCHEMA_MAX, SCHEMA_MIN, is_long_enough_for_contains,
+    SCHEMA_MAX, SCHEMA_MIN, UnknownName, is_long_enough_for_contains, parse_regions,
 };

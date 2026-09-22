@@ -183,6 +183,9 @@ fn run(input: &str, output: &str, fp_rate: f64, verify: &[String]) -> Result<(),
     Ok(())
 }
 
+/// 2 GiB of bits: far above anything this lexicon will need, and small enough to allocate.
+const MAX_FILTER_BITS: u64 = 8 * 2 * 1024 * 1024 * 1024;
+
 /// A plain Bloom filter with the classic double-hashing construction, so the server side can be a
 /// few dozen lines of Java rather than a dependency.
 ///
@@ -196,17 +199,28 @@ struct BloomFilter {
 
 impl BloomFilter {
     fn new(expected: u64, fp_rate: f64) -> Self {
-        let expected = expected.max(1) as f64;
-        let bits = (-expected * fp_rate.ln() / (std::f64::consts::LN_2 * std::f64::consts::LN_2))
+        // m = -n ln p / (ln 2)^2 and k = (m/n) ln 2, the standard sizing. Both results are clamped
+        // into ranges that fit their target type before being converted, so the conversions below
+        // cannot truncate; a nonsensical --fp-rate gives a small or large filter, never a panic.
+        let n = expected.max(1) as f64;
+        let bits_f = (-n * fp_rate.ln() / (std::f64::consts::LN_2 * std::f64::consts::LN_2))
             .ceil()
-            .max(8.0) as u64;
-        let hashes = ((bits as f64 / expected) * std::f64::consts::LN_2)
+            .clamp(8.0, MAX_FILTER_BITS as f64);
+        #[allow(
+            clippy::cast_possible_truncation,
+            reason = "clamped to 8..=MAX_FILTER_BITS above"
+        )]
+        let bits = bits_f as u64;
+        let hashes_f = ((bits_f / n) * std::f64::consts::LN_2)
             .round()
-            .max(1.0) as u32;
+            .clamp(1.0, 64.0);
+        #[allow(clippy::cast_possible_truncation, reason = "clamped to 1..=64 above")]
+        let hashes = hashes_f as u32;
+        let bytes = usize::try_from(bits.div_ceil(8)).expect("filter fits in memory");
         Self {
             bits,
             hashes,
-            data: vec![0u8; bits.div_ceil(8) as usize],
+            data: vec![0u8; bytes],
         }
     }
 
@@ -224,13 +238,21 @@ impl BloomFilter {
 
     fn insert(&mut self, key: &[u8; 32]) {
         for pos in self.positions(key).collect::<Vec<_>>() {
-            self.data[(pos / 8) as usize] |= 1 << (pos % 8);
+            let (byte, bit) = Self::locate(pos);
+            self.data[byte] |= bit;
         }
     }
 
     fn contains(&self, key: &[u8; 32]) -> bool {
-        self.positions(key)
-            .all(|pos| self.data[(pos / 8) as usize] & (1 << (pos % 8)) != 0)
+        self.positions(key).all(|pos| {
+            let (byte, bit) = Self::locate(pos);
+            self.data[byte] & bit != 0
+        })
+    }
+
+    fn locate(pos: u64) -> (usize, u8) {
+        let byte = usize::try_from(pos / 8).expect("position is inside the allocated filter");
+        (byte, 1u8 << (pos % 8))
     }
 
     fn encode(&self, lexicon_version: u64) -> Vec<u8> {

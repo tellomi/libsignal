@@ -34,6 +34,48 @@ pub enum Field {
     Search,
 }
 
+impl std::str::FromStr for Field {
+    type Err = UnknownName;
+
+    /// Field names are exactly the strings the lexicon files use, so a caller spells them the way
+    /// an author does: `username`, `display_name`, `group_name`, `slug`, …
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        serde_json::from_value(serde_json::Value::String(s.to_owned())).map_err(|_| UnknownName {
+            kind: "field",
+            name: s.to_owned(),
+        })
+    }
+}
+
+impl std::str::FromStr for Region {
+    type Err = UnknownName;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        serde_json::from_value(serde_json::Value::String(s.to_owned())).map_err(|_| UnknownName {
+            kind: "region",
+            name: s.to_owned(),
+        })
+    }
+}
+
+/// A field or region name that is not in the vocabulary. Callers hear about it rather than getting
+/// a silent `allowed`: a misspelled field would otherwise mean "no rules apply".
+#[derive(Debug, thiserror::Error, displaydoc::Display)]
+#[displaydoc("unknown policy {kind} {name:?}")]
+pub struct UnknownName {
+    pub kind: &'static str,
+    pub name: String,
+}
+
+/// Parse a comma-separated region list, e.g. `global` or `global,cn`. Empty means `global`.
+pub fn parse_regions(regions: &str) -> Result<Vec<Region>, UnknownName> {
+    let trimmed = regions.trim();
+    if trimmed.is_empty() {
+        return Ok(vec![Region::Global]);
+    }
+    trimmed.split(',').map(|code| code.trim().parse()).collect()
+}
+
 impl Field {
     /// Fields whose input is guaranteed ASCII by a layer above us (libsignal's `validate_nickname`
     /// for usernames, our own slug grammar for tell.cc). Unicode-only rules are pointless there —

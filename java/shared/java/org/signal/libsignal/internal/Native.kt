@@ -1999,6 +1999,28 @@ internal object Native {
   public external fun PlaintextContent_GetSerialized(obj: ObjectHandle): ByteArray
 
   @JvmStatic
+  @Throws(Exception::class)
+  public external fun PolicyEngine_Check(
+    engine: ObjectHandle,
+    input: String,
+    field: String,
+    regions: String,
+  ): Int
+
+  @JvmStatic
+  public external fun PolicyEngine_Destroy(handle: ObjectHandle): Unit
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun PolicyEngine_Load(lexicon: ByteArray): ObjectHandle
+
+  @JvmStatic
+  public external fun PolicyEngine_RuleCount(engine: ObjectHandle): Int
+
+  @JvmStatic
+  public external fun PolicyEngine_Version(engine: ObjectHandle): Long
+
+  @JvmStatic
   public external fun PreKeyBundle_Destroy(handle: ObjectHandle): Unit
 
   @JvmStatic

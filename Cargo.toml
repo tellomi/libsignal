@@ -80,6 +80,7 @@ libsignal-svrb = { path = "rust/svrb" }
 poksho = { path = "rust/poksho" }
 signal-crypto = { path = "rust/crypto" }
 signal-media = { path = "rust/media" }
+tellomi-policy = { path = "rust/policy" }
 usernames = { path = "rust/usernames" }
 zkcredential = { path = "rust/zkcredential" }
 zkgroup = { path = "rust/zkgroup" }
