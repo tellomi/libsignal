@@ -25,7 +25,8 @@ jobs:
   rebase:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ github.token }}
+      # 组织没开「Allow GitHub Actions to create and approve pull requests」→ GITHUB_TOKEN 开不了 PR；配了 fine-grained PAT（secrets.TELLOMI_BOT_TOKEN）就用它
+      GH_TOKEN: ${{ secrets.TELLOMI_BOT_TOKEN || github.token }}
       OURS: tellomi
     steps:
       - uses: actions/checkout@v4
@@ -50,8 +51,10 @@ jobs:
           BASE=$(git describe --tags --abbrev=0 "$BASE_COMMIT")
           TARGET='${{ inputs.tag }}'
           if [ -z "$TARGET" ]; then
-            # head 提前关管道会让 grep 收 SIGPIPE，pipefail 下整条假红：这一行关掉 pipefail
-            set +o pipefail; TARGET=$(git tag --sort=-creatordate | grep -viE 'beta|rc|hotfix|alpha|nightly' | head -1); set -o pipefail
+            # 只在「上游有的 tag」里挑（fork 自己打的 v0.100.0-tellomi.2 之类不算）；按版本号排序（去掉可有可无的 v 前缀，storage-service 2026-08 起 tag 不带 v）
+            git ls-remote --tags --refs upstream | sed 's|.*refs/tags/||' | grep -viE 'beta|rc|hotfix|alpha|nightly' > /tmp/upstream-tags.txt
+            BEST=$(sed 's/^v//' /tmp/upstream-tags.txt | sort -V | tail -1)
+            TARGET=$(grep -xE "v?$(printf '%s' "$BEST" | sed 's/[.]/\\./g')" /tmp/upstream-tags.txt | head -1)
           fi
           git rev-parse -q --verify "refs/tags/$TARGET" >/dev/null || { echo "::error::tag 不存在：$TARGET"; exit 1; }
           OURS_N=$(git rev-list --count "$BASE_COMMIT..$OURS" --no-merges)
