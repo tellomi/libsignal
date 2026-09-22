@@ -24,5 +24,17 @@ thiserror = { workspace = true }
 unicode-normalization = { workspace = true }
 unicode-security = { workspace = true }
 
+usernames = { workspace = true, optional = true }
+sha2 = { workspace = true, optional = true }
+
+# Only the build-time binaries need these; clients get the engine without libsignal's username
+# machinery or a hashing dependency.
+[features]
+build-tools = ["dep:usernames", "dep:sha2"]
+
+[[bin]]
+name = "policy-username-hashes"
+required-features = ["build-tools"]
+
 [dev-dependencies]
 proptest = { workspace = true }
