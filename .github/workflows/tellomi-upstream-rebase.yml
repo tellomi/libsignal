@@ -48,7 +48,8 @@ jobs:
           set -euo pipefail
           UPSTREAM_HEAD=$(git rev-parse upstream/main 2>/dev/null || git rev-parse upstream/master)
           BASE_COMMIT=$(git merge-base "$OURS" "$UPSTREAM_HEAD")
-          BASE=$(git describe --tags --abbrev=0 "$BASE_COMMIT")
+          # 基线 = merge-base 上最近的「纯版本号 release tag」：Desktop 在同一条历史上还打 @signalapp/mock-server@26.0.0 这类包 tag，libsignal 有 ts-0.3.3，都要排掉；带 - 的（beta / rc / 我们自己的 v0.100.0-tellomi.2）也排掉
+          BASE=$(git describe --tags --abbrev=0 --match 'v[0-9]*' --match '[0-9]*' --exclude '*-*' "$BASE_COMMIT")
           TARGET='${{ inputs.tag }}'
           if [ -z "$TARGET" ]; then
             # 只在「上游有的 tag」里挑（fork 自己打的 v0.100.0-tellomi.2 之类不算）；按版本号排序（去掉可有可无的 v 前缀，storage-service 2026-08 起 tag 不带 v）
