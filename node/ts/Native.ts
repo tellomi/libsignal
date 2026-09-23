@@ -2036,6 +2036,15 @@ type NativeFunctions = {
   PlaintextContent_Serialize: (
     obj: Wrapper<PlaintextContent>
   ) => Uint8Array<ArrayBuffer>;
+  PolicyEngine_Check: (
+    engine: Wrapper<PolicyEngine>,
+    input: string,
+    field: string,
+    regions: string
+  ) => number;
+  PolicyEngine_Load: (lexicon: Uint8Array<ArrayBuffer>) => PolicyEngine;
+  PolicyEngine_RuleCount: (engine: Wrapper<PolicyEngine>) => number;
+  PolicyEngine_Version: (engine: Wrapper<PolicyEngine>) => bigint;
   PreKeyBundle_GetDeviceId: (obj: Wrapper<PreKeyBundle>) => number;
   PreKeyBundle_GetIdentityKey: (p: Wrapper<PreKeyBundle>) => PublicKey;
   PreKeyBundle_GetKyberPreKeyId: (obj: Wrapper<PreKeyBundle>) => number;
@@ -4087,6 +4096,10 @@ const {
   PlaintextContent_FromDecryptionErrorMessage,
   PlaintextContent_GetBody,
   PlaintextContent_Serialize,
+  PolicyEngine_Check,
+  PolicyEngine_Load,
+  PolicyEngine_RuleCount,
+  PolicyEngine_Version,
   PreKeyBundle_GetDeviceId,
   PreKeyBundle_GetIdentityKey,
   PreKeyBundle_GetKyberPreKeyId,
@@ -4881,6 +4894,10 @@ export {
   PlaintextContent_FromDecryptionErrorMessage,
   PlaintextContent_GetBody,
   PlaintextContent_Serialize,
+  PolicyEngine_Check,
+  PolicyEngine_Load,
+  PolicyEngine_RuleCount,
+  PolicyEngine_Version,
   PreKeyBundle_GetDeviceId,
   PreKeyBundle_GetIdentityKey,
   PreKeyBundle_GetKyberPreKeyId,
@@ -5594,6 +5611,9 @@ export interface PinHash {
   readonly __type: unique symbol;
 }
 export interface PlaintextContent {
+  readonly __type: unique symbol;
+}
+export interface PolicyEngine {
   readonly __type: unique symbol;
 }
 export interface PreKeyBundle {
