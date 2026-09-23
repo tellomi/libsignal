@@ -43,6 +43,23 @@ fn is_core(outcome: Outcome) -> bool {
     matches!(outcome, Outcome::BrandProtected | Outcome::Impersonation)
 }
 
+/// Bounded cross product of brand-protected × impersonation affix terms, both orders, joined by
+/// `_` — the only character the username grammar (`[a-z][a-z0-9_]{1,31}`) allows that also forms
+/// a PREFIX/SUFFIX match boundary. `match_affix` (`engine.rs`) requires the character immediately
+/// outside the term to be non-alphanumeric or the string to end there; letters and digits never
+/// qualify, so a bare concatenation like `tellomisupport` has no boundary anywhere in the middle
+/// and the client engine would never flag it as a PREFIX/SUFFIX hit. Generating it here would only
+/// bloat the filter with entries nothing can ever be denied against, so `_` is the only join.
+///
+/// Every input already passed `normalize::is_username_safe` (the caller's collection loop),
+/// and `_` is itself in that alphabet, so every combination produced here is safe too.
+fn derive_affix_combinations(brand: &BTreeSet<String>, role: &BTreeSet<String>) -> BTreeSet<String> {
+    brand
+        .iter()
+        .flat_map(|b| role.iter().flat_map(move |r| [format!("{b}_{r}"), format!("{r}_{b}")]))
+        .collect()
+}
+
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let (Some(input), Some(output)) = (args.first(), args.get(1)) else {
@@ -90,18 +107,36 @@ fn run(input: &str, output: &str, fp_rate: f64, verify: &[String]) -> Result<(),
     // affix-shaped match. CONTAINS and CONFUSABLE are deliberately excluded — enumerating every
     // string that *contains* a term, or every visual variant of it, is unbounded. The client-side
     // engine covers those; see the ADR on what this filter does and does not promise.
+    //
+    // PREFIX and SUFFIX are a narrower case of the same unboundedness: `tellomi*` matches any
+    // string that *starts* with `tellomi`, which is just as unenumerable as CONTAINS in general.
+    // Inserting only the bare term (as the loop below does) gives it zero actual PREFIX/SUFFIX
+    // coverage — it is fully subsumed by the NORMALIZED_EXACT entry for the same term, so an
+    // affix-tagged term contributed *nothing* beyond what an exact-only term would have.
+    //
+    // The one case worth closing: a PREFIX/SUFFIX brand term combined with a PREFIX/SUFFIX
+    // impersonation term — `tellomi_staff`, `support_tellomi` — is exactly the shape
+    // `tellomi/impersonation.toml`'s own comment calls "真正的冒充" (the real impersonation
+    // shape), and it *is* bounded: brand terms × role terms is a small cross product. See
+    // `derive_affix_combinations` below for why only `_` is a valid separator and other/no
+    // combination is generated.
     let mut core: BTreeSet<String> = BTreeSet::new();
     let mut other: BTreeSet<String> = BTreeSet::new();
+    let mut brand_affix: BTreeSet<String> = BTreeSet::new();
+    let mut role_affix: BTreeSet<String> = BTreeSet::new();
     for rule in &envelope.payload.rules {
         if !rule.fields.contains(&Field::Username) {
             continue;
         }
-        let enumerable = rule.matches.iter().any(|m| {
-            matches!(
-                m,
-                Match::Exact | Match::NormalizedExact | Match::Prefix | Match::Suffix
-            )
-        });
+        let has_affix = rule
+            .matches
+            .iter()
+            .any(|m| matches!(m, Match::Prefix | Match::Suffix));
+        let enumerable = has_affix
+            || rule
+                .matches
+                .iter()
+                .any(|m| matches!(m, Match::Exact | Match::NormalizedExact));
         if !enumerable {
             continue;
         }
@@ -114,7 +149,27 @@ fn run(input: &str, output: &str, fp_rate: f64, verify: &[String]) -> Result<(),
             &mut other
         }
         .insert(rule.normalized.clone());
+        if has_affix {
+            match rule.outcome {
+                Outcome::BrandProtected => {
+                    brand_affix.insert(rule.normalized.clone());
+                }
+                Outcome::Impersonation => {
+                    role_affix.insert(rule.normalized.clone());
+                }
+                _ => {}
+            }
+        }
     }
+    let derived = derive_affix_combinations(&brand_affix, &role_affix);
+    println!(
+        "affix combinations: {} brand × {} role terms → {} bounded `brand_role`/`role_brand` \
+         pairs (only `_` is a valid boundary inside a username; see comment)",
+        brand_affix.len(),
+        role_affix.len(),
+        derived.len()
+    );
+    core.extend(derived);
     other.retain(|t| !core.contains(t));
 
     let total = core.len() as u64 * u64::from(CORE_DISCRIMINATOR_MAX)

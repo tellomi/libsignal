@@ -15,9 +15,15 @@
 //! phone rejects.
 //!
 //!     cargo run -p tellomi-policy --bin policy-build -- \
-//!         policy/dist/policy-source.json policy/dist/policy-2026092201.json \
-//!         --must-allow policy/tests/corpus/must-allow.txt \
-//!         --must-deny  policy/tests/corpus/must-deny.txt
+//!         policy/dist/policy-source.json policy/dist/policy-2026092201.json
+//!
+//! The corpus runs by default (paths below); pass `--must-allow`/`--must-deny` to point at
+//! different files, or `--no-corpus` to skip it explicitly. There is no way to build a lexicon
+//! that silently skipped the corpus without a command-line flag saying so in the shell history —
+//! "forgot the flags" and "corpus failed" used to produce the same artifact (a written
+//! `policy-*.json`, no error), and this build has no CI running it yet to catch the difference.
+const DEFAULT_MUST_ALLOW: &str = "policy/tests/corpus/must-allow.txt";
+const DEFAULT_MUST_DENY: &str = "policy/tests/corpus/must-deny.txt";
 
 use std::collections::BTreeMap;
 use std::path::PathBuf;
@@ -31,18 +37,35 @@ fn main() -> ExitCode {
     let (Some(input), Some(output)) = (args.next(), args.next()) else {
         eprintln!(
             "usage: policy-build <source.json> <out.json> \
-             [--must-allow <file>] [--must-deny <file>]"
+             [--must-allow <file>] [--must-deny <file>] [--no-corpus]\n\
+             defaults to {DEFAULT_MUST_ALLOW} / {DEFAULT_MUST_DENY} when no corpus flag is given"
         );
         return ExitCode::FAILURE;
     };
 
-    let mut must_allow: Option<PathBuf> = None;
-    let mut must_deny: Option<PathBuf> = None;
+    let mut must_allow: Option<PathBuf> = Some(DEFAULT_MUST_ALLOW.into());
+    let mut must_deny: Option<PathBuf> = Some(DEFAULT_MUST_DENY.into());
     while let Some(flag) = args.next() {
-        match (flag.as_str(), args.next()) {
-            ("--must-allow", Some(p)) => must_allow = Some(p.into()),
-            ("--must-deny", Some(p)) => must_deny = Some(p.into()),
-            (other, _) => {
+        match flag.as_str() {
+            "--must-allow" => match args.next() {
+                Some(p) => must_allow = Some(p.into()),
+                None => {
+                    eprintln!("--must-allow needs a path");
+                    return ExitCode::FAILURE;
+                }
+            },
+            "--must-deny" => match args.next() {
+                Some(p) => must_deny = Some(p.into()),
+                None => {
+                    eprintln!("--must-deny needs a path");
+                    return ExitCode::FAILURE;
+                }
+            },
+            "--no-corpus" => {
+                must_allow = None;
+                must_deny = None;
+            }
+            other => {
                 eprintln!("unknown argument {other}");
                 return ExitCode::FAILURE;
             }
