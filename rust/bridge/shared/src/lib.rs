@@ -44,6 +44,7 @@ mod svr2;
 
 pub mod incremental_mac;
 pub mod message_backup;
+pub mod policy;
 pub mod usernames;
 
 #[cfg(feature = "signal-media")]
