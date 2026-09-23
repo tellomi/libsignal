@@ -3,24 +3,37 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-//! Stage 3 of the policy build: the server-side username denylist (ADR-0062 §5.4).
+//! Stage 3 of the policy build: the server-side username denylist (ADR-0062 §5.4, as revised by
+//! ADR-0066).
 //!
 //! The server never sees a username in the clear — the client sends `Username::hash()` and the
 //! server stores that. So the only way for the server to refuse `admin.01` is to know the hash of
-//! `admin.01` in advance. This binary enumerates `<reserved nickname>.<discriminator>` for the
-//! discriminator ranges the Signal clients actually pick from, hashes each one with libsignal's
-//! own function, and writes a Bloom filter.
+//! `admin.01` in advance. This binary enumerates `<reserved nickname>.<discriminator>` for every
+//! reserved nickname and every discriminator from `01` to `99`, hashes each one with libsignal's
+//! own function, and writes the hashes, sorted.
 //!
-//! Why a Bloom filter rather than the hashes themselves: ~3.8 million entries × 32 bytes is about
-//! 121 MB, while a filter at a 1e-6 false-positive rate is about 13 MB. A false positive costs the
-//! user nothing — the client is already looping over a list of candidate usernames and simply
-//! tries the next one — while a false negative is impossible, which is the direction that matters.
+//! Why `01`–`99`: ADR-0066 fixes the discriminator at `01` and hides it in the UI, so `01` is the
+//! one every stock client produces. `02`–`99` are covered as well because `admin.12` is exactly
+//! the shape upstream's default candidates had, and it still reads like an official account.
+//! Three or more digits are left alone: official clients show any discriminator other than `01`
+//! in full, so `tellomi.123` does not pass for `tellomi`.
 //!
-//! The limits of this defence are written down in the ADR: a modified client can pick a
-//! discriminator outside the enumerated ranges, and the engine on the client is what catches that.
+//! Why an exact list rather than the Bloom filter this binary used to write: with the range down
+//! from 1–9999 to 01–99 the list is a few tens of thousands of hashes (about 1.4 MB for the first
+//! lexicon), small enough for the server to hold as a plain set. No false positives, nothing to
+//! tune.
+//!
+//! Layout of the output file, integers little endian:
+//!
+//! ```text
+//! "TLPH" | u32 format version (1) | u64 lexicon version | u32 highest discriminator (99)
+//!        | u32 count | [u8; 32] SHA-256 of the body | body: count × [u8; 32], sorted, unique
+//! ```
+//!
+//! The server recomputes the SHA-256 when it loads the file and refuses to start on a mismatch.
 //!
 //!     cargo run -p tellomi-policy --features build-tools --bin policy-username-hashes -- \
-//!         policy/dist/policy-2026092201.json policy/dist/username-denylist-2026092201.bloom
+//!         policy/dist/policy-2026092201.json policy/dist/username-hash-denylist-2026092201.bin
 
 use std::collections::BTreeSet;
 use std::process::ExitCode;
@@ -29,19 +42,13 @@ use sha2::{Digest, Sha256};
 use tellomi_policy::{Envelope, Field, LexiconPayload, Match, Outcome, normalize};
 use usernames::{NicknameLimits, Username};
 
-/// How many discriminators to enumerate per nickname, by how much the term matters.
-///
-/// Signal's clients propose candidates from the low ranges first (`DISCRIMINATOR_RANGES` in
-/// `libsignal/rust/usernames/src/constants.rs` starts at 1..100), so covering 1..=9999 catches
-/// every username a stock client would offer for a brand term.
-const CORE_DISCRIMINATOR_MAX: u32 = 9_999;
-const OTHER_DISCRIMINATOR_MAX: u32 = 999;
+/// Discriminators `01..=HIGHEST_DISCRIMINATOR` are enumerated for every reserved nickname.
+const HIGHEST_DISCRIMINATOR: u32 = 99;
 
-/// Outcomes worth spending denylist space on. `reserved` covers the routing words, but the
-/// expensive high range is kept for the terms someone would actually impersonate.
-fn is_core(outcome: Outcome) -> bool {
-    matches!(outcome, Outcome::BrandProtected | Outcome::Impersonation)
-}
+const MAGIC: &[u8; 4] = b"TLPH";
+const FORMAT_VERSION: u32 = 1;
+/// magic + format version + lexicon version + highest discriminator + count + body digest
+const HEADER_LEN: usize = 4 + 4 + 8 + 4 + 4 + 32;
 
 /// Bounded cross product of brand-protected × impersonation affix terms, both orders, joined by
 /// `_` — the only character the username grammar (`[a-z][a-z0-9_]{1,31}`) allows that also forms
@@ -49,7 +56,7 @@ fn is_core(outcome: Outcome) -> bool {
 /// outside the term to be non-alphanumeric or the string to end there; letters and digits never
 /// qualify, so a bare concatenation like `tellomisupport` has no boundary anywhere in the middle
 /// and the client engine would never flag it as a PREFIX/SUFFIX hit. Generating it here would only
-/// bloat the filter with entries nothing can ever be denied against, so `_` is the only join.
+/// add entries nothing can ever be denied against, so `_` is the only join.
 ///
 /// Every input already passed `normalize::is_username_safe` (the caller's collection loop),
 /// and `_` is itself in that alphabet, so every combination produced here is safe too.
@@ -70,24 +77,20 @@ fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let (Some(input), Some(output)) = (args.first(), args.get(1)) else {
         eprintln!(
-            "usage: policy-username-hashes <policy-<version>.json> <out.bloom> \
-             [--fp-rate 1e-6] [--verify <nickname.discriminator>]"
+            "usage: policy-username-hashes <policy-<version>.json> <out.bin> \
+             [--verify <nickname.discriminator>]..."
         );
         return ExitCode::FAILURE;
     };
-    let mut fp_rate = 1e-6f64;
     let mut verify: Vec<String> = Vec::new();
     let mut rest = args[2..].iter();
     while let Some(flag) = rest.next() {
         match (flag.as_str(), rest.next()) {
-            ("--fp-rate", Some(v)) => match v.parse() {
-                Ok(v) => fp_rate = v,
-                Err(e) => {
-                    eprintln!("bad --fp-rate: {e}");
-                    return ExitCode::FAILURE;
-                }
-            },
             ("--verify", Some(v)) => verify.push(v.clone()),
+            ("--fp-rate", _) => {
+                eprintln!("--fp-rate is gone: the output is an exact list now, not a Bloom filter");
+                return ExitCode::FAILURE;
+            }
             (other, _) => {
                 eprintln!("unknown argument {other}");
                 return ExitCode::FAILURE;
@@ -95,7 +98,7 @@ fn main() -> ExitCode {
         }
     }
 
-    match run(input, output, fp_rate, &verify) {
+    match run(input, output, &verify) {
         Ok(()) => ExitCode::SUCCESS,
         Err(err) => {
             eprintln!("policy-username-hashes failed: {err}");
@@ -104,7 +107,7 @@ fn main() -> ExitCode {
     }
 }
 
-fn run(input: &str, output: &str, fp_rate: f64, verify: &[String]) -> Result<(), String> {
+fn run(input: &str, output: &str, verify: &[String]) -> Result<(), String> {
     let raw = std::fs::read(input).map_err(|e| format!("reading {input}: {e}"))?;
     let envelope: Envelope<LexiconPayload> =
         serde_json::from_slice(&raw).map_err(|e| format!("parsing {input}: {e}"))?;
@@ -112,22 +115,20 @@ fn run(input: &str, output: &str, fp_rate: f64, verify: &[String]) -> Result<(),
     // Which nicknames to enumerate: every rule that applies to usernames by an equality- or
     // affix-shaped match. CONTAINS and CONFUSABLE are deliberately excluded — enumerating every
     // string that *contains* a term, or every visual variant of it, is unbounded. The client-side
-    // engine covers those; see the ADR on what this filter does and does not promise.
+    // engine covers those; see the ADR on what this list does and does not promise.
     //
     // PREFIX and SUFFIX are a narrower case of the same unboundedness: `tellomi*` matches any
     // string that *starts* with `tellomi`, which is just as unenumerable as CONTAINS in general.
     // Inserting only the bare term (as the loop below does) gives it zero actual PREFIX/SUFFIX
     // coverage — it is fully subsumed by the NORMALIZED_EXACT entry for the same term, so an
-    // affix-tagged term contributed *nothing* beyond what an exact-only term would have.
+    // affix-tagged term contributes nothing beyond what an exact-only term would have.
     //
     // The one case worth closing: a PREFIX/SUFFIX brand term combined with a PREFIX/SUFFIX
     // impersonation term — `tellomi_staff`, `support_tellomi` — is exactly the shape
     // `tellomi/impersonation.toml`'s own comment calls "真正的冒充" (the real impersonation
     // shape), and it *is* bounded: brand terms × role terms is a small cross product. See
-    // `derive_affix_combinations` below for why only `_` is a valid separator and other/no
-    // combination is generated.
-    let mut core: BTreeSet<String> = BTreeSet::new();
-    let mut other: BTreeSet<String> = BTreeSet::new();
+    // `derive_affix_combinations` for why only `_` is a valid separator.
+    let mut nicknames: BTreeSet<String> = BTreeSet::new();
     let mut brand_affix: BTreeSet<String> = BTreeSet::new();
     let mut role_affix: BTreeSet<String> = BTreeSet::new();
     for rule in &envelope.payload.rules {
@@ -143,18 +144,10 @@ fn run(input: &str, output: &str, fp_rate: f64, verify: &[String]) -> Result<(),
                 .matches
                 .iter()
                 .any(|m| matches!(m, Match::Exact | Match::NormalizedExact));
-        if !enumerable {
+        if !enumerable || !normalize::is_username_safe(&rule.normalized) {
             continue;
         }
-        if !normalize::is_username_safe(&rule.normalized) {
-            continue;
-        }
-        if is_core(rule.outcome) {
-            &mut core
-        } else {
-            &mut other
-        }
-        .insert(rule.normalized.clone());
+        nicknames.insert(rule.normalized.clone());
         if has_affix {
             match rule.outcome {
                 Outcome::BrandProtected => {
@@ -175,155 +168,108 @@ fn run(input: &str, output: &str, fp_rate: f64, verify: &[String]) -> Result<(),
         role_affix.len(),
         derived.len()
     );
-    core.extend(derived);
-    other.retain(|t| !core.contains(t));
-
-    let total = core.len() as u64 * u64::from(CORE_DISCRIMINATOR_MAX)
-        + other.len() as u64 * u64::from(OTHER_DISCRIMINATOR_MAX);
-    println!(
-        "nicknames: {} core (×{CORE_DISCRIMINATOR_MAX}) + {} other (×{OTHER_DISCRIMINATOR_MAX}) \
-         = {total} usernames to hash",
-        core.len(),
-        other.len()
-    );
-
-    let mut filter = BloomFilter::new(total, fp_rate);
-    println!(
-        "bloom: {} bits ({:.1} MB), {} hash functions, target fp rate {fp_rate:e}",
-        filter.bits,
-        filter.bytes_len() as f64 / 1_048_576.0,
-        filter.hashes
-    );
+    nicknames.extend(derived);
 
     let started = std::time::Instant::now();
-    let mut inserted = 0u64;
+    let mut hashes: Vec<[u8; 32]> = Vec::new();
     let mut skipped = 0u64;
-    for (terms, max) in [
-        (&core, CORE_DISCRIMINATOR_MAX),
-        (&other, OTHER_DISCRIMINATOR_MAX),
-    ] {
-        for nickname in terms {
-            for d in 1..=max {
-                // Zero-pad to two digits, exactly as `Username::format_parts` does
-                // (`libsignal/rust/usernames/src/username.rs:171`). A bare "1" is not a legal
-                // discriminator at all, so enumerating `d.to_string()` would have produced a
-                // filter full of nothing for the whole 1..=9 range.
-                match Username::from_parts(nickname, &format!("{d:0>2}"), NicknameLimits::default())
-                {
-                    Ok(username) => {
-                        filter.insert(&username.hash());
-                        inserted += 1;
-                    }
-                    // A nickname shorter than the 3-character minimum, or any other rejection:
-                    // the username could not exist, so it needs no entry.
-                    Err(_) => skipped += 1,
-                }
+    for nickname in &nicknames {
+        for d in 1..=HIGHEST_DISCRIMINATOR {
+            // Zero-padded to two digits, exactly as `Username::format_parts` does
+            // (`libsignal/rust/usernames/src/username.rs`): a bare "1" is not a legal
+            // discriminator at all, while "01" is — and "01" is the one ADR-0066 fixes.
+            match Username::from_parts(nickname, &format!("{d:0>2}"), NicknameLimits::default()) {
+                Ok(username) => hashes.push(username.hash()),
+                // A nickname shorter than the 3-character minimum, or any other rejection: the
+                // username could not exist, so it needs no entry.
+                Err(_) => skipped += 1,
             }
         }
     }
+    hashes.sort_unstable();
+    hashes.dedup();
     println!(
-        "hashed {inserted} usernames in {:.1}s ({skipped} impossible ones skipped)",
+        "{} nicknames × 01–{HIGHEST_DISCRIMINATOR} → {} hashes in {:.1}s \
+         ({skipped} impossible usernames skipped)",
+        nicknames.len(),
+        hashes.len(),
         started.elapsed().as_secs_f64()
     );
 
     for candidate in verify {
         let username = Username::new(candidate).map_err(|e| format!("{candidate}: {e}"))?;
-        let present = filter.contains(&username.hash());
+        let denied = hashes.binary_search(&username.hash()).is_ok();
         println!(
             "verify {candidate}: {}",
-            if present { "DENIED" } else { "allowed" }
+            if denied { "DENIED" } else { "allowed" }
         );
     }
 
-    let encoded = filter.encode(envelope.version);
+    let encoded = encode(envelope.version, &hashes)?;
+    // Read our own output back through the decoder the server's loader mirrors, so the layout
+    // documented above and the bytes on disk cannot drift apart.
+    let decoded = decode(&encoded)?;
+    if decoded != hashes {
+        return Err("round trip through decode() changed the list".to_owned());
+    }
     std::fs::write(output, &encoded).map_err(|e| format!("writing {output}: {e}"))?;
     println!(
-        "wrote {output} ({:.1} MB)",
-        encoded.len() as f64 / 1_048_576.0
+        "wrote {output} ({:.2} MB, body sha256 {})",
+        encoded.len() as f64 / 1_048_576.0,
+        hex(&encoded[HEADER_LEN - 32..HEADER_LEN])
     );
     Ok(())
 }
 
-/// 2 GiB of bits: far above anything this lexicon will need, and small enough to allocate.
-const MAX_FILTER_BITS: u64 = 8 * 2 * 1024 * 1024 * 1024;
-
-/// A plain Bloom filter with the classic double-hashing construction, so the server side can be a
-/// few dozen lines of Java rather than a dependency.
-///
-/// Layout of the encoded file, all little endian:
-/// `"TLPB"` | u32 format version | u64 lexicon version | u64 bit count | u32 hash count | bits
-struct BloomFilter {
-    bits: u64,
-    hashes: u32,
-    data: Vec<u8>,
+fn encode(lexicon_version: u64, hashes: &[[u8; 32]]) -> Result<Vec<u8>, String> {
+    let count = u32::try_from(hashes.len()).map_err(|_| "more than u32::MAX hashes".to_owned())?;
+    let body: Vec<u8> = hashes.concat();
+    let mut out = Vec::with_capacity(HEADER_LEN + body.len());
+    out.extend_from_slice(MAGIC);
+    out.extend_from_slice(&FORMAT_VERSION.to_le_bytes());
+    out.extend_from_slice(&lexicon_version.to_le_bytes());
+    out.extend_from_slice(&HIGHEST_DISCRIMINATOR.to_le_bytes());
+    out.extend_from_slice(&count.to_le_bytes());
+    out.extend_from_slice(&Sha256::digest(&body));
+    out.extend_from_slice(&body);
+    Ok(out)
 }
 
-impl BloomFilter {
-    fn new(expected: u64, fp_rate: f64) -> Self {
-        // m = -n ln p / (ln 2)^2 and k = (m/n) ln 2, the standard sizing. Both results are clamped
-        // into ranges that fit their target type before being converted, so the conversions below
-        // cannot truncate; a nonsensical --fp-rate gives a small or large filter, never a panic.
-        let n = expected.max(1) as f64;
-        let bits_f = (-n * fp_rate.ln() / (std::f64::consts::LN_2 * std::f64::consts::LN_2))
-            .ceil()
-            .clamp(8.0, MAX_FILTER_BITS as f64);
-        #[allow(
-            clippy::cast_possible_truncation,
-            reason = "clamped to 8..=MAX_FILTER_BITS above"
-        )]
-        let bits = bits_f as u64;
-        let hashes_f = ((bits_f / n) * std::f64::consts::LN_2)
-            .round()
-            .clamp(1.0, 64.0);
-        #[allow(clippy::cast_possible_truncation, reason = "clamped to 1..=64 above")]
-        let hashes = hashes_f as u32;
-        let bytes = usize::try_from(bits.div_ceil(8)).expect("filter fits in memory");
-        Self {
-            bits,
-            hashes,
-            data: vec![0u8; bytes],
-        }
+/// The same checks the server's loader makes, in the same order.
+fn decode(bytes: &[u8]) -> Result<Vec<[u8; 32]>, String> {
+    let header = bytes.get(..HEADER_LEN).ok_or("shorter than the header")?;
+    if &header[0..4] != MAGIC {
+        return Err("bad magic".to_owned());
     }
+    let format = u32::from_le_bytes(header[4..8].try_into().expect("4 bytes"));
+    if format != FORMAT_VERSION {
+        return Err(format!("unknown format version {format}"));
+    }
+    let count = u32::from_le_bytes(header[20..24].try_into().expect("4 bytes"));
+    let body = &bytes[HEADER_LEN..];
+    let expected_len = usize::try_from(count)
+        .ok()
+        .and_then(|c| c.checked_mul(32))
+        .ok_or("count × 32 overflows usize")?;
+    if body.len() != expected_len {
+        return Err(format!(
+            "body is {} bytes, header says {count} × 32",
+            body.len()
+        ));
+    }
+    if Sha256::digest(body).as_slice() != &header[24..56] {
+        return Err("body does not match the SHA-256 in the header".to_owned());
+    }
+    let hashes: Vec<[u8; 32]> = body
+        .chunks_exact(32)
+        .map(|c| c.try_into().expect("32-byte chunk"))
+        .collect();
+    if hashes.windows(2).any(|w| w[0] >= w[1]) {
+        return Err("hashes are not strictly ascending".to_owned());
+    }
+    Ok(hashes)
+}
 
-    fn bytes_len(&self) -> usize {
-        self.data.len()
-    }
-
-    /// Derive all k positions from one SHA-256 of the username hash (Kirsch-Mitzenmacher).
-    fn positions(&self, key: &[u8; 32]) -> impl Iterator<Item = u64> + '_ {
-        let digest = Sha256::digest(key);
-        let h1 = u64::from_le_bytes(digest[0..8].try_into().expect("32-byte digest"));
-        let h2 = u64::from_le_bytes(digest[8..16].try_into().expect("32-byte digest")) | 1;
-        (0..self.hashes).map(move |i| h1.wrapping_add(h2.wrapping_mul(u64::from(i))) % self.bits)
-    }
-
-    fn insert(&mut self, key: &[u8; 32]) {
-        for pos in self.positions(key).collect::<Vec<_>>() {
-            let (byte, bit) = Self::locate(pos);
-            self.data[byte] |= bit;
-        }
-    }
-
-    fn contains(&self, key: &[u8; 32]) -> bool {
-        self.positions(key).all(|pos| {
-            let (byte, bit) = Self::locate(pos);
-            self.data[byte] & bit != 0
-        })
-    }
-
-    fn locate(pos: u64) -> (usize, u8) {
-        let byte = usize::try_from(pos / 8).expect("position is inside the allocated filter");
-        (byte, 1u8 << (pos % 8))
-    }
-
-    fn encode(&self, lexicon_version: u64) -> Vec<u8> {
-        let mut out = Vec::with_capacity(self.data.len() + 32);
-        out.extend_from_slice(b"TLPB");
-        out.extend_from_slice(&1u32.to_le_bytes());
-        out.extend_from_slice(&lexicon_version.to_le_bytes());
-        out.extend_from_slice(&self.bits.to_le_bytes());
-        out.extend_from_slice(&self.hashes.to_le_bytes());
-        out.extend_from_slice(&self.data);
-        out
-    }
+fn hex(bytes: &[u8]) -> String {
+    bytes.iter().map(|b| format!("{b:02x}")).collect()
 }
