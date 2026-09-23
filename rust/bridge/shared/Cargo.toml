@@ -29,6 +29,7 @@ libsignal-net-chat = { workspace = true }
 libsignal-protocol = { workspace = true }
 signal-crypto = { workspace = true }
 signal-media = { workspace = true, optional = true }
+tellomi-policy = { workspace = true }
 usernames = { workspace = true }
 zkgroup = { workspace = true }
 
