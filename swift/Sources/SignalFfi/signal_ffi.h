@@ -1605,6 +1605,10 @@ static_assert_64bit(alignof(SignalType_ConstPointer_SignalPreKeyRecord) == 8);
 typedef const SignalSignedPreKeyRecord* SignalType_ConstPointer_SignalSignedPreKeyRecord;
 static_assert_64bit(sizeof(SignalType_ConstPointer_SignalSignedPreKeyRecord) == 8);
 static_assert_64bit(alignof(SignalType_ConstPointer_SignalSignedPreKeyRecord) == 8);
+typedef struct SignalPolicyEngine SignalPolicyEngine;
+typedef const SignalPolicyEngine* SignalType_ConstPointer_SignalPolicyEngine;
+static_assert_64bit(sizeof(SignalType_ConstPointer_SignalPolicyEngine) == 8);
+static_assert_64bit(alignof(SignalType_ConstPointer_SignalPolicyEngine) == 8);
 typedef const uint32_t* SignalType_ConstPointer_uint32_t;
 static_assert_64bit(sizeof(SignalType_ConstPointer_uint32_t) == 8);
 static_assert_64bit(alignof(SignalType_ConstPointer_uint32_t) == 8);
@@ -2170,6 +2174,18 @@ static_assert_64bit(alignof(SignalMutPointerAes256Ctr32) == 8);
 typedef SignalMutPointerAes256Ctr32* SignalType_MutPointer_SignalMutPointerAes256Ctr32;
 static_assert_64bit(sizeof(SignalType_MutPointer_SignalMutPointerAes256Ctr32) == 8);
 static_assert_64bit(alignof(SignalType_MutPointer_SignalMutPointerAes256Ctr32) == 8);
+typedef SignalPolicyEngine* SignalType_MutPointer_SignalPolicyEngine;
+static_assert_64bit(sizeof(SignalType_MutPointer_SignalPolicyEngine) == 8);
+static_assert_64bit(alignof(SignalType_MutPointer_SignalPolicyEngine) == 8);
+typedef struct {
+  SignalPolicyEngine* raw;
+} SignalMutPointerPolicyEngine;
+static_assert_64bit(offsetof(SignalMutPointerPolicyEngine, raw) == 0);
+static_assert_64bit(sizeof(SignalMutPointerPolicyEngine) == 8);
+static_assert_64bit(alignof(SignalMutPointerPolicyEngine) == 8);
+typedef SignalMutPointerPolicyEngine* SignalType_MutPointer_SignalMutPointerPolicyEngine;
+static_assert_64bit(sizeof(SignalType_MutPointer_SignalMutPointerPolicyEngine) == 8);
+static_assert_64bit(alignof(SignalType_MutPointer_SignalMutPointerPolicyEngine) == 8);
 typedef SignalServerPublicParams* SignalType_MutPointer_SignalServerPublicParams;
 static_assert_64bit(sizeof(SignalType_MutPointer_SignalServerPublicParams) == 8);
 static_assert_64bit(alignof(SignalType_MutPointer_SignalServerPublicParams) == 8);
@@ -3388,6 +3404,12 @@ typedef struct {
 static_assert_64bit(offsetof(SignalConstPointerSignedPreKeyRecord, raw) == 0);
 static_assert_64bit(sizeof(SignalConstPointerSignedPreKeyRecord) == 8);
 static_assert_64bit(alignof(SignalConstPointerSignedPreKeyRecord) == 8);
+typedef struct {
+  const SignalPolicyEngine* raw;
+} SignalConstPointerPolicyEngine;
+static_assert_64bit(offsetof(SignalConstPointerPolicyEngine, raw) == 0);
+static_assert_64bit(sizeof(SignalConstPointerPolicyEngine) == 8);
+static_assert_64bit(alignof(SignalConstPointerPolicyEngine) == 8);
 typedef struct {
   const SignalServerPublicParams* raw;
 } SignalConstPointerServerPublicParams;
@@ -5438,6 +5460,28 @@ SignalFfiError* signal_plaintext_content_get_body(
 SignalFfiError* signal_plaintext_content_serialize(
   SignalOwnedBuffer* out,
   SignalConstPointerPlaintextContent obj
+);
+SignalFfiError* signal_policy_engine_check(
+  uint8_t* out,
+  SignalConstPointerPolicyEngine engine,
+  const int8_t* input,
+  const int8_t* field,
+  const int8_t* regions
+);
+SignalFfiError* signal_policy_engine_destroy(
+  SignalMutPointerPolicyEngine p
+);
+SignalFfiError* signal_policy_engine_load(
+  SignalMutPointerPolicyEngine* out,
+  SignalBorrowedBuffer lexicon
+);
+SignalFfiError* signal_policy_engine_rule_count(
+  uint32_t* out,
+  SignalConstPointerPolicyEngine engine
+);
+SignalFfiError* signal_policy_engine_version(
+  uint64_t* out,
+  SignalConstPointerPolicyEngine engine
 );
 SignalFfiError* signal_pre_key_bundle_clone(
   SignalMutPointerPreKeyBundle* new_obj,
