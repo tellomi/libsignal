@@ -53,10 +53,16 @@ fn is_core(outcome: Outcome) -> bool {
 ///
 /// Every input already passed `normalize::is_username_safe` (the caller's collection loop),
 /// and `_` is itself in that alphabet, so every combination produced here is safe too.
-fn derive_affix_combinations(brand: &BTreeSet<String>, role: &BTreeSet<String>) -> BTreeSet<String> {
+fn derive_affix_combinations(
+    brand: &BTreeSet<String>,
+    role: &BTreeSet<String>,
+) -> BTreeSet<String> {
     brand
         .iter()
-        .flat_map(|b| role.iter().flat_map(move |r| [format!("{b}_{r}"), format!("{r}_{b}")]))
+        .flat_map(|b| {
+            role.iter()
+                .flat_map(move |r| [format!("{b}_{r}"), format!("{r}_{b}")])
+        })
         .collect()
 }
 
