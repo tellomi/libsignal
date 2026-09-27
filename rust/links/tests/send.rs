@@ -733,20 +733,47 @@ fn generic_links_use_og_then_title_meta() {
     };
     assert_eq!(run(url, &script).out.level, Level::PlainLink);
 
-    // A GBK page: its text is not decoded (UTF-8 only in this crate), so no title → plain link.
-    let gbk = Reply::Http {
-        status: 200,
-        final_url: url.into(),
-        content_type: "text/html; charset=gbk",
-        location: None,
-        body: b"<title>\xcd\xf8\xd2\xd7</title>".to_vec(),
+    // Legacy Chinese charsets are decoded (GBK / GB2312 / GB18030 / Big5), whether the header or
+    // the page's own <meta> declares them; anything else keeps its image but none of its text.
+    let legacy = |content_type: &'static str, body: &[u8]| {
+        let reply = Reply::Http {
+            status: 200,
+            final_url: url.into(),
+            content_type,
+            location: None,
+            body: body.to_vec(),
+        };
+        run(
+            url,
+            &Script {
+                replies: HashMap::from([(url.to_owned(), reply)]),
+                ..Default::default()
+            },
+        )
     };
-    let r = run(
-        url,
-        &Script {
-            replies: HashMap::from([(url.to_owned(), gbk)]),
-            ..Default::default()
-        },
+    let title = |r: &Run| r.out.preview.as_ref().and_then(|p| p.title.clone());
+    let r = legacy("text/html; charset=gbk", b"<title>\xcd\xf8\xd2\xd7</title>");
+    assert_eq!(
+        (r.out.level, title(&r).as_deref()),
+        (Level::Generic, Some("网易"))
+    );
+    let r = legacy(
+        "text/html",
+        b"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\"><meta property=\"og:title\" content=\"\xcd\xf8\xd2\xd7 &amp; \x952\x826\">",
+    );
+    assert_eq!(
+        title(&r).as_deref(),
+        Some("网易 & 𠀀"),
+        "GB18030 four-byte sequences too"
+    );
+    let r = legacy(
+        "text/html; charset=Big5",
+        b"<title>\xba\xf4\xa9\xf6\xb7s\xbbD</title>",
+    );
+    assert_eq!(title(&r).as_deref(), Some("網易新聞"));
+    let r = legacy(
+        "text/html; charset=shift_jis",
+        b"<title>\x93\xfa\x96{\x8c\xea</title>",
     );
     assert_eq!(r.out.level, Level::PlainLink);
     assert!(r.out.failures.contains(&Failure::Charset));
@@ -1039,16 +1066,23 @@ fn with_fallback(id: &str, value: &str) -> Registry {
 #[test]
 fn fallback_generic_uses_the_page_preview_when_no_route_matches() {
     let issue = "https://github.com/signalapp/Signal-Android/issues/10000";
-    // Default (`brand`): a brand shell, no request.
-    let r = run(issue, &Script::default());
+    // `fallback = "brand"` (the default when the field is absent): a brand shell, no request.
+    let r = run_with(
+        &with_fallback("github", "brand"),
+        issue,
+        &SendContext::default(),
+        &Script::default(),
+        None,
+    );
     assert_eq!(
         (r.out.level, r.out.kind.as_deref()),
         (Level::Brand, Some("web"))
     );
     assert!(r.requests.is_empty());
 
-    // `fallback = "generic"`: the generic OG path, same fetcher contract, no rich.
-    let registry = with_fallback("github", "generic");
+    // `fallback = "generic"` (what links/providers/structured/github.toml says since #1427): the
+    // generic OG path, same fetcher contract, no rich.
+    let registry = base_registry();
     let html = r#"<meta property="og:title" content="Crash on startup · Issue #10000 · signalapp/Signal-Android">
         <meta property="og:image" content="https://opengraph.githubassets.com/x/signalapp/Signal-Android/issues/10000">"#;
     let script = Script {
@@ -1123,6 +1157,8 @@ fn fallback_generic_is_dropped_where_it_may_not_apply() {
             Level::Brand,
         ),
         ("tellomi", "https://tell.cc/app", Level::PlainLink),
+        // L24: a brand-tier platform (not payment) may not fall through to generic either.
+        ("taobao", "https://item.taobao.com/", Level::Brand),
     ] {
         let registry = with_fallback(id, "generic");
         let dropped = registry.degraded_routes();

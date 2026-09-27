@@ -31,12 +31,12 @@ fn draft_registry_loads_cleanly() {
     );
 }
 
-/// The build output itself (`links/dist/links-2026092701.json`, payload = {kinds, providers}).
+/// The build output itself (`links/dist/links-2026092702.json`, payload = {kinds, providers}).
 #[test]
 fn the_built_dist_envelope_loads() {
     let registry =
-        Registry::load(&read("registry/dist/links-2026092701.json")).expect("dist loads");
-    assert_eq!(registry.version(), 2026092701);
+        Registry::load(&read("registry/dist/links-2026092702.json")).expect("dist loads");
+    assert_eq!(registry.version(), 2026092702);
     assert_eq!(
         (registry.provider_count(), registry.route_count()),
         (30, 74)
@@ -164,6 +164,13 @@ fn every_corpus_sample_matches_its_declared_provider_and_kind() {
             if let Some(canonical) = expect.get("canonical_url").and_then(Value::as_str) {
                 assert_eq!(got.canonical_url.as_deref(), Some(canonical), "{url}");
             }
+            if let Some(fallback) = expect.get("fallback").and_then(Value::as_str) {
+                assert_eq!(
+                    got.route, None,
+                    "{url}: `fallback` is only for samples with no route"
+                );
+                assert_eq!(got.fallback.as_deref(), Some(fallback), "{url}");
+            }
             if let Some(route) = &got.route {
                 routes_seen.insert(format!("{provider}.{route}"));
             }
@@ -197,7 +204,7 @@ fn every_bad_sample_is_refused_for_the_rule_it_breaks() {
         .map(|e| e.expect("entry").path())
         .collect();
     cases.sort();
-    assert_eq!(cases.len(), 19);
+    assert_eq!(cases.len(), 20);
     for dir in cases {
         let name = dir
             .file_name()
@@ -239,6 +246,24 @@ fn every_bad_sample_is_refused_for_the_rule_it_breaks() {
             collect(&providers, &dir, &mut overlay);
         }
         tree.extend(overlay);
+        if name == "hot-l24-fallback-generic-locked" {
+            // L24 is a compatibility rule here: the update applies, `fallback` drops back to
+            // `brand` for that provider (the default), so a payment page never fetches its OG.
+            let registry = Registry::load(&envelope(&tree, 2026092799)).expect(&name);
+            let dropped: Vec<_> = registry
+                .degraded_routes()
+                .iter()
+                .filter(|d| d.provider == "zz-pay")
+                .collect();
+            assert_eq!(dropped.len(), 1, "{name}: {dropped:?}");
+            assert_eq!(dropped[0].route, "*");
+            assert!(dropped[0].reason.contains("L10"), "{}", dropped[0].reason);
+            let unknown = registry
+                .identify("https://pay.example.net/anything", false)
+                .expect("zz-pay");
+            assert_eq!(unknown.fallback.as_deref(), Some("brand"));
+            continue;
+        }
         let err = Registry::load(&envelope(&tree, 2026092799)).expect_err(&name);
         assert!(matches!(err, LoadError::Rejected(_)), "{name}: {err}");
         let got = rules(&err);

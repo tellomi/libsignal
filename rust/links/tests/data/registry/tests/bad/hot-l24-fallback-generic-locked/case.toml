@@ -1,0 +1,5 @@
+about = "L24：支付类 provider（L10 锁）写 fallback = generic，想让认不出对象的页面去抓 OG；brand 档也不许写 generic"
+expect = [
+  "L24 zz-pay: fallback = generic 只许 structured（现在是 brand）",
+  "L24 zz-pay: payment 不许 fallback = generic",
+]

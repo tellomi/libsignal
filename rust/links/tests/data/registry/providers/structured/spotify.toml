@@ -3,6 +3,7 @@ id = "spotify"
 name = { zh-Hans = "Spotify", en = "Spotify" }
 tier = "structured"
 category = "audio"
+fallback = "generic"                            # 认不出对象的页面（Issue / PR / 歌手 / 播放列表……）照今天的 generic 预览，不降成品牌壳（README 第 5 条，L24）
 domains = ["open.spotify.com"]
 short_domains = ["spotify.link"]                 # App「分享」出来的短链（Branch），展开到 open.spotify.com
 unreachable_in = ["cn"]                          # 大陆直连不可达（§3.3）：cn 区直接品牌壳，不发请求
