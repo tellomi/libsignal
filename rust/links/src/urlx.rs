@@ -168,8 +168,7 @@ pub fn registrable_domain(host: &str) -> Option<String> {
     if host.starts_with('[') || host.parse::<IpAddr>().is_ok() {
         return None;
     }
-    let domain = psl::domain_str(host)?;
-    (domain != host.rsplit('.').next().unwrap_or(host)).then(|| domain.to_owned())
+    crate::suffix::registrable(host)
 }
 
 /// Unicode form of an ASCII (punycode) host, when showing it is safe: every label is written in

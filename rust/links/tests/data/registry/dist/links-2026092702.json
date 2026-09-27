@@ -40,7 +40,7 @@
     },
     {
       "path": "links/provider.schema.json",
-      "sha256": "fef3225c42617cfc6194a8e02ce33713c8d9a1d6aebd105e881c03aa8c84994e"
+      "sha256": "d5c586ace4825eb283adae7d8c1229ece3c2e80b461eb4fb8ca788a69f9e3898"
     },
     {
       "path": "links/providers/brand/alipay.toml",
@@ -144,15 +144,15 @@
     },
     {
       "path": "links/providers/structured/github.toml",
-      "sha256": "a74e402977422e06b092e114028180e9938192dafb77265dc942a54853d5f0e1"
+      "sha256": "15eb99e74c7c37000658a5269e849fb71a0abe169b5ed8c924a8b4f87111fd0e"
     },
     {
       "path": "links/providers/structured/netease-music.toml",
-      "sha256": "0277ba0d1c731ef1a6d531cb2aa3351e49c864ecaabcc5bb72a2d3e1a54589ce"
+      "sha256": "a19850898eb78cb56918d984b9f7c54fd038b578848c35559d2131af0531ba8b"
     },
     {
       "path": "links/providers/structured/spotify.toml",
-      "sha256": "749ab46dea671755f79df04629e25663e774e64a72116177212725fad7c4d378"
+      "sha256": "fbbfda8e0ef804867bd191ee55041f33c1af3cea1846e4f2ece34404bbde7825"
     },
     {
       "path": "links/providers/structured/tencent-map.toml",
@@ -160,7 +160,7 @@
     },
     {
       "path": "links/providers/structured/youtube.toml",
-      "sha256": "b6cc8364daf4b1d08076694bb3bbcfbb0d219929951d670c8278d0be09633345"
+      "sha256": "87b2084bb10fd9addc8847fd04785f3003bd59cb4be74574247bf9a36e3c803e"
     }
   ],
   "name": "links",
@@ -1116,6 +1116,7 @@
           "github.com"
         ],
         "evidence": "ecosystem-2026-09-23/G6-dev-housing-jobs-stores.md「GitHub」（仓库 / Issue / PR / 用户页 OG 对象级；REST 无需 key）；2026-09-27 首批复核（#1419 PR）",
+        "fallback": "generic",
         "id": "github",
         "name": {
           "en": "GitHub",
@@ -1402,6 +1403,7 @@
           "y.music.163.com"
         ],
         "evidence": "ecosystem-2026-09-23/G4-video-audio.md「网易云音乐 — 单曲 & 歌单（A）」（完整 og:title / og:image / og:music:artist / og:music:album）；2026-09-27 首批复核（#1419 PR）",
+        "fallback": "generic",
         "hash_route": true,
         "id": "netease-music",
         "name": {
@@ -1633,6 +1635,7 @@
           "open.spotify.com"
         ],
         "evidence": "ecosystem-2026-09-23/G4-video-audio.md「Spotify」（oEmbed，✕cn）；2026-09-27 首批复核（#1419 PR）",
+        "fallback": "generic",
         "id": "spotify",
         "name": {
           "en": "Spotify",
@@ -2346,6 +2349,7 @@
           "youtu.be"
         ],
         "evidence": "ecosystem-2026-09-23/G4-video-audio.md「YouTube」（oEmbed 200，title / author / thumbnail 齐全；✕cn）；2026-09-27 首批复核（#1419 PR）",
+        "fallback": "generic",
         "host_rewrite": {
           "m.youtube.com": "www.youtube.com",
           "youtube.com": "www.youtube.com"
@@ -2513,5 +2517,5 @@
     ]
   },
   "schema": 1,
-  "version": 2026092701
+  "version": 2026092702
 }

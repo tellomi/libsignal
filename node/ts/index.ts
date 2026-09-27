@@ -29,6 +29,8 @@ import * as uuid from './uuid.js';
 
 export * as usernames from './usernames.js';
 
+export * as links from './links.js';
+
 export * as io from './io.js';
 
 export * as Net from './net.js';
