@@ -6,7 +6,9 @@
 [package]
 name = "tellomi-links"
 authors.workspace = true
-license.workspace = true
+# The crate is AGPL; data/public_suffix_list.dat is the Public Suffix List (MPL-2.0), bundled into
+# the binary, so the acknowledgments must carry MPL-2.0 for it too.
+license = "AGPL-3.0-only AND MPL-2.0"
 rust-version.workspace = true
 version = "0.1.0"
 edition = "2024"
