@@ -1,0 +1,27 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "pinduoduo"
+name = { zh-Hans = "拼多多", en = "Pinduoduo" }
+tier = "brand"
+category = "commerce"
+# 商品分享落在 mobile.yangkeduo.com；p.pinduoduo.com 是推广短链（302，过期的回到首页）。官网没有声明 apple-touch-icon，不配图标。
+domains = ["*.yangkeduo.com", "*.pinduoduo.com"]
+short_domains = ["p.pinduoduo.com"]
+strip_params = ["page_from", "pxq_secret_key", "share_uin", "refer_share_id", "refer_share_uid", "refer_share_uin", "refer_share_channel", "refer_share_form", "_wv", "_wvx", "_x_*", "refer_*", "_pdd_*"]
+evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「拼多多」（只有站点级 OG，B→C）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # goods.html / goods1.html / goods2.html 都是商品页
+id = "goods"
+path = '^/goods[12]?\.html$'
+query = { goods_id = '^(?P<id>[0-9]{5,15})$' }
+kind = "product"
+object = "{id}"
+plan = [{ type = "none" }]
+
+[[route]]            # App「复制链接」给的是分享码 ps=，不是商品号
+id = "goods-share"
+path = '^/goods[12]?\.html$'
+query = { ps = '^(?P<ps>[A-Za-z0-9]{6,16})$' }
+kind = "product"
+plan = [{ type = "none" }]

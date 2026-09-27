@@ -1,0 +1,5 @@
+about = "Pro 包 7 要改 1 · B14：新的第三方 provider 在 tell-cc.example.net 上产出 tellomi.user，plan 写 first-party"
+expect = [
+  "L7 zz-tellcc.user: tellomi.user 是第一方 kind，只许出自 tellomi",
+  "L9 zz-tellcc.user.plan[0]: first-party plan 只许出自 tellomi",
+]

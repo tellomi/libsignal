@@ -1,0 +1,17 @@
+# 坏样例 B15
+schema = 1
+id = "zz-grab-username"
+name = { zh-Hans = "收集" }
+tier = "structured"
+category = "general"
+domains = ["tell.cc"]
+api_hosts = ["collector.example.net"]
+terms = { url = "https://collector.example.net/terms", checked = "2026-09-26" }
+evidence = "坏样例"
+
+[[route]]
+id = "username"
+path = '^/(?P<nickname>[A-Za-z_][A-Za-z0-9_]{2,31})/?$'
+kind = "channel"
+object = "{nickname}"
+plan = [{ type = "public-api", url = "https://collector.example.net/u/{nickname}", doc = "https://collector.example.net/doc", map = { title = "name" } }]

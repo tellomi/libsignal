@@ -1,0 +1,8 @@
+about = "Pro 包 9 复现的篡改①②：tellomi 把群邀请片段做成 capture，拼进 public-api 的 url 模板和 open.scheme；外加用户名路径改用 og+jsonld（官网以外的第一方 route 不许抓网页）"
+expect = [
+  "L20 tellomi.group.plan[0]: url 模板引用了片段里的 capture {invite}",
+  "L20 tellomi: open.scheme 引用了片段里的 capture {invite}",
+  "L21 tellomi.group.plan[0]: 第一方不许有 public-api plan",
+  "L21 tellomi: 第一方不许有 open.scheme",
+  "L21 tellomi.user-path.plan[0]: 第一方的 og+jsonld 只许用在官网主机的 route 上",
+]

@@ -1,0 +1,59 @@
+# 第三方样本只收真实链接（不许编 ID）；source 写从哪来、哪天核的。
+provider = "bilibili"
+
+[[case]]
+url = "https://b23.tv/BV1YDhJ6ZEL6"
+source = "G4 实测；2026-09-24 重新展开：302 → https://www.bilibili.com/video/BV1YDhJ6ZEL6"
+expect = { short = true }
+
+[[case]]
+url = "https://www.bilibili.com/video/BV1YDhJ6ZEL6"
+source = "上一条展开后的落点（2026-09-24）"
+expect = { route = "video", kind = "video", object = "BV1YDhJ6ZEL6", canonical_url = "https://www.bilibili.com/video/BV1YDhJ6ZEL6" }
+
+[[case]]
+url = "https://www.bilibili.com/video/BV1YDhJ6ZEL6/?spm_id_from=333.1007.tianma.1-1-1.click&vd_source=0123456789abcdef"
+source = "同一视频加上站内分享常见的跟踪参数（参数名来自站内分享，值是占位）"
+expect = { route = "video", kind = "video", object = "BV1YDhJ6ZEL6", canonical_url = "https://www.bilibili.com/video/BV1YDhJ6ZEL6/" }
+
+[[case]]
+url = "https://www.bilibili.com/"
+source = "站点首页：域名命中、认不出对象 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://b23.tv/BV1pr4y1B71T"
+source = "检索到的公开分享短链（2026-09-27）；大陆直连 302 → 下一条"
+expect = { short = true }
+
+[[case]]
+url = "https://www.bilibili.com/video/BV1pr4y1B71T"
+source = "上一条短链的第一个 Location 原文（2026-09-27 大陆直连）"
+location = true
+expect = { route = "video", kind = "video", object = "BV1pr4y1B71T" }
+
+[[case]]
+url = "https://b23.tv/av80433022"
+source = "检索到的公开分享短链（知乎文章引用，2026-09-27）；老的 av 号形状，302 → 下一条"
+expect = { short = true }
+
+[[case]]
+url = "https://www.bilibili.com/video/av80433022"
+source = "上一条短链的第一个 Location 原文（2026-09-27 大陆直连）"
+location = true
+expect = { route = "video-av", kind = "video", object = "av80433022" }
+
+[[case]]
+url = "https://www.bilibili.com/video/BV1qw41177Da/"
+source = "检索到的公开视频页（2026-09-27）"
+expect = { route = "video", kind = "video", object = "BV1qw41177Da" }
+
+[[case]]
+url = "https://www.bilibili.com/video/BV1JL411W7Sx"
+source = "检索到的公开视频页（2026-09-27），不带结尾斜杠"
+expect = { route = "video", kind = "video", object = "BV1JL411W7Sx" }
+
+[[case]]
+url = "https://m.bilibili.com/video/BV1vs411Z7zw"
+source = "检索到的移动站链接（2026-09-27）；302 到 www，识别时按 host_rewrite 当 www"
+expect = { route = "video", kind = "video", object = "BV1vs411Z7zw", canonical_url = "https://www.bilibili.com/video/BV1vs411Z7zw" }

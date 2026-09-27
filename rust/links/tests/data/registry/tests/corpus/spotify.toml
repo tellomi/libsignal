@@ -1,0 +1,36 @@
+provider = "spotify"
+
+[[case]]
+url = "https://open.spotify.com/track/7qiZfU4dY1lWllzX7mPBI3"
+source = "G4 实测（oEmbed，境外出口）"
+expect = { route = "track", kind = "music.track", object = "track/7qiZfU4dY1lWllzX7mPBI3" }
+
+[[case]]
+url = "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b"
+source = "检索到的公开单曲（2026-09-27）"
+expect = { route = "track", kind = "music.track", object = "track/0VjIjW4GlUZAMYd2vXMi3b" }
+
+[[case]]
+url = "https://open.spotify.com/intl-es/track/7MXgrcOQAJ5VwSNUL0lDd3"
+source = "检索到的带语言段的单曲链接（2026-09-27）"
+expect = { route = "track", kind = "music.track", object = "track/7MXgrcOQAJ5VwSNUL0lDd3" }
+
+[[case]]
+url = "https://open.spotify.com/album/2Xoteh7uEpea4TohMxjtaq"
+source = "检索到的公开专辑（2026-09-27）"
+expect = { route = "album", kind = "music.album", object = "album/2Xoteh7uEpea4TohMxjtaq" }
+
+[[case]]
+url = "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M"
+source = "G4 实测（Spotify 官方歌单 Today's Top Hits）"
+expect = { route = "playlist", kind = "music.playlist", object = "playlist/37i9dQZF1DXcBWIGoYBM5M" }
+
+[[case]]
+url = "https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02"
+source = "检索到的歌手页（2026-09-27）：kind 词汇表里没有歌手 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://spotify.link/9SmhQr0y2Ib"
+source = "Spotify 社区论坛里的真实分享短链（2026-09-27 经代理 307 到 open.spotify.com/playlist/…；Location 带分享跟踪参数，不收进样本）"
+expect = { short = true }

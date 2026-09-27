@@ -1,0 +1,8 @@
+about = "与上面两份同类：schema 必填的键缺了（route 的 id / kind、plan 的 type、样本的 url），lint 只报错、不崩溃"
+expect = [
+  "zz-missing.toml.route[0]: 缺 id",
+  "zz-missing.toml.route[0].plan[0]: 缺 type",
+  "zz-missing.toml.route[1]: 缺 kind",
+  "L14 corpus zz-missing[0] None: 缺 url",
+  "kind = None，期望 channel",
+]

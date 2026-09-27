@@ -1,0 +1,39 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "pinduoduo"
+
+[[case]]
+url = "https://p.pinduoduo.com/svsmce9Z"
+source = "检索到的拼多多推广短链（2026-09-27）"
+expect = { short = true }
+
+[[case]]
+url = "https://p.pinduoduo.com/aTJmF5ZI"
+source = "检索到的拼多多推广短链（2026-09-27）"
+expect = { short = true }
+
+[[case]]
+url = "https://mobile.yangkeduo.com/goods.html?goods_id=95988871683"
+source = "检索到的拼多多商品页（2026-09-27）"
+expect = { route = "goods", kind = "product", object = "95988871683" }
+
+[[case]]
+url = "https://mobile.yangkeduo.com/goods2.html?goods_id=846351856546"
+source = "检索到的拼多多商品页 goods2（2026-09-27）"
+expect = { route = "goods", kind = "product", object = "846351856546" }
+
+[[case]]
+url = "https://mobile.yangkeduo.com/goods.html?ps=PbFINcJclz"
+source = "检索到的 App「复制链接」分享码形状（2026-09-27）"
+expect = { route = "goods-share", kind = "product" }
+
+[[case]]
+url = "https://mobile.yangkeduo.com/goods1.html?ps=JVdxz9BmCq"
+source = "检索到的 goods1 分享码形状（2026-09-27）"
+expect = { route = "goods-share", kind = "product" }
+
+[[case]]
+url = "https://mobile.yangkeduo.com/mall_page.html?mall_id=112824170"
+source = "检索到的拼多多店铺页（2026-09-27）：店铺认不出对象 → 品牌壳"
+expect = { route = "" }

@@ -1,0 +1,34 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "dianping"
+
+[[case]]
+url = "https://dpurl.cn/vkbmocvz"
+source = "检索到的大众点评 App 分享短链（2026-09-27 302 到 m.dianping.com/shopshare/…；原文 http，改成 https）"
+expect = { short = true }
+
+[[case]]
+url = "https://dpurl.cn/GJF6YUkz"
+source = "检索到的大众点评分享短链（2026-09-27 302 到 h5.peppermall.meituan.com 的票务页：落到美团，按美团走；原文 http，改成 https）"
+expect = { short = true }
+
+[[case]]
+url = "https://m.dianping.com/shopshare/k1tcZDtRfXspEFvZ"
+source = "检索到的店铺分享页（2026-09-27；不带 cookie 进 verify.meituan.com）"
+expect = { route = "" }
+
+[[case]]
+url = "https://www.dianping.com/shop/2972056"
+source = "G2 实测的店铺页（2026-09-27 复核）"
+expect = { route = "" }
+
+[[case]]
+url = "https://m.dianping.com/shop/123086463"
+source = "检索到的移动店铺页（2026-09-27；原文 http 且带 msource，改成 https、去掉）"
+expect = { route = "" }
+
+[[case]]
+url = "https://m.dianping.com/discovery/2097760685"
+source = "检索到的内容页（2026-09-27）"
+expect = { route = "" }

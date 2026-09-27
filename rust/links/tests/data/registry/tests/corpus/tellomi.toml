@@ -1,0 +1,62 @@
+# 第一方：用户名用真实的测试号；带秘密的形状（群邀请 / 通话 key / 贴纸 key / 加密用户名链接）一律用合成值（synthetic），
+# 仓库里绝不放真实秘密。
+provider = "tellomi"
+
+[[case]]
+url = "https://tell.cc/hk881qb"
+source = "测试号 0006 的用户名 hk881qb.01（docs/signal/BUILD_REGISTRATION.md）"
+expect = { route = "user-path", kind = "tellomi.user", object = "hk881qb" }
+
+[[case]]
+url = "https://tell.cc/ceshi.57"
+source = "旧的带数字形状（LINKS_AND_SCHEMES.md 的实测）"
+expect = { route = "user-path", kind = "tellomi.user", object = "ceshi", captures = { discriminator = "57" } }
+
+[[case]]
+url = "https://tell.cc/u#u/hk881qb.01"
+source = "落地页唤起 App 时的内部形状 tellomi://tell.cc/u#u/… 的 https 写法（匹配器只认 https：Signal 只给 https 链接生成预览）"
+expect = { route = "user-username-fragment", kind = "tellomi.user", object = "hk881qb.01" }
+
+[[case]]
+url = "https://tell.cc/u#eu/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+source = "合成值（加密用户名链接是秘密）"
+synthetic = true
+expect = { route = "user-encrypted-link", kind = "tellomi.user" }
+
+[[case]]
+url = "https://tell.cc/u#p/+8613800000006"
+source = "测试号 0006（固定验证码的测试号段，docs/signal/BUILD_REGISTRATION.md）"
+expect = { route = "user-phone", kind = "tellomi.user" }
+
+[[case]]
+url = "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+source = "合成值（群邀请是秘密）"
+synthetic = true
+expect = { route = "group", kind = "tellomi.group" }
+
+[[case]]
+url = "https://tell.cc/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz"
+source = "合成值；Desktop 生成的是带斜杠的 /call/#（signalRoutes.std.ts）"
+synthetic = true
+expect = { route = "call", kind = "tellomi.call" }
+
+[[case]]
+url = "https://tell.cc/s#pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000"
+source = "合成值（贴纸包 key 是秘密）"
+synthetic = true
+expect = { route = "sticker", kind = "tellomi.sticker" }
+
+[[case]]
+url = "https://tell.cc/call"
+source = "保留路径、没有片段：不是用户名，也不是对象"
+expect = { route = "" }
+
+[[case]]
+url = "https://tell.cc/app"
+source = "保留路径 app（3 个字母，合用户名语法，必须被挡住）"
+expect = { route = "" }
+
+[[case]]
+url = "https://tellomi.app/download/"
+source = "官网页面 → tellomi.official"
+expect = { route = "official", kind = "tellomi.official" }

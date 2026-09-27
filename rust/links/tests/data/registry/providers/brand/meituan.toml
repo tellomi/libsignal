@@ -1,0 +1,22 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "meituan"
+name = { zh-Hans = "美团", en = "Meituan" }
+tier = "brand"
+category = "local"
+# 美团、美团外卖（h5.waimai.meituan.com）、美团团购（g.meituan.com）同一家。App 分享链接 i.meituan.com/c/… 与
+# click.meituan.com、g.meituan.com/fuse/…（大众点评的分享也用它）回 200 的 JS 页、没有 Location，按域名直接出品牌壳。
+# 页面大多进 verify.meituan.com 验证页（C 档）。官网没有声明 apple-touch-icon，不配图标。
+domains = ["*.meituan.com"]
+strip_params = ["lch", "utm_*", "channel", "f", "page_source", "_rdt"]
+evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「美团外卖」「美团团购」（连站点级 OG 都没有，C 档）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # 团购套餐：卡片只写「美团 · 优惠」
+id = "deal"
+host = "g.meituan.com"
+path = '^/app/gfe-app-page-tuan/detail-mt\.html$'
+query = { dealId = '^(?P<id>[0-9]{5,15})$' }
+kind = "deal"
+object = "{id}"
+plan = [{ type = "none" }]

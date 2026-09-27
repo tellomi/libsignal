@@ -1,0 +1,12 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 支付金融：L10 锁死 —— 只能 brand、只能 plan none、不许 scheme，只许浏览器打开（§4.9 / §6.6）
+schema = 1
+id = "unionpay"
+name = { zh-Hans = "云闪付", en = "UnionPay" }
+tier = "brand"
+category = "payment"
+# 没找到分享短链主机（2026-09-27 检索 c. / t. / u. / d.95516.com 都没有）；活动与权益页在 *.95516.com，官网在 *.unionpay.com。
+# 官网没有声明 apple-touch-icon（yunshanfu.unionpay.com 大陆直连连不上），不配图标。
+domains = ["*.95516.com", "*.unionpay.com"]
+evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「云闪付」；2026-09-27 首批复核（#1419 PR）"

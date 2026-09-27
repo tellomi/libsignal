@@ -1,0 +1,35 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "douyin"
+name = { zh-Hans = "抖音", en = "Douyin" }
+tier = "brand"
+category = "video"
+# v.douyin.com 是 App 分享短链（302 到 www.iesdouyin.com/share/video/<id>/?…，再 302 到 www.douyin.com/video/<id>）。
+# 页面是 JS 壳、没有 OG（C 档）。汽水音乐（qishui.douyin.com）是另一个品牌，不写通配。官网没有声明 apple-touch-icon，不配图标。
+domains = ["www.douyin.com", "douyin.com", "www.iesdouyin.com", "iesdouyin.com", "live.douyin.com"]
+short_domains = ["v.douyin.com"]
+strip_params = ["previous_page", "region", "mid", "u_code", "did", "iid", "with_sec_did", "titleType", "share_sign", "share_version", "ts", "from_aid", "from_ssr", "from", "source", "utm_*", "modeFrom"]
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「抖音」（真实 ID 直连仍是 JS 壳，C 档）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]
+id = "video"
+path = '^/(?:video|share/video)/(?P<id>[0-9]{15,20})/?$'
+kind = "video"
+object = "{id}"
+plan = [{ type = "none" }]
+
+[[route]]            # 直播间只做频道卡的类型文字，不声称在播（§3.4.12）
+id = "live"
+host = "live.douyin.com"
+path = '^/(?P<room>[A-Za-z0-9_-]{2,40})/?$'
+kind = "channel"
+object = "live/{room}"
+plan = [{ type = "none" }]
+
+[[route]]
+id = "user"
+path = '^/user/(?P<uid>[A-Za-z0-9_-]{10,80})/?$'
+kind = "channel"
+object = "user/{uid}"
+plan = [{ type = "none" }]

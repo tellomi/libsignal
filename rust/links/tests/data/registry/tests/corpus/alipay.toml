@@ -1,0 +1,32 @@
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "alipay"
+
+[[case]]
+url = "https://render.alipay.com/p/f/fd-j5rqp49m/index.html"
+source = "G2 实测（生活号简介页，2026-09-27 复核）"
+expect = { route = "" }
+
+[[case]]
+url = "https://ur.alipay.com/_6UQdzN8yUtEMBMywY4dArY"
+source = "检索到的小程序分享短链（2026-09-27 302 到 render.alipay.com/p/s/i/?scheme=alipays://…）：支付类不展开，按域名直接出品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://render.alipay.com/p/c/18rdibyo7z0g"
+source = "检索到的活动页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://render.alipay.com/p/f/fd-jwzsiiud/index.html"
+source = "检索到的活动规则页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://render.alipay.com/p/f/fd-jjr55egh/index.html"
+source = "检索到的活动规则页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://ds.alipay.com/fd-ig26iule/offlinemuq4rdzaqh.html"
+source = "检索到的活动页（2026-09-27）"
+expect = { route = "" }
