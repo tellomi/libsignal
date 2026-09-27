@@ -1,0 +1,45 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "youtube"
+name = { zh-Hans = "YouTube", en = "YouTube" }
+tier = "structured"
+category = "video"
+# youtu.be/<id> 本身就带着视频号，直接识别，不当短链展开（省一个请求；它 303 到 watch?v=）
+domains = ["www.youtube.com", "youtube.com", "m.youtube.com", "youtu.be"]
+host_rewrite = { "youtube.com" = "www.youtube.com", "m.youtube.com" = "www.youtube.com" }
+unreachable_in = ["cn"]                          # 大陆直连不可达（§3.3）：cn 区直接品牌壳，不发请求
+api_hosts = ["www.youtube.com"]                  # oEmbed 端点的主机（L9）
+strip_params = ["si", "feature", "pp", "t", "list", "index", "ab_channel", "app"]
+terms = { url = "https://www.youtube.com/t/terms", checked = "2026-09-27", notes = "oEmbed 端点不要 key；视频页 <link rel=alternate type=application/json+oembed> 自己声明端点（G4 实测）；YouTube 没有单独的 oEmbed 文档页，doc 写 oEmbed 规范" }
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「YouTube」（oEmbed 200，title / author / thumbnail 齐全；✕cn）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]
+id = "watch"
+path = '^/watch$'
+query = { v = '^(?P<id>[A-Za-z0-9_-]{11})$' }
+kind = "video"
+object = "{id}"
+plan = [{ type = "oembed", endpoint = "https://www.youtube.com/oembed", doc = "https://oembed.com/", map = { title = "title", image = "thumbnail_url", author = "author_name" } }]
+
+[[route]]
+id = "short-link"
+host = "youtu.be"
+path = '^/(?P<id>[A-Za-z0-9_-]{11})/?$'
+kind = "video"
+object = "{id}"
+plan = [{ type = "oembed", endpoint = "https://www.youtube.com/oembed", doc = "https://oembed.com/", map = { title = "title", image = "thumbnail_url", author = "author_name" } }]
+
+[[route]]
+id = "shorts"
+path = '^/(?:shorts|live)/(?P<id>[A-Za-z0-9_-]{11})/?$'
+kind = "video"
+object = "{id}"
+plan = [{ type = "oembed", endpoint = "https://www.youtube.com/oembed", doc = "https://oembed.com/", map = { title = "title", image = "thumbnail_url", author = "author_name" } }]
+
+[[route]]            # 频道主页 /@handle（含 /videos 等标签页）：oEmbed 不支持频道，取页面 OG
+id = "channel-handle"
+path = '^/@(?P<handle>[A-Za-z0-9._-]{3,30})(?:/(?:featured|videos|shorts|streams|playlists|community|about))?/?$'
+kind = "channel"
+object = "@{handle}"
+plan = [{ type = "og+jsonld", map = { title = "og:title", image = "og:image" } }]

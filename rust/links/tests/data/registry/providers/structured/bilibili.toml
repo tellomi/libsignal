@@ -1,0 +1,28 @@
+schema = 1
+id = "bilibili"
+name = { zh-Hans = "哔哩哔哩", en = "Bilibili" }
+tier = "structured"
+category = "video"
+# m 站 302 到 www（2026-09-27 实测）；识别时当 www 处理，canonical_url 也写 www
+domains = ["www.bilibili.com", "m.bilibili.com"]
+host_rewrite = { "m.bilibili.com" = "www.bilibili.com" }
+short_domains = ["b23.tv"]
+strip_params = ["spm_id_from", "vd_source", "share_source", "share_medium", "share_plat", "share_session_id", "share_tag", "share_times", "bbid", "ts", "timestamp", "unique_k", "from_spmid"]
+placeholders = { description = ["-"] }          # 没写简介的视频，JSON-LD description 是 "-"（2026-09-24 复核）
+title_strip = ['_哔哩哔哩bilibili(_[^_]*)?$']     # og:title 带站点后缀；JSON-LD name 是干净的，优先用它
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「Bilibili — 视频（A）」；2026-09-24 复核 JSON-LD VideoObject；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]
+id = "video"
+path = '^/video/(?P<bv>BV[0-9A-Za-z]{10})/?$'
+kind = "video"
+object = "{bv}"
+# api.bilibili.com 没有公开文档，不用（§4.4）；页面 JSON-LD 已经够
+plan = [{ type = "og+jsonld", jsonld_type = "VideoObject", map = { title = "name", image = "thumbnailUrl[0]", author = "author.name", duration_ms = "duration|iso8601_ms", published_at = "datePublished|rfc3339" } }]
+
+[[route]]            # 老的 av 号链接（b23.tv/av… 展开后的形状）：页面 JSON-LD 按 BV 号自称，身份校验对不上 av 号，所以只取 OG
+id = "video-av"
+path = '^/video/av(?P<aid>[0-9]{1,12})/?$'
+kind = "video"
+object = "av{aid}"
+plan = [{ type = "og+jsonld", map = { title = "og:title", image = "og:image" } }]

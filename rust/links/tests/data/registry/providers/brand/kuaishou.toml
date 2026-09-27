@@ -1,0 +1,28 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "kuaishou"
+name = { zh-Hans = "快手", en = "Kuaishou" }
+tier = "brand"
+category = "video"
+# v.kuaishou.com 是 App 分享短链（302 到 v.m.chenzhongtech.com 或随机前缀的 *.m.chenzhongtech.com /fw/photo/<id>，快手自己的落地域名）。
+# www.kuaishou.com/f/<token> 是网页版分享口令（302 到 /short-video/<id>），认不出对象。官网没有声明 apple-touch-icon，不配图标。
+domains = ["www.kuaishou.com", "kuaishou.com", "live.kuaishou.com", "m.kuaishou.com", "*.chenzhongtech.com"]
+short_domains = ["v.kuaishou.com"]
+strip_params = ["cc", "fid", "followRefer", "shareMethod", "docId", "kpn", "subBiz", "photoId", "shareId", "shareToken", "shareResourceType", "userId", "shareType", "et", "timestamp", "shareObjectId", "streamSource", "trendingId", "area", "kpf", "utm_*"]
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「快手」（C 档）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]
+id = "video"
+path = '^/(?:short-video|fw/photo)/(?P<id>[0-9a-z]{12,20})/?$'
+kind = "video"
+object = "{id}"
+plan = [{ type = "none" }]
+
+[[route]]
+id = "live"
+host = "live.kuaishou.com"
+path = '^/u/(?P<uid>[0-9a-zA-Z_-]{6,40})/?$'
+kind = "channel"
+object = "live/{uid}"
+plan = [{ type = "none" }]

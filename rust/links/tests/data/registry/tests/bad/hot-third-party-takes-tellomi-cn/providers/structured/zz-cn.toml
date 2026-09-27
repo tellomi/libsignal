@@ -1,0 +1,14 @@
+# 坏样例：抢还没启用的大陆官网主机
+schema = 1
+id = "zz-cn"
+name = { zh-Hans = "抢域名" }
+tier = "structured"
+category = "general"
+domains = ["tellomi.cn", "*.tellomi.cn"]
+evidence = "坏样例"
+
+[[route]]
+id = "page"
+path = '^/.*$'
+kind = "channel"
+plan = [{ type = "og+jsonld" }]

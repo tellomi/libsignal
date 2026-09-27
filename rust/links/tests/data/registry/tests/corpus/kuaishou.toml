@@ -1,0 +1,39 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "kuaishou"
+
+[[case]]
+url = "https://v.kuaishou.com/poD0QM"
+source = "G4 实测的快手分享短链（2026-09-27 复核）"
+expect = { short = true }
+
+[[case]]
+url = "https://v.kuaishou.com/KI2PHDq2"
+source = "检索到的快手分享短链（2026-09-27 302 到 v.m.chenzhongtech.com/fw/photo/…）"
+expect = { short = true }
+
+[[case]]
+url = "https://www.kuaishou.com/short-video/3xmufxcqhgyy6gm"
+source = "检索到的视频页（2026-09-27）"
+expect = { route = "video", kind = "video", object = "3xmufxcqhgyy6gm" }
+
+[[case]]
+url = "https://www.kuaishou.com/short-video/3xsa2ha3xd4e4sy"
+source = "检索到的视频页（2026-09-27）"
+expect = { route = "video", kind = "video", object = "3xsa2ha3xd4e4sy" }
+
+[[case]]
+url = "https://v.m.chenzhongtech.com/fw/photo/3x6a296g8y4rp4e"
+source = "G4 实测的短链落地（快手自己的落地域名，2026-09-27 复核）"
+expect = { route = "video", kind = "video", object = "3x6a296g8y4rp4e" }
+
+[[case]]
+url = "https://live.kuaishou.com/u/3xnt2af5k7gvuyy"
+source = "G4 实测的直播间（2026-09-27 复核）"
+expect = { route = "live", kind = "channel" }
+
+[[case]]
+url = "https://www.kuaishou.com/f/X-8dHF9SInRxs1WN"
+source = "检索到的网页版分享口令（2026-09-27 302 到 /short-video/…）：认不出对象 → 品牌壳"
+expect = { route = "" }

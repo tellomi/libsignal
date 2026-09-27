@@ -1,0 +1,5 @@
+about = "B16 的变体：品牌壳 provider 只写 host_rewrite = {evil2.example = tellomi.app}，不出第一方 kind。canonical_url 同样变成官网；拦它的是 L4 和 L23"
+expect = [
+  "L4 zz-rewrite-brand: host_rewrite evil2.example → tellomi.app 两边都要在 domains 里",
+  "L23 zz-rewrite-brand: host_rewrite 的 tellomi.app 就是第一方 / 官网主机 ['tellomi.app']",
+]

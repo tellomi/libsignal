@@ -1,0 +1,2 @@
+about = "Pro 包 7 · #1249 不阻塞 1（实跑 A23）：tellomi 的 route 缺 path。L19 对照一级路径那段曾抛 KeyError，前面记下的报错一条都打印不出来"
+expect = ["first-party/tellomi.toml.route[7]: 缺 path"]

@@ -1,0 +1,48 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+provider = "youtube"
+
+[[case]]
+url = "https://youtu.be/dQw4w9WgXcQ"
+source = "G4 实测（oEmbed 200）；youtu.be 本身带着视频号，直接识别"
+expect = { route = "short-link", kind = "video", object = "dQw4w9WgXcQ" }
+
+[[case]]
+url = "https://youtu.be/F6va6tg62qg?t=14s"
+source = "检索到的分享短链（2026-09-27，带时间点）"
+expect = { route = "short-link", kind = "video", object = "F6va6tg62qg" }
+
+[[case]]
+url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+source = "G4 实测"
+expect = { route = "watch", kind = "video", object = "dQw4w9WgXcQ", canonical_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+
+[[case]]
+url = "https://m.youtube.com/watch?v=GHMjD0Lp5DY"
+source = "检索到的移动站链接（2026-09-27）；m 站按 host_rewrite 当 www"
+expect = { route = "watch", kind = "video", object = "GHMjD0Lp5DY", canonical_url = "https://www.youtube.com/watch?v=GHMjD0Lp5DY" }
+
+[[case]]
+url = "https://www.youtube.com/watch?v=47dtFZ8CFo8&list=PLwxnUUM01nt2nMh9DPq09e6fIDbumybgt&index=166"
+source = "检索到的播放列表里的视频（2026-09-27）：list / index 去掉后识别"
+expect = { route = "watch", kind = "video", object = "47dtFZ8CFo8" }
+
+[[case]]
+url = "https://www.youtube.com/shorts/2Sx6dvMTtuM"
+source = "检索到的 Shorts 链接（2026-09-27）"
+expect = { route = "shorts", kind = "video", object = "2Sx6dvMTtuM" }
+
+[[case]]
+url = "https://www.youtube.com/@LofiGirl/live"
+source = "G4 实测（直播间：只做频道卡，不声称在播，§3.4.12）；/live 不在频道标签页里 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://www.youtube.com/@YouTube"
+source = "YouTube 官方频道（2026-09-27）"
+expect = { route = "channel-handle", kind = "channel", object = "@YouTube" }
+
+[[case]]
+url = "https://www.youtube.com/playlist?list=PLPoyjoH0J4xn67bdEiKLVPV9W6sy60t6x"
+source = "检索到的播放列表（2026-09-27）：kind 词汇表里没有视频播放列表 → 品牌壳（见 PR「不合 schema 的样本」）"
+expect = { route = "" }

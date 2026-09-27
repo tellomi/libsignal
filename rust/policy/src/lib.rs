@@ -24,6 +24,7 @@
 //! ```
 
 mod engine;
+pub mod envelope;
 mod lexicon;
 pub mod normalize;
 
