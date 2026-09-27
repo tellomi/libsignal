@@ -8,11 +8,11 @@
 
 use std::collections::BTreeMap;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 /// The degradation ladder (ADR-0063 §5.1). Every link lands on exactly one rung; failure only
 /// ever moves it down.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Level {
     /// No preview; the link in the text stays tappable. When the message is only this link the

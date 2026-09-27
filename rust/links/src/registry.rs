@@ -405,6 +405,9 @@ pub struct Identified {
     pub captures: BTreeMap<String, String>,
     pub canonical_url: Option<String>,
     pub short: bool,
+    /// Only when no route recognised an object on a third-party host: what that link gets —
+    /// `"brand"` (a brand shell) or `"generic"` (the provider's `fallback`, README §3 rule 5).
+    pub fallback: Option<String>,
 }
 
 /// The loaded, validated registry. Immutable; a hot update builds a new one.
@@ -606,6 +609,14 @@ impl Registry {
             captures: m.captures,
             canonical_url: (!short).then_some(m.canonical),
             short,
+            fallback: (route.is_none() && !short && !provider.is_tellomi()).then(|| {
+                if provider.fallback_generic {
+                    "generic"
+                } else {
+                    "brand"
+                }
+                .to_owned()
+            }),
         })
     }
 }
@@ -1127,6 +1138,16 @@ impl Loader {
                     pid,
                     "*",
                     "fallback does not apply to tellomi: unknown tell.cc paths stay plain links",
+                );
+                false
+            }
+            // L24: only a structured provider may fall through to generic; a brand-tier platform
+            // is one whose pages are known to say nothing true about the object.
+            Some("generic") if tier != Tier::Structured => {
+                self.degrade(
+                    pid,
+                    "*",
+                    "fallback = generic is only for structured providers (L24)",
                 );
                 false
             }

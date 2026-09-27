@@ -1950,6 +1950,75 @@ type NativeFunctions = {
   KyberSecretKey_Serialize: (
     obj: Wrapper<KyberSecretKey>
   ) => Uint8Array<ArrayBuffer>;
+  LinkJob_Finish: (
+    job: Wrapper<LinkJob>,
+    policy: Wrapper<PolicyEngine> | null
+  ) => string;
+  LinkJob_NextRequest: (job: Wrapper<LinkJob>) => string | null;
+  LinkJob_OnFailure: (job: Wrapper<LinkJob>, id: number) => void;
+  LinkJob_OnFirstParty: (
+    job: Wrapper<LinkJob>,
+    id: number,
+    result: string
+  ) => void;
+  LinkJob_OnImage: (job: Wrapper<LinkJob>, id: number, ok: boolean) => void;
+  LinkJob_OnNetworkError: (job: Wrapper<LinkJob>, id: number) => void;
+  LinkJob_OnResponse: (
+    job: Wrapper<LinkJob>,
+    id: number,
+    status: number,
+    final_url: string,
+    content_type: string,
+    location: string | null,
+    body: Uint8Array<ArrayBuffer>
+  ) => void;
+  LinkRegistry_Begin: (
+    registry: Wrapper<LinkRegistry>,
+    url: string,
+    context: string
+  ) => LinkJob;
+  LinkRegistry_Classify: (
+    registry: Wrapper<LinkRegistry>,
+    preview: string,
+    body: string,
+    message: string
+  ) => string;
+  LinkRegistry_Degraded: (registry: Wrapper<LinkRegistry>) => string;
+  LinkRegistry_Identify: (
+    registry: Wrapper<LinkRegistry>,
+    url: string,
+    location: boolean
+  ) => string | null;
+  LinkRegistry_Load: (envelope: Uint8Array<ArrayBuffer>) => LinkRegistry;
+  LinkRegistry_LoadUpdate: (
+    envelope: Uint8Array<ArrayBuffer>,
+    signature_hex: string,
+    public_key: Uint8Array<ArrayBuffer>,
+    current_version: bigint
+  ) => LinkRegistry;
+  LinkRegistry_OpenPlan: (
+    registry: Wrapper<LinkRegistry>,
+    url: string
+  ) => string;
+  LinkRegistry_ReceiveCheck: (
+    registry: Wrapper<LinkRegistry>,
+    preview: string,
+    body: string,
+    message: string
+  ) => string;
+  LinkRegistry_Version: (registry: Wrapper<LinkRegistry>) => bigint;
+  Links_Layout: (
+    image_width: number,
+    image_height: number,
+    kind: string,
+    level: string
+  ) => string;
+  Links_Tint: (
+    layout: string,
+    width: number,
+    height: number,
+    rgba: Uint8Array<ArrayBuffer>
+  ) => string;
   LookupRequest_addAciAndAccessKey: (
     request: Wrapper<LookupRequest>,
     aci: Uint8Array<ArrayBuffer>,
@@ -4076,6 +4145,24 @@ const {
   KyberPublicKey_Serialize,
   KyberSecretKey_Deserialize,
   KyberSecretKey_Serialize,
+  LinkJob_Finish,
+  LinkJob_NextRequest,
+  LinkJob_OnFailure,
+  LinkJob_OnFirstParty,
+  LinkJob_OnImage,
+  LinkJob_OnNetworkError,
+  LinkJob_OnResponse,
+  LinkRegistry_Begin,
+  LinkRegistry_Classify,
+  LinkRegistry_Degraded,
+  LinkRegistry_Identify,
+  LinkRegistry_Load,
+  LinkRegistry_LoadUpdate,
+  LinkRegistry_OpenPlan,
+  LinkRegistry_ReceiveCheck,
+  LinkRegistry_Version,
+  Links_Layout,
+  Links_Tint,
   LookupRequest_addAciAndAccessKey,
   LookupRequest_addE164,
   LookupRequest_addPreviousE164,
@@ -4874,6 +4961,24 @@ export {
   KyberPublicKey_Serialize,
   KyberSecretKey_Deserialize,
   KyberSecretKey_Serialize,
+  LinkJob_Finish,
+  LinkJob_NextRequest,
+  LinkJob_OnFailure,
+  LinkJob_OnFirstParty,
+  LinkJob_OnImage,
+  LinkJob_OnNetworkError,
+  LinkJob_OnResponse,
+  LinkRegistry_Begin,
+  LinkRegistry_Classify,
+  LinkRegistry_Degraded,
+  LinkRegistry_Identify,
+  LinkRegistry_Load,
+  LinkRegistry_LoadUpdate,
+  LinkRegistry_OpenPlan,
+  LinkRegistry_ReceiveCheck,
+  LinkRegistry_Version,
+  Links_Layout,
+  Links_Tint,
   LookupRequest_addAciAndAccessKey,
   LookupRequest_addE164,
   LookupRequest_addPreviousE164,
@@ -5596,6 +5701,12 @@ export interface KyberPublicKey {
   readonly __type: unique symbol;
 }
 export interface KyberSecretKey {
+  readonly __type: unique symbol;
+}
+export interface LinkJob {
+  readonly __type: unique symbol;
+}
+export interface LinkRegistry {
   readonly __type: unique symbol;
 }
 export interface LookupRequest {
