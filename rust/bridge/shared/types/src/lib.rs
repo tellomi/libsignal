@@ -52,6 +52,18 @@ mod policy {
     bridge_as_handle!(PolicyEngine);
 }
 
+/// Tellomi: link cards (ADR-0063). The registry is loaded once and shared; a job is one link being
+/// previewed by the sender, driven request by request from the client's own fetcher.
+pub mod links {
+    use crate::*;
+
+    pub struct LinkRegistry(pub ::tellomi_links::Registry);
+    bridge_as_handle!(LinkRegistry);
+
+    pub struct LinkJob(pub ::tellomi_links::Job);
+    bridge_as_handle!(LinkJob, mut = true);
+}
+
 pub mod incremental_mac;
 pub mod message_backup;
 

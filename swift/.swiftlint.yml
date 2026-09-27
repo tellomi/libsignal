@@ -18,7 +18,7 @@ opt_in_rules:
 file_header:
   required_pattern: |
     //
-    // Copyright \d{4}(-\d{4})? Signal Messenger, LLC.
+    // Copyright \d{4}(-\d{4})? (Signal Messenger, LLC\.|重庆半格智能科技有限公司)
     // SPDX-License-Identifier: AGPL-3.0-only
     //
 inclusive_language:

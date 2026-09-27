@@ -19,13 +19,13 @@ expect = { route = "repo", kind = "repo", object = "facebook/react" }
 
 [[case]]
 url = "https://github.com/signalapp/Signal-Android/issues/10000"
-source = "真实 Issue（2026-09-27 gh api 200）。kind 词汇表里没有 Issue / PR → 认不出对象 → 品牌壳（见 PR「不合 schema 的样本」）"
-expect = { route = "" }
+source = "真实 Issue（2026-09-27 gh api 200）。kind 词汇表里没有 Issue / PR → 认不出对象 → fallback = generic，照今天的 OG 预览"
+expect = { route = "", fallback = "generic" }
 
 [[case]]
 url = "https://github.com/signalapp/Signal-Desktop/pull/8036"
-source = "真实 PR（2026-09-27 gh api 200）；同上，品牌壳"
-expect = { route = "" }
+source = "真实 PR（2026-09-27 gh api 200）；同上，generic"
+expect = { route = "", fallback = "generic" }
 
 [[case]]
 url = "https://github.com/torvalds"

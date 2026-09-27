@@ -187,8 +187,11 @@ pub struct PreviewDraft {
     /// First-party avatars and covers come from the client itself and are not listed here.
     pub image_url: Option<String>,
     pub date: Option<u64>,
-    /// `Preview.rich`; encode with [`PreviewDraft::rich_bytes`].
+    /// `Preview.rich`, as fields; the bytes for field 1000 are [`PreviewDraft::rich_bytes`].
     pub rich: Option<RichContent>,
+    /// The same, encoded, as lower-case hex: what crosses the bridges as JSON and goes straight
+    /// into `Preview` field 1000 (and back into [`crate::PreviewInput`]'s `rich`).
+    pub rich_hex: Option<String>,
 }
 
 impl PreviewDraft {
@@ -1009,14 +1012,23 @@ impl Job {
             self.failures.push(Failure::TooLarge);
             return;
         }
-        let text = String::from_utf8_lossy(body);
-        let page = html::scan(&text);
+        let lossy = String::from_utf8_lossy(body);
+        let page = html::scan(&lossy);
         let charset = html::content_type_charset(content_type).or(page.charset.clone());
-        // Only UTF-8 is decoded. A page that declares another charset keeps its image and icon
-        // (URLs are ASCII) but none of its text.
-        let text_ok = charset
-            .as_deref()
-            .is_none_or(|c| matches!(c, "utf-8" | "utf8" | "us-ascii" | "ascii"));
+        // UTF-8, plus the legacy Chinese charsets older pages still declare. Anything else keeps
+        // its image and icon (URLs are ASCII) but none of its text.
+        let (page, text_ok) = match charset.as_deref().map(html::Charset::from_label) {
+            None | Some(html::Charset::Utf8) => (page, true),
+            Some(html::Charset::Gb18030) => (
+                html::scan(&encoding_rs::GB18030.decode_without_bom_handling(body).0),
+                true,
+            ),
+            Some(html::Charset::Big5) => (
+                html::scan(&encoding_rs::BIG5.decode_without_bom_handling(body).0),
+                true,
+            ),
+            Some(html::Charset::Other) => (page, false),
+        };
         if !text_ok {
             self.failures.push(Failure::Charset);
         }
@@ -1301,6 +1313,7 @@ impl Job {
             image_url: None,
             date: None,
             rich: None,
+            rich_hex: None,
         };
         let best = |v: &Option<Value>| v.as_ref().map(|v| v.text.clone());
         let image = self
@@ -1475,6 +1488,9 @@ impl Job {
                 out.level = Level::PlainLink;
                 out.preview = None;
             }
+        }
+        if let Some(preview) = &mut out.preview {
+            preview.rich_hex = preview.rich_bytes().map(|b| crate::json::hex(&b));
         }
         out.failures = self.failures.clone();
         out

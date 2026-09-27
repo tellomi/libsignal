@@ -73,6 +73,26 @@ fn top_level_alternation(rx: &str) -> bool {
     false
 }
 
+/// `\d \w \s \b \p{…}` and their negations: Python reads them as Unicode classes, and the client
+/// builds `regex` without Unicode tables (they would cost ~800 KB on Android), so they are not in
+/// the shared subset. `[0-9]`, `[A-Za-z0-9_]` say the same thing in both engines.
+fn perl_class(rx: &str) -> Option<char> {
+    let b = rx.as_bytes();
+    let mut i = 0;
+    while i + 1 < b.len() {
+        if b[i] == b'\\' {
+            let c = char::from(b[i + 1]);
+            if "dDwWsSbBpP".contains(c) {
+                return Some(c);
+            }
+            i += 2;
+            continue;
+        }
+        i += 1;
+    }
+    None
+}
+
 fn has_posix_class(rx: &str) -> bool {
     // `[:alpha:]` / `[:^alpha:]` anywhere: Python `re` does not have them.
     let b = rx.as_bytes();
@@ -92,6 +112,11 @@ fn has_posix_class(rx: &str) -> bool {
 pub(crate) fn compile(rx: &str, anchored: bool) -> Result<Regex, String> {
     if let Some(bad) = unsupported_group(rx) {
         return Err(format!("`(?` may only open `(?:` or `(?P<` (found {bad}…)"));
+    }
+    if let Some(c) = perl_class(rx) {
+        return Err(format!(
+            "\\{c} is a Perl / Unicode class, not in the shared subset: write the ASCII class"
+        ));
     }
     if has_posix_class(rx) {
         return Err("POSIX character classes are not in the shared subset".into());
@@ -210,6 +235,26 @@ mod tests {
         assert!(compile(r"/a$", true).is_err());
         assert!(compile(r"^[[:digit:]]$", true).is_err());
         assert!(compile(r"^/(a)\1$", true).is_err());
+        // Perl / Unicode classes: Python reads them as Unicode classes, and the client's engine is
+        // built without Unicode tables; write [0-9] / [A-Za-z0-9_] instead.
+        for rx in [
+            r"^/\d+$",
+            r"^/\w+$",
+            r"^/\s$",
+            r"^/a\b$",
+            r"^/\p{Han}$",
+            r"^/[\d]$",
+        ] {
+            let err = compile(rx, true).expect_err(rx);
+            assert!(err.contains("Perl / Unicode class"), "{rx}: {err}");
+        }
+        assert!(
+            compile(r"^/\\d$", true).is_ok(),
+            "an escaped backslash followed by d is a literal"
+        );
+        // Non-ASCII literals and negated ASCII classes still match any character.
+        let han = compile(r"^/(?P<name>[^,]{1,64})$", true).unwrap();
+        assert!(han.is_match("/同仁堂(五一路店)"));
         assert!(compile(r"_哔哩哔哩bilibili(_[^_]*)?$", false).is_ok());
         // The full-match wrapping matters: without it `^/a$` would still be fine, but a pattern
         // body is always matched against the whole path.
