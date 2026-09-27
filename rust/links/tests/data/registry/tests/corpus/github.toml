@@ -1,0 +1,38 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+provider = "github"
+
+[[case]]
+url = "https://github.com/signalapp/Signal-Android"
+source = "真实公开仓库（2026-09-27 gh api 200）"
+expect = { route = "repo", kind = "repo", object = "signalapp/Signal-Android", captures = { owner = "signalapp", repo = "Signal-Android" } }
+
+[[case]]
+url = "https://github.com/torvalds/linux"
+source = "真实公开仓库（2026-09-27 gh api 200）"
+expect = { route = "repo", kind = "repo", object = "torvalds/linux" }
+
+[[case]]
+url = "https://github.com/facebook/react"
+source = "G6 实测（301 到 react/react，API 跟随后拿到仓库）"
+expect = { route = "repo", kind = "repo", object = "facebook/react" }
+
+[[case]]
+url = "https://github.com/signalapp/Signal-Android/issues/10000"
+source = "真实 Issue（2026-09-27 gh api 200）。kind 词汇表里没有 Issue / PR → 认不出对象 → 品牌壳（见 PR「不合 schema 的样本」）"
+expect = { route = "" }
+
+[[case]]
+url = "https://github.com/signalapp/Signal-Desktop/pull/8036"
+source = "真实 PR（2026-09-27 gh api 200）；同上，品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://github.com/torvalds"
+source = "真实用户页（2026-09-27 gh api 200）；单段路径不是仓库 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://github.com/features/copilot"
+source = "GitHub 自己的功能页：形状像 owner/repo，被排在前面的 site-pages 拦下 → 品牌壳"
+expect = { route = "site-pages", kind = "web" }

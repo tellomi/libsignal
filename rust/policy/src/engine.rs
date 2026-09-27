@@ -16,6 +16,7 @@ use std::collections::HashMap;
 
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, MatchKind};
 
+use crate::envelope::{self, EnvelopeError};
 use crate::lexicon::*;
 use crate::normalize;
 
@@ -95,17 +96,14 @@ impl PolicyEngine {
     /// Parse and index a lexicon. Returns an error rather than a partial engine: the caller falls
     /// back to the copy that shipped with the app.
     pub fn load(bytes: &[u8]) -> Result<Self, LoadError> {
-        let envelope: Envelope<LexiconPayload> = serde_json::from_slice(bytes)?;
-        if envelope.name != "policy" {
-            return Err(LoadError::WrongPayload(envelope.name));
-        }
-        if envelope.schema < SCHEMA_MIN || envelope.schema > SCHEMA_MAX {
-            return Err(LoadError::UnsupportedSchema {
-                found: envelope.schema,
-                min: SCHEMA_MIN,
-                max: SCHEMA_MAX,
-            });
-        }
+        let envelope: Envelope<LexiconPayload> =
+            envelope::parse(bytes, "policy", SCHEMA_MIN..=SCHEMA_MAX).map_err(|e| match e {
+                EnvelopeError::WrongName { found, .. } => LoadError::WrongPayload(found),
+                EnvelopeError::UnsupportedSchema { found, min, max } => {
+                    LoadError::UnsupportedSchema { found, min, max }
+                }
+                EnvelopeError::Parse(e) => LoadError::Parse(e),
+            })?;
         validate(&envelope.payload).map_err(LoadError::Invalid)?;
         Ok(Self::index(envelope.version, envelope.payload))
     }

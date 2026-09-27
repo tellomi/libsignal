@@ -1,0 +1,2 @@
+about = "Pro 包 7 · #1249 不阻塞 2（实跑 B15）：样本匹配到别家 provider。样本那段曾抛 StopIteration，已经记下的 L3 打印不出来；现在报「匹配到 X，期望 Y」后接着核下一条"
+expect = ["L3 tell.cc 同时属于 tellomi 和 zz-grab", "匹配到 zz-grab，期望 tellomi"]

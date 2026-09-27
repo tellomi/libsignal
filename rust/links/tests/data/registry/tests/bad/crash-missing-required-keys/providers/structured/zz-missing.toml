@@ -1,0 +1,18 @@
+# 坏样例：route 缺 id、缺 kind，plan 缺 type（形状报 L1；规则段、匹配器、样本段、覆盖检查曾按 r["id"] / r["kind"] / pl["type"] 取值抛 KeyError）
+schema = 1
+id = "zz-missing"
+name = { zh-Hans = "缺字段" }
+tier = "structured"
+category = "general"
+domains = ["zz-missing.example.org"]
+evidence = "坏样例"
+
+[[route]]
+path = '^/v/(?P<id>[0-9]{1,9})$'
+kind = "channel"
+plan = [{ map = { title = "og:title" } }]
+
+[[route]]
+id = "w"
+path = '^/w/[0-9]{1,9}$'
+plan = [{ type = "og+jsonld" }]

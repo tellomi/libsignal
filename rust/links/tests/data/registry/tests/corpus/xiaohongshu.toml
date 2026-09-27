@@ -1,0 +1,34 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "xiaohongshu"
+
+[[case]]
+url = "https://xhslink.com/o/8iQbOIYV4IX"
+source = "检索到的小红书 App 分享短链（2026-09-27）"
+expect = { short = true }
+
+[[case]]
+url = "https://xhslink.com/o/5oTNHv9d7Mw"
+source = "G2 实测的分享短链（2026-09-27 复核）"
+expect = { short = true }
+
+[[case]]
+url = "https://xhslink.com/o/4aSqyCCzKCB"
+source = "检索到的分享短链（2026-09-27 302 到 www.xiaohongshu.com/discovery/item/…；原文 http，改成 https）"
+expect = { short = true }
+
+[[case]]
+url = "https://www.xiaohongshu.com/discovery/item/67b97405000000002503ed8f"
+source = "检索到的笔记页（2026-09-27）"
+expect = { route = "note", kind = "article", object = "67b97405000000002503ed8f" }
+
+[[case]]
+url = "https://www.xiaohongshu.com/explore/6858ccaa0000000013013c94"
+source = "检索到的笔记页（2026-09-27；原文带 xsec_token 等分享参数，去掉）"
+expect = { route = "note", kind = "article", object = "6858ccaa0000000013013c94" }
+
+[[case]]
+url = "https://www.xiaohongshu.com/discovery/item/6aabf6a600000000270145dd"
+source = "G2 实测的笔记（2026-09-27 复核）"
+expect = { route = "note", kind = "article", object = "6aabf6a600000000270145dd" }

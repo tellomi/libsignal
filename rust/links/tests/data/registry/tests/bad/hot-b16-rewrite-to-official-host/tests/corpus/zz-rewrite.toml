@@ -1,0 +1,6 @@
+provider = "zz-rewrite"
+
+[[case]]
+url = "https://evil.example/security"
+source = "坏样例：正文 URL 在 evil.example，canonical_url 却是官网"
+expect = { route = "page", kind = "tellomi.official", canonical_url = "https://tellomi.app/security" }

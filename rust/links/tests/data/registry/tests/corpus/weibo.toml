@@ -1,0 +1,49 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "weibo"
+
+[[case]]
+url = "https://t.cn/A6hnoBSh"
+source = "检索到的微博短链（2026-09-27 302 到 m.weibo.cn/c/…；原文 http，改成 https）"
+expect = { short = true }
+
+[[case]]
+url = "https://t.cn/AXWUUYTp"
+source = "检索到的微博短链（2026-09-27 302 到 weibo.com/l/wblive/…；原文 http，改成 https）"
+expect = { short = true }
+
+[[case]]
+url = "https://weibo.com/2803301701/NEfBc8VJE"
+source = "人民日报的微博（base62 号，2026-09-27）"
+expect = { route = "status", kind = "article", object = "NEfBc8VJE" }
+
+[[case]]
+url = "https://weibo.com/2656274875/5287695334244896"
+source = "央视新闻的微博（纯数字号，2026-09-27）"
+expect = { route = "status", kind = "article", object = "5287695334244896" }
+
+[[case]]
+url = "https://m.weibo.cn/status/4154099588849643"
+source = "G3 实测的移动状态页（2026-09-27 复核）"
+expect = { route = "status-m", kind = "article" }
+
+[[case]]
+url = "https://m.weibo.cn/detail/5297312579716946"
+source = "检索到的移动详情页（2026-09-27；不带 cookie 进访客验证）"
+expect = { route = "status-m", kind = "article" }
+
+[[case]]
+url = "https://weibo.com/ttarticle/p/show?id=2309405039315326468279"
+source = "检索到的头条文章（2026-09-27）"
+expect = { route = "ttarticle", kind = "article" }
+
+[[case]]
+url = "https://weibo.com/u/2803301701"
+source = "人民日报的主页（2026-09-27）"
+expect = { route = "profile", kind = "channel" }
+
+[[case]]
+url = "https://weibo.com/2/detail/comos:nisvcqf1240032"
+source = "G3 实测的 H5「文章」型（2026-09-27 复核；有 OG，但微博先做壳）"
+expect = { route = "" }

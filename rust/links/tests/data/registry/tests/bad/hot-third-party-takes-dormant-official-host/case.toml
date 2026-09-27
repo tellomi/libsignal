@@ -1,0 +1,5 @@
+about = "编译期集合里有、tellomi.toml 还没启用的官网主机（www.tellomi.app）没人占，L3 查不出来：别家用通配 *.tellomi.app 盖住它；再把 tellomi.app 写进 api_hosts，发送端就会把第三方链接的参数发给 Tellomi 的服务器"
+expect = [
+  "L23 zz-dormant: domains 的 *.tellomi.app 盖住了第一方 / 官网主机 ['www.tellomi.app']",
+  "L23 zz-dormant: api_hosts 的 tellomi.app 就是第一方 / 官网主机 ['tellomi.app']",
+]

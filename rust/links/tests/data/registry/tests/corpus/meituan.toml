@@ -1,0 +1,39 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "meituan"
+
+[[case]]
+url = "https://i.meituan.com/c/NjM4Nzk0M2Mt"
+source = "检索到的美团 App 分享链接（2026-09-27）：回 200 的 JS 页、没有 Location"
+expect = { route = "" }
+
+[[case]]
+url = "https://i.meituan.com/c/ODk3ZjgwYzQt"
+source = "G2 实测的 App「复制链接」（2026-09-27 复核；原文带 utm_fromapp / lch 分享参数，样本里去掉）"
+expect = { route = "" }
+
+[[case]]
+url = "https://h5.waimai.meituan.com/waimai/mindex/menu?mtShopId=858337635889759"
+source = "检索到的美团外卖店铺页（2026-09-27；原文带 lch / channel，去掉）"
+expect = { route = "" }
+
+[[case]]
+url = "https://h5.waimai.meituan.com/waimai/mindex/menu?mtShopId=934719348419870"
+source = "G2 实测的美团外卖店铺页（2026-09-27 复核）"
+expect = { route = "" }
+
+[[case]]
+url = "https://g.meituan.com/app/gfe-app-page-tuan/detail-mt.html?dealId=1459403141"
+source = "G2 实测的美团团购套餐（2026-09-27 复核）"
+expect = { route = "deal", kind = "deal", object = "1459403141" }
+
+[[case]]
+url = "https://g.meituan.com/fuse/TUEZWnyhIY"
+source = "检索到的大众点评分享（搜索结果标题「大众点评」，2026-09-27）：主机 g.meituan.com 归美团，显示成美团"
+expect = { route = "" }
+
+[[case]]
+url = "https://click.meituan.com/t?c=2&p=RoGv4L9z7iDS&t=9"
+source = "检索到的美团推广跳转链接（2026-09-27）：回 200、没有 Location"
+expect = { route = "" }

@@ -1,0 +1,9 @@
+provider = "zz-missing"
+
+[[case]]
+source = "坏样例：缺 url（曾按 case[\"url\"] 取值抛 KeyError）"
+
+[[case]]
+url = "https://zz-missing.example.org/w/1"
+source = "坏样例：命中缺 kind 的 route w；找 route 时要跳过前面那条缺 id 的"
+expect = { route = "w", kind = "channel" }

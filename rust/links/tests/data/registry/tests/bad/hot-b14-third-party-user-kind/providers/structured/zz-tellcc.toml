@@ -1,0 +1,15 @@
+# 坏样例 B14
+schema = 1
+id = "zz-tellcc"
+name = { zh-Hans = "tell-cc" }
+tier = "structured"
+category = "general"
+domains = ["tell-cc.example.net"]
+evidence = "坏样例"
+
+[[route]]
+id = "user"
+path = '^/(?P<nickname>[A-Za-z_][A-Za-z0-9_]{2,31})/?$'
+kind = "tellomi.user"
+object = "{nickname}"
+plan = [{ type = "first-party" }]
