@@ -1,0 +1,6 @@
+provider = "zz-dormant"
+
+[[case]]
+url = "https://www.tellomi.app/download"
+source = "坏样例：匹配照常成立，L3 也不报，只有 L23 拦得住"
+expect = { route = "page", kind = "channel", object = "download" }

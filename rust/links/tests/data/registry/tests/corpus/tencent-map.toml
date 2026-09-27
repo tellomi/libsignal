@@ -1,0 +1,43 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+provider = "tencent-map"
+
+[[case]]
+url = "https://apis.map.qq.com/uri/v1/marker?marker=coord:39.892326,116.342763;title:%E8%B6%85%E5%A5%BD%E5%90%83%E5%86%B0%E6%BF%80%E5%87%8C;addr:%E6%89%8B%E5%B8%95%E5%8F%A3%E6%A1%A5%E5%8C%97%E9%93%81%E8%B7%AF%E9%81%93%E5%8F%A3&referer=myapp"
+source = "URI API 文档示例 https://lbs.qq.com/webApi/uriV1/uriGuide/uriWebMarker（坐标是 URL 本身）"
+expect = { route = "marker", kind = "place", captures = { lat = "39.892326", lng = "116.342763", name = "超好吃冰激凌", address = "手帕口桥北铁路道口" } }
+
+[[case]]
+url = "https://apis.map.qq.com/uri/v1/marker?marker=coord%3A23.253598%2C113.340764%3Btitle%3A%E5%B9%BF%E4%B8%9C%E5%B9%BF%E5%B7%9E%E7%99%BD%E4%BA%91%E5%8C%BA%E5%85%AD%E7%89%87%E5%B1%B1"
+source = "检索到的真实标注链接（2026-09-27）：整段百分号编码，解码后再匹配；没有 addr"
+expect = { route = "marker", kind = "place", captures = { lat = "23.253598", lng = "113.340764", name = "广东广州白云区六片山" } }
+
+[[case]]
+url = "https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:39.880200,116.410620;title:%E5%A4%A9%E5%9D%9B%E5%85%AC%E5%9B%AD;addr:%E5%8C%97%E4%BA%AC%E5%B8%82%E4%B8%9C%E5%9F%8E%E5%8C%BA%E5%A4%A9%E5%9D%9B%E4%B8%9C%E8%B7%AF%E7%94%B21%E5%8F%B7&referer=myapp"
+source = "检索到的 poimarker 链接（2026-09-27；原文 http 且带文档里的演示 key，改成 https、去掉 key）"
+expect = { route = "marker", kind = "place", captures = { lat = "39.880200", lng = "116.410620", name = "天坛公园" } }
+
+[[case]]
+url = "https://mapapi.qq.com/web/mapComponents/locationMarker/v/index.html?type=0&marker=coord:23.10647,113.32446;title:%E5%B9%BF%E5%B7%9E%E5%A1%94;addr:%E5%B9%BF%E4%B8%9C%E7%9C%81%E5%B9%BF%E5%B7%9E%E5%B8%82%E6%B5%B7%E7%8F%A0%E5%8C%BA%E9%98%85%E6%B1%9F%E8%A5%BF%E8%B7%AF222%E5%8F%B7"
+source = "检索到的地点组件页链接（2026-09-27）"
+expect = { route = "location-marker", kind = "place", captures = { lat = "23.10647", lng = "113.32446", name = "广州塔" } }
+
+[[case]]
+url = "https://apis.map.qq.com/uri/v1/geocoder?coord=23.421206,116.610449&referer=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"
+source = "检索到的逆地址解析链接（2026-09-27）；referer 是文档里的演示值"
+expect = { route = "geocoder", kind = "place", captures = { lat = "23.421206", lng = "116.610449" } }
+
+[[case]]
+url = "https://map.qq.com/?type=marker&isopeninfowin=1&markertype=1&pointx=-2.794167&pointy=53.3225&name=&addr=ADDRESS"
+source = "检索到的旧版标注链接（2026-09-27）：pointx 是经度、pointy 是纬度"
+expect = { route = "legacy-marker", kind = "place", captures = { lat = "53.3225", lng = "-2.794167" } }
+
+[[case]]
+url = "https://apis.map.qq.com/uri/v1/search?keyword=%E5%92%96%E5%95%A1%E5%BA%97&region=%E5%8C%97%E4%BA%AC&referer=myapp"
+source = "URI API 文档的搜索示例：搜索不是地点 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://apis.map.qq.com/uri/v1/marker?marker=coord:39.892326,116.342763;title:%E8%B6%85%E5%A5%BD%E5%90%83%E5%86%B0%E6%BF%80%E5%87%8C&coord_type=1&referer=myapp"
+source = "按 URI API 文档的格式写的坐标链接（坐标取自文档示例；coord_type=1 = GPS 坐标是文档列出的取值）。坐标就是 URL 本身，README §6 允许；没找到外面流通的真实链接"
+expect = { route = "marker-gps", kind = "place", captures = { lat = "39.892326", lng = "116.342763" } }

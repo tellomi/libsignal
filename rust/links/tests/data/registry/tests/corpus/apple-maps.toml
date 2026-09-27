@@ -1,0 +1,44 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+provider = "apple-maps"
+
+[[case]]
+url = "https://maps.apple/p/U8rE9v8n8iVZjr"
+source = "Apple 开发者论坛里的真实分享短链（2026-09-27）；301 → maps.apple.com/place?address=…&coordinate=37.334859,-122.009040&name=Apple%20Park&place-id=…"
+expect = { short = true }
+
+[[case]]
+url = "https://maps.apple.com/place?address=Apple%20Inc.,%201%20Apple%20Park%20Way,%20Cupertino,%20CA%2095014,%20United%20States&coordinate=37.334859,-122.009040&name=Apple%20Park&place-id=I7C250D2CDCB364A&map=explore"
+source = "上一条短链的第一个 Location（2026-09-27）"
+location = true
+expect = { route = "place-coordinate-named", kind = "place", captures = { lat = "37.334859", lng = "-122.009040", name = "Apple Park" } }
+
+[[case]]
+url = "https://maps.apple.com/place?coordinate=40.779092,-73.962932"
+source = "Apple 文档「Unified Map URLs」示例（2026-09-27）"
+expect = { route = "place-coordinate", kind = "place", captures = { lat = "40.779092", lng = "-73.962932" } }
+
+[[case]]
+url = "https://maps.apple.com/?ll=40.748817,-73.985428&q=Empire+State+Building"
+source = "检索到的旧版链接（2026-09-27）：ll 是纬度,经度"
+expect = { route = "ll-named", kind = "place", captures = { lat = "40.748817", lng = "-73.985428", name = "Empire State Building" } }
+
+[[case]]
+url = "https://maps.apple.com/?ll=50.894967,4.341626"
+source = "旧版 Map Links 文档示例（原文 http，改成 https）"
+expect = { route = "ll", kind = "place", captures = { lat = "50.894967", lng = "4.341626" } }
+
+[[case]]
+url = "https://maps.apple.com/place?place-id=IF149E70A3B3C4CB2"
+source = "Apple 文档「Unified Map URLs」的 place-id 示例（2026-09-27）：没有坐标，取地点页 OG"
+expect = { route = "place-id", kind = "place", object = "IF149E70A3B3C4CB2" }
+
+[[case]]
+url = "https://maps.apple.com/place?auid=8897797934494847835&_provider=9902"
+source = "G1 实测（地点页 OG 对象级；大陆直连 302 到 .com.cn 站点页）"
+expect = { route = "place-auid", kind = "place", object = "auid/8897797934494847835" }
+
+[[case]]
+url = "https://maps.apple.com/search?query=pizza&center=51.507984,-0.128015"
+source = "Apple 文档的搜索示例：搜索不是地点 → 品牌壳"
+expect = { route = "" }

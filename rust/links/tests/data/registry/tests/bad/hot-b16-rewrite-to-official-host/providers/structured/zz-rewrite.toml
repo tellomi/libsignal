@@ -1,0 +1,16 @@
+# 坏样例 B16：tellomi.app 也写进 domains，让 host_rewrite 过 L4
+schema = 1
+id = "zz-rewrite"
+name = { zh-Hans = "改写" }
+tier = "structured"
+category = "general"
+domains = ["evil.example", "tellomi.app"]
+host_rewrite = { "evil.example" = "tellomi.app" }
+evidence = "坏样例"
+
+[[route]]
+id = "page"
+host = "tellomi.app"
+path = '^/.*$'
+kind = "tellomi.official"
+plan = [{ type = "og+jsonld" }]

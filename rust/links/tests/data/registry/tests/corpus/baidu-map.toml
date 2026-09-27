@@ -1,0 +1,54 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+provider = "baidu-map"
+
+[[case]]
+url = "https://api.map.baidu.com/marker?location=40.047669,116.313082&title=%E6%88%91%E7%9A%84%E4%BD%8D%E7%BD%AE&content=%E7%99%BE%E5%BA%A6%E5%A5%8E%E7%A7%91%E5%A4%A7%E5%8E%A6&output=html&src=webapp.baidu.openAPIdemo"
+source = "URI API 文档示例 https://lbsyun.baidu.com/faq/api?title=webapi/uri/web（原文 http，改成 https）；坐标是 URL 本身"
+expect = { route = "marker-named", kind = "place", captures = { lat = "40.047669", lng = "116.313082", name = "我的位置" } }
+
+[[case]]
+url = "https://map.baidu.com/?latlng=40.047669,116.313082&title=%E6%88%91%E7%9A%84%E4%BD%8D%E7%BD%AE&content=%E7%99%BE%E5%BA%A6%E5%A5%8E%E7%A7%91%E5%A4%A7%E5%8E%A6&autoOpen=true"
+source = "上一条 302 的落点（2026-09-27 大陆直连，Location 末尾的 &l 去掉）"
+expect = { route = "latlng", kind = "place", captures = { lat = "40.047669", lng = "116.313082" } }
+
+[[case]]
+url = "https://api.map.baidu.com/geocoder?location=39.990912172420714,116.32715863448607&coord_type=gcj02&output=html&src=webapp.baidu.openAPIdemo"
+source = "URI API 文档的逆地理示例（coord_type=gcj02；原文 http，改成 https）"
+expect = { route = "marker-gcj02", kind = "place", captures = { lat = "39.990912172420714", lng = "116.32715863448607" } }
+
+[[case]]
+url = "https://api.map.baidu.com/marker?location=39.9088,116.3975&title=&content="
+source = "G1 实测（title 为空：不算名字，按缺省 BD-09 标注）"
+expect = { route = "marker", kind = "place", captures = { lat = "39.9088", lng = "116.3975" } }
+
+[[case]]
+url = "https://j.map.baidu.com/ejKt2"
+source = "检索到的公开分享短链（2026-09-27）；302 → 下一条"
+expect = { short = true }
+
+[[case]]
+url = "https://map.baidu.com/?shareurl=1&poiShareUid=fe9b578ae6299a6ac16c14d2"
+source = "上一条短链的第一个 Location 原文（2026-09-27 大陆直连）：只有 POI 号、没有坐标 → 品牌壳"
+location = true
+expect = { route = "" }
+
+[[case]]
+url = "https://j.map.baidu.com/44/D4T"
+source = "检索到的公开分享短链（2026-09-27）；302 到 map.baidu.com/?shareurl=1&poiShareUid=…"
+expect = { short = true }
+
+[[case]]
+url = "https://j.map.baidu.com/1baM-"
+source = "检索到的公开分享短链（2026-09-27）；302 到 map.baidu.com/?shareurl=1&poiShareUid=…"
+expect = { short = true }
+
+[[case]]
+url = "https://api.map.baidu.com/direction?origin=latlng:34.264642646862,108.95108518068|name:%E6%88%91%E5%AE%B6&destination=%E5%A4%A7%E9%9B%81%E5%A1%94&mode=driving&region=%E8%A5%BF%E5%AE%89&output=html&src=webapp.baidu.openAPIdemo"
+source = "URI API 文档的路线示例（原文 http，改成 https）：路线不是地点 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://api.map.baidu.com/marker?location=40.047669,116.313082&coord_type=wgs84&output=html&src=webapp.baidu.openAPIdemo"
+source = "按 URI API 文档的格式写的坐标链接（坐标取自文档示例；coord_type=wgs84 是文档列出的取值）。坐标就是 URL 本身，README §6 允许；没找到外面流通的 wgs84 真实链接"
+expect = { route = "marker-wgs84", kind = "place", captures = { lat = "40.047669", lng = "116.313082" } }

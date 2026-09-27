@@ -1,0 +1,313 @@
+{
+  "about": "ADR-0063 §5.1 rule 4 / §5.3 / §6.1: the shared 'Preview → level' samples. Each case is a received Preview (rich given as fields and encoded by the harness, or as raw hex), the message body and context, and the parts of the resulting Card that must match. Registry: tests/data/registry (draft, see SOURCE).",
+  "cases": [
+    {
+      "name": "old sender, no rich: generic (§5.3 'old client' / 'no rich')",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "《柯洁围棋入门课》", "has_image": true},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic", "provider": null, "show_image": true, "tintable": true, "domain": "bilibili.com"}
+    },
+    {
+      "name": "structured video: sender level 2, required fields present",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "《柯洁围棋入门课》", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "schema": 1, "canonical_url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "level": 2,
+          "attrs": [["author", "柯洁"], ["duration_ms", "499000"], ["published_at", "2026-09-22T09:25:33.000Z"]]}},
+      "body": "看 https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "structured", "provider": "bilibili", "kind": "video", "route": "video", "title": "《柯洁围棋入门课》",
+        "attrs": [{"key": "author", "value": "柯洁"}, {"key": "duration_ms", "value": "499000"}, {"key": "published_at", "value": "2026-09-22T09:25:33.000Z"}],
+        "show_image": true}
+    },
+    {
+      "name": "§6.1 lying about level: level 2 but the video has no image → brand",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "《柯洁围棋入门课》", "has_image": false,
+        "rich": {"kind": "video", "provider": "bilibili", "level": 2, "attrs": [["author", "柯洁"]]}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "brand", "provider": "bilibili", "kind": "video", "attrs": [], "title": null, "show_image": false}
+    },
+    {
+      "name": "sender says brand (level 1) although fields are complete → brand (min of the two)",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "《柯洁围棋入门课》", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "level": 1}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "brand", "show_image": false}
+    },
+    {
+      "name": "level absent → brand",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili"}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "brand"}
+    },
+    {
+      "name": "unknown level value (7) → brand",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "level": 7}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "brand"}
+    },
+    {
+      "name": "§6.1 brand-tier platform claiming a structured card with attrs → brand, no attrs",
+      "preview": {"url": "https://item.taobao.com/item.htm?id=100032608854", "title": "iPhone 18 Pro 5 折", "has_image": true,
+        "rich": {"kind": "product", "provider": "taobao", "level": 2, "attrs": [["price", "1"]]}},
+      "body": "https://item.taobao.com/item.htm?id=100032608854",
+      "expect": {"level": "brand", "provider": "taobao", "kind": "product", "attrs": [], "title": null, "show_image": false, "payment": false}
+    },
+    {
+      "name": "payment platform: brand, locked, never tinted",
+      "preview": {"url": "https://render.alipay.com/p/f/fd-j5rqp49m/index.html", "title": "支付宝",
+        "rich": {"kind": "web", "provider": "alipay", "level": 1}},
+      "body": "https://render.alipay.com/p/f/fd-j5rqp49m/index.html",
+      "expect": {"level": "brand", "kind": "web", "payment": true, "tintable": false}
+    },
+    {
+      "name": "§6.1 provider does not match the URL → drop rich, generic",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "music.track", "provider": "spotify", "level": 2}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic", "provider": null}
+    },
+    {
+      "name": "§6.1 kind this build does not know → generic",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video.short", "provider": "bilibili", "level": 2}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "kind known but not what the URL is → generic",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "channel", "provider": "bilibili", "level": 2}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "RichContent.schema beyond this build → generic",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "schema": 2, "level": 2}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "schema 0 means 1",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "schema": 0, "level": 2}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "structured"}
+    },
+    {
+      "name": "canonical_url on another provider (non-short) → generic",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "canonical_url": "https://open.spotify.com/track/7qiZfU4dY1lWllzX7mPBI3", "level": 2}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "short link: kind from canonical_url on the same provider",
+      "preview": {"url": "https://b23.tv/BV1YDhJ6ZEL6", "title": "《柯洁围棋入门课》", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "canonical_url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "level": 2}},
+      "body": "https://b23.tv/BV1YDhJ6ZEL6",
+      "expect": {"level": "structured", "provider": "bilibili", "kind": "video", "route": "video", "domain": "b23.tv"}
+    },
+    {
+      "name": "§6.1 short link switching provider through canonical_url → generic",
+      "preview": {"url": "https://b23.tv/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "music.track", "provider": "bilibili", "canonical_url": "https://open.spotify.com/track/7qiZfU4dY1lWllzX7mPBI3", "level": 2}},
+      "body": "https://b23.tv/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "short link without canonical_url claiming an object kind: unverifiable → generic",
+      "preview": {"url": "https://b23.tv/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "level": 2}},
+      "body": "https://b23.tv/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "short link that was never expanded: brand of the short domain's provider",
+      "preview": {"url": "https://b23.tv/BV1YDhJ6ZEL6", "title": "哔哩哔哩",
+        "rich": {"kind": "web", "provider": "bilibili", "level": 1}},
+      "body": "https://b23.tv/BV1YDhJ6ZEL6",
+      "expect": {"level": "brand", "provider": "bilibili", "kind": "web", "route": null}
+    },
+    {
+      "name": "rich present but the snapshot has no title → plain link",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "level": 2}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "plain_link"}
+    },
+    {
+      "name": "no provider and no title → plain link",
+      "preview": {"url": "https://www.163.com/news/article/K1234.html"},
+      "body": "https://www.163.com/news/article/K1234.html",
+      "expect": {"level": "plain_link", "domain": "163.com"}
+    },
+    {
+      "name": "Preview.url not in the body → plain link",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t"},
+      "body": "hello",
+      "expect": {"level": "plain_link", "reason": "not_in_body"}
+    },
+    {
+      "name": "Preview.url only as the prefix of a longer host in the body → plain link",
+      "preview": {"url": "https://tellomi.app", "title": "Tellomi"},
+      "body": "https://tellomi.app.evil.cn/login",
+      "expect": {"level": "plain_link", "official_badge": false}
+    },
+    {
+      "name": "story: URL need not be in the body",
+      "preview": {"url": "https://www.163.com/news/article/K1234.html", "title": "t"},
+      "body": "",
+      "msg": {"is_story": true},
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "an image attachment drops the preview (§5.1 rule 4, iOS rule for all)",
+      "preview": {"url": "https://www.163.com/news/article/K1234.html", "title": "t"},
+      "body": "https://www.163.com/news/article/K1234.html",
+      "msg": {"attachment_content_types": ["image/jpeg"]},
+      "expect": {"level": "plain_link", "reason": "attachments"}
+    },
+    {
+      "name": "a single long-text attachment keeps it",
+      "preview": {"url": "https://www.163.com/news/article/K1234.html", "title": "t"},
+      "body": "https://www.163.com/news/article/K1234.html",
+      "msg": {"attachment_content_types": ["text/x-signal-plain"]},
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "two attachments drop it",
+      "preview": {"url": "https://www.163.com/news/article/K1234.html", "title": "t"},
+      "body": "https://www.163.com/news/article/K1234.html",
+      "msg": {"attachment_content_types": ["text/x-signal-plain", "text/x-signal-plain"]},
+      "expect": {"level": "plain_link"}
+    },
+    {
+      "name": "§6.1 oversized RichContent (kind of 33 characters) is dropped whole → generic",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "videoooooooooooooooooooooooooooooo", "provider": "bilibili", "level": 2}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "§6.1 17 attrs: the whole rich is dropped → generic",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "level": 2, "attrs": [["a","1"],["b","1"],["c","1"],["d","1"],["e","1"],["f","1"],["g","1"],["h","1"],["i","1"],["j","1"],["k","1"],["l","1"],["m","1"],["n","1"],["o","1"],["p","1"],["q","1"]]}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "§6.1 malformed attrs are dropped one by one, the card stays",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "level": 2,
+          "attrs": [["author", "https://evil.cn/"], ["duration_ms", "-5"], ["published_at", "2026-09-22T09:25:33Z"], ["Unknown", "x"], ["price", "1"], ["published_at", "2020-01-01T00:00:00Z"]]}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "structured", "attrs": [{"key": "published_at", "value": "2026-09-22T09:25:33Z"}]}
+    },
+    {
+      "name": "not even protobuf → rich ignored → generic",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "t", "has_image": true, "rich_hex": "ffffffff"},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "generic"}
+    },
+    {
+      "name": "place from the URL (U tier): structured without an image",
+      "preview": {"url": "https://uri.amap.com/marker?position=116.47,39.99", "title": "高德地图",
+        "rich": {"kind": "place", "provider": "amap", "canonical_url": "https://uri.amap.com/marker?position=116.47,39.99", "level": 2,
+          "attrs": [["lat", "39.99"], ["lng", "116.47"], ["coord_sys", "gcj02"]]}},
+      "body": "https://uri.amap.com/marker?position=116.47,39.99",
+      "expect": {"level": "structured", "kind": "place", "show_image": false}
+    },
+    {
+      "name": "§6.1 lookalike domain (punycode Cyrillic аррӏе.com) → plain link, flagged",
+      "preview": {"url": "https://xn--80ak6aa92e.com/login", "title": "Apple ID"},
+      "body": "https://xn--80ak6aa92e.com/login",
+      "expect": {"level": "plain_link", "lookalike": "apple.com", "reason": "lookalike"}
+    },
+    {
+      "name": "§6.1 ASCII lookalike of a provider, dressed up with its rich → plain link, flagged",
+      "preview": {"url": "https://www.bi1ibili.com/video/BV1YDhJ6ZEL6", "title": "t",
+        "rich": {"kind": "video", "provider": "bilibili", "level": 2}},
+      "body": "https://www.bi1ibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "plain_link", "lookalike": "bilibili.com"}
+    },
+    {
+      "name": "§6.1 tell.cc user: the name comes from the URL, not the snapshot (@kefu is ignored)",
+      "preview": {"url": "https://tell.cc/scam01", "title": "@kefu",
+        "rich": {"kind": "tellomi.user", "provider": "tellomi", "level": 1}},
+      "body": "https://tell.cc/scam01",
+      "expect": {"level": "first_party", "kind": "tellomi.user", "first_party": {"type": "user", "display": "@scam01", "username": "scam01.01"}, "official_badge": false, "show_image": false}
+    },
+    {
+      "name": "tell.cc user without rich (old sender) is still a first-party card",
+      "preview": {"url": "https://tell.cc/ceshi.57"},
+      "body": "https://tell.cc/ceshi.57",
+      "expect": {"level": "first_party", "first_party": {"type": "user", "display": "@ceshi.57", "username": "ceshi.57"}}
+    },
+    {
+      "name": "encrypted username link: fixed 'Tellomi user'",
+      "preview": {"url": "https://tell.cc/u#eu/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "title": "@kefu"},
+      "body": "https://tell.cc/u#eu/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expect": {"level": "first_party", "first_party": {"type": "user", "display": null, "username": null}}
+    },
+    {
+      "name": "reserved first-level path is not a user → plain link",
+      "preview": {"url": "https://tell.cc/app", "title": "@app",
+        "rich": {"kind": "tellomi.user", "provider": "tellomi", "level": 2}},
+      "body": "https://tell.cc/app",
+      "expect": {"level": "plain_link", "reason": "not_an_object"}
+    },
+    {
+      "name": "group: name from the snapshot, member count from a rich that agrees",
+      "preview": {"url": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "title": "周末爬山群", "has_image": true,
+        "rich": {"kind": "tellomi.group", "provider": "tellomi", "attrs": [["member_count", "12"]]}},
+      "body": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expect": {"level": "first_party", "first_party": {"type": "group", "title": "周末爬山群", "member_count": 12}, "show_image": true}
+    },
+    {
+      "name": "group without a name → plain link",
+      "preview": {"url": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+      "body": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expect": {"level": "plain_link"}
+    },
+    {
+      "name": "call link without a room name is still a card",
+      "preview": {"url": "https://tell.cc/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz"},
+      "body": "https://tell.cc/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz",
+      "expect": {"level": "first_party", "first_party": {"type": "call", "title": null}}
+    },
+    {
+      "name": "sticker pack",
+      "preview": {"url": "https://tell.cc/s#pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000", "title": "猫猫", "has_image": true},
+      "body": "https://tell.cc/s#pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000",
+      "expect": {"level": "first_party", "first_party": {"type": "sticker", "title": "猫猫", "sticker_count": null}}
+    },
+    {
+      "name": "§6.1 official card: badge from the host, fixed text + path, nothing the sender wrote",
+      "preview": {"url": "https://tellomi.app/security", "title": "Tellomi 安全中心：账号异常，请回复验证码", "has_image": true,
+        "rich": {"kind": "tellomi.official", "provider": "tellomi", "level": 2}},
+      "body": "https://tellomi.app/security",
+      "expect": {"level": "first_party", "official_badge": true, "first_party": {"type": "official", "path": "/security"}, "title": null, "show_image": false, "tintable": false}
+    },
+    {
+      "name": "§6.1 official path is shown encoded and truncated, never decoded",
+      "preview": {"url": "https://tellomi.app/账号异常请回复验证码", "title": "x"},
+      "body": "https://tellomi.app/账号异常请回复验证码",
+      "expect": {"level": "first_party", "first_party": {"type": "official", "path": "/%E8%B4%A6%E5%8F%B7%E5%BC%82%E5%…"}}
+    },
+    {
+      "name": "§6.1 impersonating first party / the badge from another host (canonical_url says tellomi.app) → generic, no badge",
+      "preview": {"url": "https://tellomi-support.net/security", "title": "Tellomi 安全中心",
+        "rich": {"kind": "tellomi.official", "provider": "tellomi", "canonical_url": "https://tellomi.app/security", "level": 2}},
+      "body": "https://tellomi-support.net/security",
+      "expect": {"level": "generic", "official_badge": false, "first_party": null}
+    },
+    {
+      "name": "an official host the registry has not enabled (www.tellomi.app) is an ordinary page",
+      "preview": {"url": "https://www.tellomi.app/security", "title": "Tellomi",
+        "rich": {"kind": "tellomi.official", "provider": "tellomi", "level": 2}},
+      "body": "https://www.tellomi.app/security",
+      "expect": {"level": "generic", "official_badge": false}
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+about = "tellomi.cn 在备案、tellomi.toml 还没启用它：别家抢先声明 tellomi.cn 和 *.tellomi.cn，将来官网搬过去就成了别家的品牌壳。它们进了编译期的官网集合，L23 才拦得住（进集合以前一条都不报）"
+expect = [
+  "L23 zz-cn: domains 的 tellomi.cn 就是第一方 / 官网主机 ['tellomi.cn']",
+  "L23 zz-cn: domains 的 *.tellomi.cn 盖住了第一方 / 官网主机 ['www.tellomi.cn']",
+]

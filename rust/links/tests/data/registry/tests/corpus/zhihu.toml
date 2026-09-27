@@ -1,0 +1,34 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "zhihu"
+
+[[case]]
+url = "https://www.zhihu.com/question/1974941060271740355"
+source = "G3 实测的问题页（2026-09-27 复核）"
+expect = { route = "question", kind = "question", object = "question/1974941060271740355" }
+
+[[case]]
+url = "https://www.zhihu.com/question/2053216573796749424/answer/2053906210676642794"
+source = "G3 实测的回答（2026-09-27 复核）"
+expect = { route = "answer", kind = "question", object = "answer/2053906210676642794" }
+
+[[case]]
+url = "https://zhuanlan.zhihu.com/p/2082783922031686455"
+source = "G3 实测的专栏文章（2026-09-27 复核）"
+expect = { route = "column-article", kind = "article", object = "p/2082783922031686455" }
+
+[[case]]
+url = "https://www.zhihu.com/question/640359835/answer/3371728492"
+source = "检索到的 App 分享回答（2026-09-27；原文带 utm_psn 分享者参数，去掉）"
+expect = { route = "answer", kind = "question" }
+
+[[case]]
+url = "https://zhuanlan.zhihu.com/p/74424675"
+source = "检索到的专栏文章（2026-09-27）"
+expect = { route = "column-article", kind = "article" }
+
+[[case]]
+url = "https://www.zhihu.com/org/zhi-hu-xin-zhi"
+source = "知乎新知的机构主页（2026-09-27）：认不出对象 → 品牌壳"
+expect = { route = "" }

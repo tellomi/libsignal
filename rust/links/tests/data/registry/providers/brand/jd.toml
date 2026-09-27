@@ -1,0 +1,38 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "jd"
+name = { zh-Hans = "京东", en = "JD" }
+tier = "brand"
+category = "commerce"
+# 3.cn 是京东的短链（302，2026-09-27 实测，Location 可能是 http 或广告点击跳转 ccc-x.jd.com）；
+# u.jd.com 是推广短链，回 200 的 JS 跳转页、没有 Location，按域名直接出品牌壳。官网没有声明 apple-touch-icon，不配图标。
+domains = ["*.jd.com"]
+short_domains = ["3.cn"]
+strip_params = ["cu", "utm_*", "abt", "gx", "gxd", "ad_od", "shareType", "sid", "_ts", "ptag", "PTAG", "wxAppName", "clickUrl"]
+evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「京东」（商品页跳 cfe.m.jd.com 风控页，C 档）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]
+id = "item"
+host = "item.jd.com"
+path = '^/(?P<sku>[0-9]{5,15})\.html$'
+kind = "product"
+object = "{sku}"
+plan = [{ type = "none" }]
+
+[[route]]
+id = "item-m"
+host = "item.m.jd.com"
+path = '^/product/(?P<sku>[0-9]{5,15})\.html$'
+kind = "product"
+object = "{sku}"
+plan = [{ type = "none" }]
+
+[[route]]            # 老的移动商品页：/ware/view.action?wareId=
+id = "item-ware"
+host = "item.m.jd.com"
+path = '^/ware/view\.action$'
+query = { wareId = '^(?P<sku>[0-9]{5,15})$' }
+kind = "product"
+object = "{sku}"
+plan = [{ type = "none" }]

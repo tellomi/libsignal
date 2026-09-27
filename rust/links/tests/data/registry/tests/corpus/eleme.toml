@@ -1,0 +1,29 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "eleme"
+
+[[case]]
+url = "https://u.ele.me/ZkTpsDSi"
+source = "检索到的饿了么分享短链（2026-09-27 302 到 h5.ele.me/adminiappsub/…）"
+expect = { short = true }
+
+[[case]]
+url = "https://h5.ele.me/newretail/p/shop/no-cache.html?id=32267804243"
+source = "检索到的新零售门店页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://www.ele.me/shop/85455/info"
+source = "检索到的老版店铺页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://h5.ele.me/app-resource/prod/gxR2qcQ6b.html"
+source = "检索到的活动页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://taobaoshangou.ele.me/"
+source = "官网（2026-09-27：www.ele.me 跳到这里）"
+expect = { route = "" }
