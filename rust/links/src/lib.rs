@@ -23,6 +23,9 @@
 //! | [`Registry::identify`] | tools | the Matcher's view of one URL |
 //! | [`layout`], [`tint`] | both | card shape and colours |
 //!
+//! [`json`] is the same surface in the shape the bridges carry (numbers, strings, bytes, JSON
+//! text); `rust/bridge/shared/src/links.rs` exposes it one function per call.
+//!
 //! ```no_run
 //! # use tellomi_links::*;
 //! # let bytes: Vec<u8> = vec![];
@@ -41,6 +44,7 @@ mod classify;
 mod extract;
 mod html;
 mod job;
+pub mod json;
 mod kinds;
 mod limits;
 mod model;
@@ -49,6 +53,7 @@ mod pattern;
 mod registry;
 mod rich;
 mod spoof;
+mod suffix;
 mod time;
 mod urlx;
 mod visual;
