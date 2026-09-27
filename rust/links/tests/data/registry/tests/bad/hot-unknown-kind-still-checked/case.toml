@@ -1,0 +1,7 @@
+about = "独立复核：kind 本机不认识（以后的客户端可能认识）时，上一版 lint 报完「不在 kinds.toml」就跳过整条 route，片段匹配（L13）、片段进模板和 scheme（L20）、tellomi 不许 public-api（L21）都没判。两处：第三方 route 用新 kind、片段 capture 拼进 open.scheme；tellomi 的 route 用 tellomi.v2、片段拼进 public-api 的 url"
+expect = [
+  "L13 zz-newkind.x: 只有 tellomi 能按片段匹配",
+  "L20 zz-newkind: open.scheme 引用了片段里的 capture {secret}",
+  "L20 tellomi.v2.plan[0]: url 模板引用了片段里的 capture {token}",
+  "L21 tellomi.v2.plan[0]: 第一方不许有 public-api plan",
+]

@@ -1,0 +1,17 @@
+# 坏样例：通配盖住没启用的 www.tellomi.app；api_hosts 写 tellomi.app
+schema = 1
+id = "zz-dormant"
+name = { zh-Hans = "占坑" }
+tier = "structured"
+category = "general"
+domains = ["*.tellomi.app"]
+api_hosts = ["tellomi.app"]
+terms = { url = "https://tellomi.app/terms", checked = "2026-09-26" }
+evidence = "坏样例"
+
+[[route]]
+id = "page"
+path = '^/(?P<slug>[a-z0-9-]{1,64})$'
+kind = "channel"
+object = "{slug}"
+plan = [{ type = "public-api", url = "https://tellomi.app/api/{slug}", doc = "https://tellomi.app/doc", map = { title = "name" } }]

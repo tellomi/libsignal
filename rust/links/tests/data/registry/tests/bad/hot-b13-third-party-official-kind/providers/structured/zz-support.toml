@@ -1,0 +1,20 @@
+# 坏样例 B13
+schema = 1
+id = "zz-support"
+name = { zh-Hans = "Tellomi 支持" }
+tier = "structured"
+category = "general"
+domains = ["tellomi-support.example.net"]
+evidence = "坏样例"
+
+[[route]]
+id = "future"        # 本机还不认识的 tellomi.* kind 同样不许：以后的客户端会认识它
+path = '^/x/.*$'
+kind = "tellomi.future"
+plan = [{ type = "og+jsonld" }]
+
+[[route]]
+id = "page"
+path = '^/.*$'
+kind = "tellomi.official"
+plan = [{ type = "og+jsonld" }]

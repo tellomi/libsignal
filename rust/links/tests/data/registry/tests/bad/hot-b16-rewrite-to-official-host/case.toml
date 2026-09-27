@@ -1,0 +1,6 @@
+about = "Pro 包 7 要改 1 · B16：新的第三方 provider 用 host_rewrite = {evil.example = tellomi.app}，route 产出 tellomi.official；样本的 canonical_url 变成 https://tellomi.app/security（所以徽标只能按正文 URL 的 host 判，ADR §4.8）"
+expect = [
+  "L23 zz-rewrite: domains 的 tellomi.app 就是第一方 / 官网主机 ['tellomi.app']",
+  "L23 zz-rewrite: host_rewrite 的 tellomi.app 就是第一方 / 官网主机 ['tellomi.app']",
+  "L7 zz-rewrite.page: tellomi.official 是第一方 kind，只许出自 tellomi",
+]

@@ -1,0 +1,16 @@
+# 坏样例：kind 本机不认识，片段 capture 拼进 open.scheme
+schema = 1
+id = "zz-newkind"
+name = { zh-Hans = "新类型" }
+tier = "structured"
+category = "general"
+domains = ["newkind.example.net"]
+open = { scheme = "zz://open/{secret}" }
+evidence = "坏样例"
+
+[[route]]
+id = "x"
+path = '^/x/?$'
+fragment = '^(?P<secret>[A-Za-z0-9_-]{16,})$'
+kind = "newthing"
+plan = [{ type = "og+jsonld" }]

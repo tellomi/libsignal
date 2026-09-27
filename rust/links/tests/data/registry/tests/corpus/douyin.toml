@@ -1,0 +1,39 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "douyin"
+
+[[case]]
+url = "https://v.douyin.com/8rmc2PU/"
+source = "G4 实测的抖音分享短链（2026-09-27 复核）"
+expect = { short = true }
+
+[[case]]
+url = "https://v.douyin.com/FX6c30f0S_c/"
+source = "检索到的抖音分享短链（2026-09-27 302 到 www.iesdouyin.com/share/video/…）"
+expect = { short = true }
+
+[[case]]
+url = "https://www.iesdouyin.com/share/video/7548643435046030628/"
+source = "检索到的分享落地页（2026-09-27；去掉分享参数后仍 302 到 www.douyin.com/video/…）"
+expect = { route = "video", kind = "video", object = "7548643435046030628" }
+
+[[case]]
+url = "https://www.douyin.com/video/7567415789267995955"
+source = "检索到的视频页（央视新闻，2026-09-27）"
+expect = { route = "video", kind = "video", object = "7567415789267995955" }
+
+[[case]]
+url = "https://www.douyin.com/video/7474199642360548643"
+source = "检索到的视频页（2026-09-27）"
+expect = { route = "video", kind = "video", object = "7474199642360548643" }
+
+[[case]]
+url = "https://live.douyin.com/dongfang"
+source = "G4 实测的直播间（2026-09-27 复核）：只做频道的类型文字"
+expect = { route = "live", kind = "channel", object = "live/dongfang" }
+
+[[case]]
+url = "https://www.douyin.com/user/MS4wLjABAAAA8U_l6rBzmy7bcy6xOJel4v0RzoR_wfAubGPeJimN__4"
+source = "人民日报的抖音主页（2026-09-27）"
+expect = { route = "user", kind = "channel" }

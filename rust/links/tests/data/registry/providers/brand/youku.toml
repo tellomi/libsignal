@@ -1,0 +1,19 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "youku"
+name = { zh-Hans = "优酷", en = "Youku" }
+tier = "brand"
+category = "video"
+# 视频页对 WhatsApp/2 回验证码页，浏览器 UA 才有对象级 OG（§3.4.1 → 品牌壳）。没找到分享短链主机：App 分享的是
+# v_show 页加 sharefrom / sharekey。官网没有声明 apple-touch-icon，不配图标。
+domains = ["v.youku.com", "m.youku.com", "list.youku.com", "v-wb.youku.com", "www.youku.com", "youku.com"]
+strip_params = ["sharefrom", "sharekey", "scene", "spm", "s", "vid", "x", "from", "playMode"]
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「优酷」；RECHECK.md 口径 2（WhatsApp/2 进验证码页）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # v.youku.com/v_show/id_<id>(.html)，m.youku.com/video/id_<id>，m.youku.com/alipay_video/id_<id>
+id = "video"
+path = '^/(?:v_show|video|alipay_video)/id_(?P<id>[A-Za-z0-9=]{8,32})(?:\.html)?$'
+kind = "video"
+object = "{id}"
+plan = [{ type = "none" }]

@@ -179,26 +179,7 @@ pub struct AllowEntry {
     pub note: String,
 }
 
-/// The shared registry envelope. `payload` is generic so links/stickers can reuse it later.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Envelope<T> {
-    pub name: String,
-    pub version: u64,
-    pub schema: u32,
-    #[serde(default)]
-    pub generated_at: String,
-    #[serde(default)]
-    pub generated_by: String,
-    #[serde(default)]
-    pub inputs: Vec<EnvelopeInput>,
-    pub payload: T,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct EnvelopeInput {
-    pub path: String,
-    pub sha256: String,
-}
+pub use crate::envelope::{Envelope, EnvelopeInput};
 
 /// Schema versions this build understands. Anything outside the range means "keep the copy that
 /// shipped with the app" rather than "fail".

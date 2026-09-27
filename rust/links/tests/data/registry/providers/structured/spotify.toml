@@ -1,0 +1,34 @@
+schema = 1
+id = "spotify"
+name = { zh-Hans = "Spotify", en = "Spotify" }
+tier = "structured"
+category = "audio"
+domains = ["open.spotify.com"]
+short_domains = ["spotify.link"]                 # App「分享」出来的短链（Branch），展开到 open.spotify.com
+unreachable_in = ["cn"]                          # 大陆直连不可达（§3.3）：cn 区直接品牌壳，不发请求
+api_hosts = ["open.spotify.com"]                 # oEmbed 端点的主机（L9：oEmbed 与 public-api 一样只许访问这里列出的主机）
+strip_params = ["si", "pi", "nd", "_branch_match_id", "_branch_referrer", "context", "go", "sp_cid", "utm_*"]
+terms = { url = "https://developer.spotify.com/documentation/embeds/reference/oembed", checked = "2026-09-27" }
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「Spotify」（oEmbed，✕cn）；2026-09-27 首批复核（#1419 PR）"
+
+# 路径前面可能带语言段 /intl-es/、/intl-pt-BR/ 这种
+[[route]]
+id = "track"
+path = '^(?:/intl-[a-z]{2}(?:-[A-Za-z]{2})?)?/track/(?P<id>[A-Za-z0-9]{22})/?$'
+kind = "music.track"
+object = "track/{id}"
+plan = [{ type = "oembed", endpoint = "https://open.spotify.com/oembed", doc = "https://developer.spotify.com/documentation/embeds/reference/oembed", map = { title = "title", image = "thumbnail_url" } }]
+
+[[route]]
+id = "album"
+path = '^(?:/intl-[a-z]{2}(?:-[A-Za-z]{2})?)?/album/(?P<id>[A-Za-z0-9]{22})/?$'
+kind = "music.album"
+object = "album/{id}"
+plan = [{ type = "oembed", endpoint = "https://open.spotify.com/oembed", doc = "https://developer.spotify.com/documentation/embeds/reference/oembed", map = { title = "title", image = "thumbnail_url" } }]
+
+[[route]]
+id = "playlist"
+path = '^(?:/intl-[a-z]{2}(?:-[A-Za-z]{2})?)?/playlist/(?P<id>[A-Za-z0-9]{22})/?$'
+kind = "music.playlist"
+object = "playlist/{id}"
+plan = [{ type = "oembed", endpoint = "https://open.spotify.com/oembed", doc = "https://developer.spotify.com/documentation/embeds/reference/oembed", map = { title = "title", image = "thumbnail_url" } }]
