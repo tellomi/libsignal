@@ -1,0 +1,37 @@
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "taobao"
+
+[[case]]
+url = "https://m.tb.cn/h.TBxLfpbarZpWrRH"
+source = "检索到的淘宝 App 分享短链（2026-09-27）；回 200 的 JS 跳转页、没有 Location，按域名出品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://m.tb.cn/h.h3G3nzl1vLSD7M5"
+source = "检索到的天猫店铺分享（搜索结果标题「首页-科建旗舰店-天猫Tmall.com」，2026-09-27）：天猫分享也走 m.tb.cn，显示成淘宝"
+expect = { route = "" }
+
+[[case]]
+url = "https://e.tb.cn/h.6n2wpdTXhX9iRLm"
+source = "检索到的 e.tb.cn 分享短链（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://s.tb.cn/c.0Ei90t"
+source = "检索到的 s.tb.cn 分享短链（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://item.taobao.com/item.htm?id=674169489573"
+source = "检索到的淘宝商品页（2026-09-27）"
+expect = { route = "item", kind = "product", object = "674169489573" }
+
+[[case]]
+url = "https://item.taobao.com/item.htm?id=602196310625"
+source = "检索到的淘宝商品页（2026-09-27）"
+expect = { route = "item", kind = "product", object = "602196310625" }
+
+[[case]]
+url = "https://item.taobao.com/item.htm?id=544769386300"
+source = "检索到的淘宝商品页（2026-09-27）"
+expect = { route = "item", kind = "product", object = "544769386300" }

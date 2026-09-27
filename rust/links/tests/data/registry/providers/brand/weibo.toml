@@ -1,0 +1,44 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "weibo"
+name = { zh-Hans = "微博", en = "Weibo" }
+tier = "brand"
+category = "social"
+# 先做品牌壳（ADR §8.1 第 8 行）：普通状态页对不带 cookie 的请求进访客验证（visitor.passport.weibo.cn），H5「文章」型给 OG；
+# App 内「复制链接」的真实形态要真机复核（§九.2）以后再定升不升档。
+# t.cn 是微博的短链服务，也包站外链接：展开以后按落点重新识别，落到别家就按别家走。官网没有声明 apple-touch-icon，不配图标。
+domains = ["weibo.com", "www.weibo.com", "m.weibo.cn", "video.weibo.com"]
+short_domains = ["t.cn"]
+strip_params = ["sourceType", "from", "wm", "featurecode", "type", "jumpfrom", "s_channel", "s_trans", "luicode", "lfid", "display", "retcode", "sudaref"]
+evidence = "ecosystem-2026-09-23/G3-social-news.md「微博（H5 文章型）」「微博（普通状态）」；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # weibo.com/<uid>/<mid>：mid 有 base62（9 位左右）与纯数字（16 位）两种
+id = "status"
+path = '^/(?P<uid>[0-9]{5,12})/(?P<mid>[0-9A-Za-z]{8,20})/?$'
+kind = "article"
+object = "{mid}"
+plan = [{ type = "none" }]
+
+[[route]]
+id = "status-m"
+host = "m.weibo.cn"
+path = '^/(?:status|detail)/(?P<mid>[0-9A-Za-z]{8,20})/?$'
+kind = "article"
+object = "{mid}"
+plan = [{ type = "none" }]
+
+[[route]]            # 头条文章
+id = "ttarticle"
+path = '^/ttarticle/p/show$'
+query = { id = '^(?P<id>[0-9]{10,25})$' }
+kind = "article"
+object = "ttarticle/{id}"
+plan = [{ type = "none" }]
+
+[[route]]
+id = "profile"
+path = '^/u/(?P<uid>[0-9]{5,12})/?$'
+kind = "channel"
+object = "u/{uid}"
+plan = [{ type = "none" }]

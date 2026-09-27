@@ -1,0 +1,34 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "unionpay"
+
+[[case]]
+url = "https://youhui.95516.com/newsign/public/app/index.html"
+source = "检索到的云闪付签到活动页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://wallet.95516.com/s/wl/web/ads/html/shareSns.html"
+source = "检索到的云闪付分享活动页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://wallet.95516.com/s/wl/web/activity/spdbank/spdbank.html"
+source = "检索到的银行联名活动页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://benefits.95516.com/upbms-web/benefits/detail/15571"
+source = "检索到的权益详情页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://cn.unionpay.com/upowhtml/cn/templates/marketingPromotions/marketingPromotions.html"
+source = "中国银联官网的优惠活动页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://benefits.95516.com/upbms-web/customActivities/wjactivity/activityDetail/05"
+source = "检索到的云闪付权益活动页（2026-09-27）"
+expect = { route = "" }

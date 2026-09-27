@@ -1,0 +1,34 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "douban"
+
+[[case]]
+url = "https://douc.cc/1zprp8"
+source = "检索到的豆瓣短链（2026-09-27 302 到 www.douban.com/link2/?url=…，包的是站外链接）"
+expect = { short = true }
+
+[[case]]
+url = "https://movie.douban.com/subject/26266893/"
+source = "检索到的电影条目（流浪地球，2026-09-27）：kind 词汇表里没有影视条目 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://book.douban.com/subject/2567698/"
+source = "检索到的图书条目（三体，2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://m.douban.com/movie/subject/26266893/"
+source = "检索到的移动条目页（2026-09-27）"
+expect = { route = "" }
+
+[[case]]
+url = "https://www.douban.com/group/topic/492551505/"
+source = "检索到的小组话题（2026-09-27；原文带 _spm_id，去掉）"
+expect = { route = "topic", kind = "article", object = "492551505" }
+
+[[case]]
+url = "https://www.douban.com/note/828388215/"
+source = "检索到的日记（2026-09-27）"
+expect = { route = "topic", kind = "article", object = "828388215" }

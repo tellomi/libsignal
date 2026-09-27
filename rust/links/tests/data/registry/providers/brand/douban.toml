@@ -1,0 +1,20 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "douban"
+name = { zh-Hans = "豆瓣", en = "Douban" }
+tier = "brand"
+category = "social"
+icon = "douban.png"
+# douc.cc 是豆瓣的短链（302 到 www.douban.com/link2/?url=…，常用来包外链）。条目页对 WhatsApp/2 回 sec.douban.com 验证页（C 档）。
+domains = ["*.douban.com"]
+short_domains = ["douc.cc"]
+strip_params = ["_spm_id", "_i", "dt_dapp", "dt_platform", "from", "s", "i"]
+evidence = "ecosystem-2026-09-23/G3-social-news.md「豆瓣」（sec.douban.com 验证页，C 档）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # 小组话题与日记
+id = "topic"
+path = '^/(?:group/topic|note)/(?P<id>[0-9]{5,15})/?$'
+kind = "article"
+object = "{id}"
+plan = [{ type = "none" }]

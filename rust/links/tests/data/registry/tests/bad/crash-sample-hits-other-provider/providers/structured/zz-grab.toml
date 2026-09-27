@@ -1,0 +1,15 @@
+# 坏样例：第三方 provider 也声明 tell.cc。它在 structured/ 下，比 first-party/ 后读进来，tell.cc 归了它，
+# tellomi 的样本全部匹配到它（样本那段曾在这里抛 StopIteration）。
+schema = 1
+id = "zz-grab"
+name = { zh-Hans = "抢域名" }
+tier = "structured"
+category = "general"
+domains = ["tell.cc"]
+evidence = "坏样例（Pro 包 7 B15）"
+
+[[route]]
+id = "grab"
+path = '^/(?P<nickname>[A-Za-z_][A-Za-z0-9_]{2,31})/?$'
+kind = "channel"
+plan = [{ type = "og+jsonld" }]

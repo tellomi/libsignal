@@ -1,0 +1,43 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "netease-music"
+name = { zh-Hans = "网易云音乐", zh-Hant = "網易雲音樂", en = "NetEase Cloud Music" }
+tier = "structured"
+category = "audio"
+# y.music.163.com/m/… 是 App 里「分享」出来的移动页；163cn.tv 是 App 的分享短链（展开到 music.163.com/m/… 或 y.music.163.com/m/…）
+domains = ["music.163.com", "y.music.163.com"]
+short_domains = ["163cn.tv"]
+hash_route = true
+# 对象不存在或页面没渲染出对象时，og:title 是站点名「网易云音乐」；移动页 og:title 带「 - 单曲 - 网易云音乐」这类后缀（2026-09-27 复核）
+placeholders = { title = ["网易云音乐"] }
+title_strip = [' - (?:单曲|歌单|专辑) - 网易云音乐$']                                 # music.163.com/#/song?id=… 是前端路由，改写到路径上再匹配
+strip_params = ["userid", "app_version", "dlt", "creatorId", "uct2", "uct", "fx-wordtest", "fx-listentest", "fx-wechatnew", "sc", "tn", "market"]
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「网易云音乐 — 单曲 & 歌单（A）」（完整 og:title / og:image / og:music:artist / og:music:album）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # music.163.com/song?id= · /#/song?id= · /m/song?id= · y.music.163.com/m/song?id=
+id = "song"
+path = '^/(?:m/)?song/?$'
+query = { id = '^(?P<id>[0-9]{1,12})$' }
+kind = "music.track"
+object = "song/{id}"
+# 页面 JSON-LD 的 @type 是 MusicAlbum（单曲页也是），不拿它当身份；OG 已经对象级
+plan = [{ type = "og+jsonld", map = { title = "og:title", image = "og:image", artist = "og:music:artist", album = "og:music:album" } }]
+
+[[route]]            # 前端路由的路径写法：/#/song/<id>/
+id = "song-path"
+path = '^/song/(?P<id>[0-9]{1,12})/?$'
+kind = "music.track"
+object = "song/{id}"
+plan = [{ type = "og+jsonld", map = { title = "og:title", image = "og:image", artist = "og:music:artist", album = "og:music:album" } }]
+
+[[route]]
+id = "playlist"
+path = '^/(?:m/)?playlist/?$'
+query = { id = '^(?P<id>[0-9]{1,15})$' }
+kind = "music.playlist"
+object = "playlist/{id}"
+plan = [{ type = "og+jsonld", map = { title = "og:title", image = "og:image" } }]
+
+# 专辑页对不带 cookie 的请求只有站点级 og:title「网易云音乐」、没有 JSON-LD（2026-09-27 复核两个专辑都一样），
+# 结构化 plan 必然落空，所以不设 route：专辑链接认不出对象 → 品牌壳，省一个请求。

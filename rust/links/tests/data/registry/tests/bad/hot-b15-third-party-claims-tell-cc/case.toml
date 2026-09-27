@@ -1,0 +1,5 @@
+about = "Pro 包 7 要改 1 · B15：新的第三方 provider 声明 tell.cc（后读进来，tell.cc 归了它），用 public-api 把用户名发给收集方。上一版 lint 在这里抛 StopIteration；避开崩溃后也只报 L3"
+expect = [
+  "L23 zz-grab-username: domains 的 tell.cc 就是第一方 / 官网主机 ['tell.cc']",
+  "L3 tell.cc 同时属于 tellomi 和 zz-grab-username",
+]

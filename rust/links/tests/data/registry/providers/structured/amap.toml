@@ -1,0 +1,60 @@
+schema = 1
+id = "amap"
+name = { zh-Hans = "高德地图", en = "Amap" }
+tier = "structured"
+category = "maps"
+# wb.amap.com：surl 短链展开的第一跳（2026-09-24 是 http，2026-09-27 新分享的是 https）。
+# www.amap.com/?p=… 在外面也有人直接贴（2026-09-27 找到真实样本），同一种 p 参数；/place/<POI> 只有 POI 号，认不出坐标 → 品牌壳。
+domains = ["uri.amap.com", "wb.amap.com", "www.amap.com", "ditu.amap.com"]
+short_domains = ["surl.amap.com"]
+strip_params = ["src", "callnative", "innersrc", "userRelationToken", "commonBizInfo"]
+evidence = "ecosystem-2026-09-23/G1-maps-travel.md「高德地图」；2026-09-24 重新展开 surl.amap.com/483oczN13g2s；URI API 文档 https://lbs.amap.com/api/uri-api/guide/mobile-web/point（position=经度,纬度；coordinate=gaode|wgs84，缺省 gaode = GCJ-02）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # coordinate=wgs84 时坐标是 WGS-84（URI API 文档），排在缺省那条前面
+id = "marker-wgs84"
+host = "uri.amap.com"
+path = '^/marker$'
+query = { position = '^(?P<lng>-?[0-9]{1,3}\.[0-9]+),(?P<lat>-?[0-9]{1,2}\.[0-9]+)$', coordinate = '^wgs84$' }
+kind = "place"
+attrs = { coord_sys = "wgs84" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}" } }]
+
+[[route]]            # 带名字的地点标注：uri.amap.com/marker?position=<lng>,<lat>&name=…
+id = "marker-named"
+host = "uri.amap.com"
+path = '^/marker$'
+query = { position = '^(?P<lng>-?[0-9]{1,3}\.[0-9]+),(?P<lat>-?[0-9]{1,2}\.[0-9]+)$', name = '^(?P<name>[^&]{1,64})$' }
+kind = "place"
+attrs = { coord_sys = "gcj02" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}", name = "{name}" } }]
+
+[[route]]            # uri.amap.com/marker?position=<lng>,<lat> —— 经度在前
+id = "marker"
+host = "uri.amap.com"
+path = '^/marker$'
+query = { position = '^(?P<lng>-?[0-9]{1,3}\.[0-9]+),(?P<lat>-?[0-9]{1,2}\.[0-9]+)$' }
+kind = "place"
+attrs = { coord_sys = "gcj02" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}" } }]
+
+# 短链落地：?p=<POI>,<lat>,<lng>,<名称>,<地址>[,<城市码>] —— 纬度在前；值要先解码（逗号可能是 %2C，空格可能是 +）。
+# 2026-09-27：新分享的 p 不再带城市码，commonBizInfo 可能排在 p 前面（查询参数不看顺序）。
+[[route]]
+id = "poi-share-wb"
+host = "wb.amap.com"
+path = '^/$'
+query = { p = '^(?P<poi>[0-9A-Z]{6,16}),(?P<lat>-?[0-9]{1,2}\.[0-9]+),(?P<lng>-?[0-9]{1,3}\.[0-9]+),(?P<name>[^,]{1,64}),(?P<address>[^,]{0,128})(?:,[0-9]{6})?$' }
+kind = "place"
+object = "{poi}"
+attrs = { coord_sys = "gcj02" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}", name = "{name}", address = "{address}" } }]
+
+[[route]]
+id = "poi-share-www"
+host = "www.amap.com"
+path = '^/$'
+query = { p = '^(?P<poi>[0-9A-Z]{6,16}),(?P<lat>-?[0-9]{1,2}\.[0-9]+),(?P<lng>-?[0-9]{1,3}\.[0-9]+),(?P<name>[^,]{1,64}),(?P<address>[^,]{0,128})(?:,[0-9]{6})?$' }
+kind = "place"
+object = "{poi}"
+attrs = { coord_sys = "gcj02" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}", name = "{name}", address = "{address}" } }]

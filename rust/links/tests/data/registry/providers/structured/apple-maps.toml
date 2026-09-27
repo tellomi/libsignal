@@ -1,0 +1,61 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "apple-maps"
+name = { zh-Hans = "Apple 地图", zh-Hant = "Apple 地圖", en = "Apple Maps" }
+tier = "structured"
+category = "maps"
+# maps.apple/p/… 是 iOS 18 起的分享短链，301 到 maps.apple.com/place?…（Apple 文档「Unified Map URLs」：短链主机永远是 maps.apple，不带 .com）。
+# 坐标按 Apple 文档是「纬度,经度」；坐标系文档没写，按 WGS-84 记（大陆设备分享出来的是不是 GCJ-02 要真机复核，见 PR 的待办）。
+domains = ["maps.apple.com"]
+short_domains = ["maps.apple"]
+strip_params = ["_ext", "map", "lsp", "_provider", "t", "z", "spn"]
+evidence = "https://developer.apple.com/documentation/mapkit/unified-map-urls（coordinate=纬度,经度；place-id / auid）与旧版 Map Links（ll=纬度,经度）；ecosystem-2026-09-23/G1-maps-travel.md「Apple Maps」（地点页 OG 对象级；大陆直连 302 到 maps.apple.com.cn 站点页）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # 统一地图链接：/place?coordinate=<lat>,<lng>&name=…
+id = "place-coordinate-named"
+path = '^/place$'
+query = { coordinate = '^(?P<lat>-?[0-9]{1,2}\.[0-9]+),(?P<lng>-?[0-9]{1,3}\.[0-9]+)$', name = '^(?P<name>[^&]{1,64})$' }
+kind = "place"
+attrs = { coord_sys = "wgs84" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}", name = "{name}" } }]
+
+[[route]]
+id = "place-coordinate"
+path = '^/place$'
+query = { coordinate = '^(?P<lat>-?[0-9]{1,2}\.[0-9]+),(?P<lng>-?[0-9]{1,3}\.[0-9]+)$' }
+kind = "place"
+attrs = { coord_sys = "wgs84" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}" } }]
+
+[[route]]            # 旧版：/?ll=<lat>,<lng>&q=<名称>
+id = "ll-named"
+path = '^/$'
+query = { ll = '^(?P<lat>-?[0-9]{1,2}\.[0-9]+),(?P<lng>-?[0-9]{1,3}\.[0-9]+)$', q = '^(?P<name>[^&]{1,64})$' }
+kind = "place"
+attrs = { coord_sys = "wgs84" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}", name = "{name}" } }]
+
+[[route]]
+id = "ll"
+path = '^/$'
+query = { ll = '^(?P<lat>-?[0-9]{1,2}\.[0-9]+),(?P<lng>-?[0-9]{1,3}\.[0-9]+)$' }
+kind = "place"
+attrs = { coord_sys = "wgs84" }
+plan = [{ type = "url-only", map = { lat = "{lat}", lng = "{lng}" } }]
+
+[[route]]            # 只有地点号、没有坐标：取地点页 OG（G1 实测对象级）；大陆直连会被 302 到 .com.cn 站点页，主机不在 domains → 这一步作废 → 品牌壳
+id = "place-id"
+path = '^/place$'
+query = { place-id = '^(?P<pid>[A-Za-z0-9]{6,32})$' }
+kind = "place"
+object = "{pid}"
+plan = [{ type = "og+jsonld", map = { name = "og:title", image = "og:image" } }]
+
+[[route]]
+id = "place-auid"
+path = '^/place$'
+query = { auid = '^(?P<auid>[0-9]{5,25})$' }
+kind = "place"
+object = "auid/{auid}"
+plan = [{ type = "og+jsonld", map = { name = "og:title", image = "og:image" } }]

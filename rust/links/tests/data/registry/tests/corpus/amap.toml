@@ -1,0 +1,68 @@
+provider = "amap"
+
+[[case]]
+url = "https://surl.amap.com/483oczN13g2s"
+source = "G1 实测的真实分享短链；2026-09-24 重新展开：302 → http://wb.amap.com/?p=…（下一条）"
+expect = { short = true }
+
+[[case]]
+url = "http://wb.amap.com/?p=B015F0IUBL%2C37.877682%2C112.573974%2C%E5%90%8C%E4%BB%81%E5%A0%82%28%E4%BA%94%E4%B8%80%E8%B7%AF%E5%BA%97%29%2C%E5%A4%AA%E5%8E%9F%E5%B8%82%E6%9D%8F%E8%8A%B1%E5%B2%AD%E5%8C%BA%E4%BA%94%E4%B8%80%E8%B7%AF227%E5%8F%B7%2C140100&src=pc_sms_poi"
+source = "上一条短链的 Location 原文（http，逗号编码成 %2C）。只用来识别，不发请求"
+location = true
+expect = { route = "poi-share-wb", kind = "place", object = "B015F0IUBL", captures = { lat = "37.877682", lng = "112.573974", name = "同仁堂(五一路店)", address = "太原市杏花岭区五一路227号" } }
+
+[[case]]
+url = "https://surl.amap.com/1YRVEQu1e3I3"
+source = "检索到的公开分享短链（2026-09-27）；大陆直连 302 → 下一条"
+expect = { short = true }
+
+[[case]]
+url = "http://wb.amap.com/?p=B0FFK0FICQ%2C28.211852%2C112.991989%2C%E6%B9%96%E5%8D%97%E5%8D%9A%E7%89%A9%E9%99%A2%28%E8%A5%BF%E9%97%A8%29%2C%E9%95%BF%E6%B2%99%E5%B8%82%E5%BC%80%E7%A6%8F%E5%8C%BA%E4%B8%9C%E9%A3%8E%E8%B7%AF50%E5%8F%B7%2C430100&src=pc_sms_poi"
+source = "上一条短链的第一个 Location 原文（2026-09-27 大陆直连）"
+location = true
+expect = { route = "poi-share-wb", kind = "place", object = "B0FFK0FICQ", captures = { lat = "28.211852", lng = "112.991989", name = "湖南博物院(西门)", address = "长沙市开福区东风路50号" } }
+
+[[case]]
+url = "https://surl.amap.com/9Th6kx4Ke8Q"
+source = "检索到的公开分享短链（2026-09-27）；302 到 https://wb.amap.com/?commonBizInfo=…&p=…（p 排在后面、不带城市码、名称里的空格是 +；Location 带分享者 token，不收进样本）"
+expect = { short = true }
+
+[[case]]
+url = "https://wb.amap.com/?p=B00156NZVG%2C31.247461353927147%2C121.4993718266487%2CNorth+Bund+Green+Land%2CDongdaming+Road+558-678&src=app_share"
+source = "上一条短链 Location 里的 p 参数原文（去掉了 commonBizInfo 与分享者 token）：新版分享不带城市码，+ 解码成空格"
+expect = { route = "poi-share-wb", kind = "place", object = "B00156NZVG", captures = { lat = "31.247461353927147", lng = "121.4993718266487", name = "North Bund Green Land", address = "Dongdaming Road 558-678" } }
+
+[[case]]
+url = "https://www.amap.com/?p=B0FFIU11XH,27.817401814924292,113.08338448405269,%E6%A0%AA%E6%B4%B2%E5%B8%82%E5%9F%8E%E5%B8%82%E7%85%A7%E6%98%8E%E7%AE%A1%E7%90%86%E5%A4%84,"
+source = "检索到的 www.amap.com 直接分享链接（2026-09-27）：同一种 p 参数，地址为空、没有城市码"
+expect = { route = "poi-share-www", kind = "place", object = "B0FFIU11XH", captures = { lat = "27.817401814924292", lng = "113.08338448405269", name = "株洲市城市照明管理处" } }
+
+[[case]]
+url = "https://uri.amap.com/marker?position=116.47,39.99"
+source = "G1：官方 URI API 的地点标注格式（坐标是 URL 本身，不是编出来的对象 ID）"
+expect = { route = "marker", kind = "place", captures = { lng = "116.47", lat = "39.99" } }
+
+[[case]]
+url = "https://uri.amap.com/marker?position=116.473195,39.993253&name=%E5%95%86%E5%AE%B6%E5%90%8D%E7%A7%B0"
+source = "URI API 文档示例 https://lbs.amap.com/api/uri-api/guide/mobile-web/point（原文 http；Signal 只给 https 生成预览，改成 https）"
+expect = { route = "marker-named", kind = "place", captures = { lng = "116.473195", lat = "39.993253", name = "商家名称" } }
+
+[[case]]
+url = "https://uri.amap.com/marker?position=108.943927%2C34.337850"
+source = "检索到的真实标注链接（2026-09-27）：逗号编码成 %2C，解码后再匹配"
+expect = { route = "marker", kind = "place", captures = { lng = "108.943927", lat = "34.337850" } }
+
+[[case]]
+url = "https://uri.amap.com/navigation?from=116.478346,39.997361,startpoint&to=116.3246,39.966577,endpoint&mode=car&coordinate=gaode"
+source = "URI API 文档的路线示例（改成 https，去掉 via）：路线不是地点 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://www.amap.com/place/B000A7ZJBB"
+source = "检索到的地点页（2026-09-27）：只有 POI 号、没有坐标 → 品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://uri.amap.com/marker?position=116.473195,39.993253&coordinate=wgs84"
+source = "按 URI API 文档的格式写的坐标链接（坐标取自文档示例；coordinate=wgs84 是文档列出的取值）。坐标就是 URL 本身，README §6 允许；没找到外面流通的 wgs84 真实链接"
+expect = { route = "marker-wgs84", kind = "place", captures = { lng = "116.473195", lat = "39.993253" } }

@@ -1,0 +1,17 @@
+# 坏样例：id 不是 tellomi，tier 写 first-party
+schema = 1
+id = "zz-fake"
+name = { zh-Hans = "假第一方" }
+tier = "first-party"
+category = "general"
+domains = ["tel1.example.net"]
+official_domains = ["tel1-app.example.net"]
+reserved_paths = ["u"]
+evidence = "坏样例"
+
+[[route]]
+id = "invite"
+path = '^/g/?$'
+fragment = '^(?P<invite>[A-Za-z0-9_-]{16,})$'
+kind = "channel"
+plan = [{ type = "og+jsonld" }]

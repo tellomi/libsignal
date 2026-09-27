@@ -1,0 +1,6 @@
+about = "第三方把自己写成 first-party，带 official_domains / reserved_paths，还按片段匹配。上一版 L13 的后两条按 tier 判，tier 正好写成 first-party，就只报了第一条"
+expect = [
+  "L13 zz-fake: 只有 tellomi 能是 first-party",
+  "L13 zz-fake: reserved_paths / official_domains 只许 tellomi",
+  "L13 zz-fake.invite: 只有 tellomi 能按片段匹配",
+]
