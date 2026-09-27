@@ -2686,6 +2686,7 @@ dependencies = [
  "static_assertions",
  "strum",
  "subtle",
+ "tellomi-links",
  "tellomi-policy",
  "test-case",
  "testing_logger",
@@ -2803,6 +2804,7 @@ dependencies = [
  "static_assertions",
  "strum",
  "subtle",
+ "tellomi-links",
  "tellomi-policy",
  "test-case",
  "thiserror 2.0.18",
@@ -5414,6 +5416,7 @@ name = "tellomi-links"
 version = "0.1.0"
 dependencies = [
  "displaydoc",
+ "encoding_rs",
  "libsignal-core",
  "png",
  "prost",

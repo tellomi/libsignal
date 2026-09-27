@@ -5,6 +5,7 @@ id = "youtube"
 name = { zh-Hans = "YouTube", en = "YouTube" }
 tier = "structured"
 category = "video"
+fallback = "generic"                            # 认不出对象的页面（Issue / PR / 歌手 / 播放列表……）照今天的 generic 预览，不降成品牌壳（README 第 5 条，L24）
 # youtu.be/<id> 本身就带着视频号，直接识别，不当短链展开（省一个请求；它 303 到 watch?v=）
 domains = ["www.youtube.com", "youtube.com", "m.youtube.com", "youtu.be"]
 host_rewrite = { "youtube.com" = "www.youtube.com", "m.youtube.com" = "www.youtube.com" }

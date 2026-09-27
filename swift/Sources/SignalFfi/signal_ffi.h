@@ -636,6 +636,10 @@ static_assert_64bit(alignof(SignalFfiSyncInputStreamStruct) == 8);
 typedef const SignalFfiSyncInputStreamStruct* SignalType_ConstPointer_SignalFfiSyncInputStreamStruct;
 static_assert_64bit(sizeof(SignalType_ConstPointer_SignalFfiSyncInputStreamStruct) == 8);
 static_assert_64bit(alignof(SignalType_ConstPointer_SignalFfiSyncInputStreamStruct) == 8);
+typedef struct SignalLinkRegistry SignalLinkRegistry;
+typedef const SignalLinkRegistry* SignalType_ConstPointer_SignalLinkRegistry;
+static_assert_64bit(sizeof(SignalType_ConstPointer_SignalLinkRegistry) == 8);
+static_assert_64bit(alignof(SignalType_ConstPointer_SignalLinkRegistry) == 8);
 typedef struct SignalMessageBackupKey SignalMessageBackupKey;
 typedef const SignalMessageBackupKey* SignalType_ConstPointer_SignalMessageBackupKey;
 static_assert_64bit(sizeof(SignalType_ConstPointer_SignalMessageBackupKey) == 8);
@@ -1485,6 +1489,31 @@ static_assert_64bit(alignof(SignalMutPointerValidatingMac) == 8);
 typedef SignalMutPointerValidatingMac* SignalType_MutPointer_SignalMutPointerValidatingMac;
 static_assert_64bit(sizeof(SignalType_MutPointer_SignalMutPointerValidatingMac) == 8);
 static_assert_64bit(alignof(SignalType_MutPointer_SignalMutPointerValidatingMac) == 8);
+typedef struct SignalLinkJob SignalLinkJob;
+typedef SignalLinkJob* SignalType_MutPointer_SignalLinkJob;
+static_assert_64bit(sizeof(SignalType_MutPointer_SignalLinkJob) == 8);
+static_assert_64bit(alignof(SignalType_MutPointer_SignalLinkJob) == 8);
+typedef struct {
+  SignalLinkJob* raw;
+} SignalMutPointerLinkJob;
+static_assert_64bit(offsetof(SignalMutPointerLinkJob, raw) == 0);
+static_assert_64bit(sizeof(SignalMutPointerLinkJob) == 8);
+static_assert_64bit(alignof(SignalMutPointerLinkJob) == 8);
+typedef SignalMutPointerLinkJob* SignalType_MutPointer_SignalMutPointerLinkJob;
+static_assert_64bit(sizeof(SignalType_MutPointer_SignalMutPointerLinkJob) == 8);
+static_assert_64bit(alignof(SignalType_MutPointer_SignalMutPointerLinkJob) == 8);
+typedef SignalLinkRegistry* SignalType_MutPointer_SignalLinkRegistry;
+static_assert_64bit(sizeof(SignalType_MutPointer_SignalLinkRegistry) == 8);
+static_assert_64bit(alignof(SignalType_MutPointer_SignalLinkRegistry) == 8);
+typedef struct {
+  SignalLinkRegistry* raw;
+} SignalMutPointerLinkRegistry;
+static_assert_64bit(offsetof(SignalMutPointerLinkRegistry, raw) == 0);
+static_assert_64bit(sizeof(SignalMutPointerLinkRegistry) == 8);
+static_assert_64bit(alignof(SignalMutPointerLinkRegistry) == 8);
+typedef SignalMutPointerLinkRegistry* SignalType_MutPointer_SignalMutPointerLinkRegistry;
+static_assert_64bit(sizeof(SignalType_MutPointer_SignalMutPointerLinkRegistry) == 8);
+static_assert_64bit(alignof(SignalType_MutPointer_SignalMutPointerLinkRegistry) == 8);
 typedef SignalMessageBackupKey* SignalType_MutPointer_SignalMessageBackupKey;
 static_assert_64bit(sizeof(SignalType_MutPointer_SignalMessageBackupKey) == 8);
 static_assert_64bit(alignof(SignalType_MutPointer_SignalMessageBackupKey) == 8);
@@ -2587,6 +2616,12 @@ typedef struct {
 static_assert_64bit(offsetof(SignalConstPointerFfiSyncInputStreamStruct, raw) == 0);
 static_assert_64bit(sizeof(SignalConstPointerFfiSyncInputStreamStruct) == 8);
 static_assert_64bit(alignof(SignalConstPointerFfiSyncInputStreamStruct) == 8);
+typedef struct {
+  const SignalLinkRegistry* raw;
+} SignalConstPointerLinkRegistry;
+static_assert_64bit(offsetof(SignalConstPointerLinkRegistry, raw) == 0);
+static_assert_64bit(sizeof(SignalConstPointerLinkRegistry) == 8);
+static_assert_64bit(alignof(SignalConstPointerLinkRegistry) == 8);
 typedef struct {
   const SignalMessageBackupKey* raw;
 } SignalConstPointerMessageBackupKey;
@@ -4523,6 +4558,112 @@ SignalFfiError* signal_kyber_secret_key_destroy(
 SignalFfiError* signal_kyber_secret_key_serialize(
   SignalOwnedBuffer* out,
   SignalConstPointerKyberSecretKey obj
+);
+SignalFfiError* signal_link_job_destroy(
+  SignalMutPointerLinkJob p
+);
+SignalFfiError* signal_link_job_finish(
+  SignalCStringPtr* out,
+  SignalMutPointerLinkJob job,
+  SignalConstPointerPolicyEngine policy
+);
+SignalFfiError* signal_link_job_next_request(
+  SignalCStringPtr* out,
+  SignalMutPointerLinkJob job
+);
+SignalFfiError* signal_link_job_on_failure(
+  SignalMutPointerLinkJob job,
+  uint32_t id
+);
+SignalFfiError* signal_link_job_on_first_party(
+  SignalMutPointerLinkJob job,
+  uint32_t id,
+  const int8_t* result
+);
+SignalFfiError* signal_link_job_on_image(
+  SignalMutPointerLinkJob job,
+  uint32_t id,
+  bool ok
+);
+SignalFfiError* signal_link_job_on_network_error(
+  SignalMutPointerLinkJob job,
+  uint32_t id
+);
+SignalFfiError* signal_link_job_on_response(
+  SignalMutPointerLinkJob job,
+  uint32_t id,
+  uint32_t status,
+  const int8_t* final_url,
+  const int8_t* content_type,
+  const int8_t* location,
+  SignalBorrowedBuffer body
+);
+SignalFfiError* signal_link_registry_begin(
+  SignalMutPointerLinkJob* out,
+  SignalConstPointerLinkRegistry registry,
+  const int8_t* url,
+  const int8_t* context
+);
+SignalFfiError* signal_link_registry_classify(
+  SignalCStringPtr* out,
+  SignalConstPointerLinkRegistry registry,
+  const int8_t* preview,
+  const int8_t* body,
+  const int8_t* message
+);
+SignalFfiError* signal_link_registry_degraded(
+  SignalCStringPtr* out,
+  SignalConstPointerLinkRegistry registry
+);
+SignalFfiError* signal_link_registry_destroy(
+  SignalMutPointerLinkRegistry p
+);
+SignalFfiError* signal_link_registry_identify(
+  SignalCStringPtr* out,
+  SignalConstPointerLinkRegistry registry,
+  const int8_t* url,
+  bool location
+);
+SignalFfiError* signal_link_registry_load(
+  SignalMutPointerLinkRegistry* out,
+  SignalBorrowedBuffer envelope
+);
+SignalFfiError* signal_link_registry_load_update(
+  SignalMutPointerLinkRegistry* out,
+  SignalBorrowedBuffer envelope,
+  const int8_t* signature_hex,
+  SignalBorrowedBuffer public_key,
+  uint64_t current_version
+);
+SignalFfiError* signal_link_registry_open_plan(
+  SignalCStringPtr* out,
+  SignalConstPointerLinkRegistry registry,
+  const int8_t* url
+);
+SignalFfiError* signal_link_registry_receive_check(
+  SignalCStringPtr* out,
+  SignalConstPointerLinkRegistry registry,
+  const int8_t* preview,
+  const int8_t* body,
+  const int8_t* message
+);
+SignalFfiError* signal_link_registry_version(
+  uint64_t* out,
+  SignalConstPointerLinkRegistry registry
+);
+SignalFfiError* signal_links_layout(
+  SignalCStringPtr* out,
+  uint32_t image_width,
+  uint32_t image_height,
+  const int8_t* kind,
+  const int8_t* level
+);
+SignalFfiError* signal_links_tint(
+  SignalCStringPtr* out,
+  const int8_t* layout,
+  uint32_t width,
+  uint32_t height,
+  SignalBorrowedBuffer rgba
 );
 SignalFfiError* signal_lookup_request_add_aci_and_access_key(
   SignalConstPointerLookupRequest request,

@@ -27,15 +27,29 @@ serde_json = { workspace = true }
 thiserror = { workspace = true }
 unicode-security = { workspace = true }
 
-# ADR-0063 §4.10: the public suffix list (registrable domain for the domain row and for lookalike
-# checks). Crate MIT / Apache-2.0, list data MPL-2.0.
-psl = "2.1.238"
+# GBK / GB2312 / GB18030 and Big5 pages (many older Chinese sites). Only those two decoders are
+# referenced, which costs about 150 KB stripped on Android arm64.
+encoding_rs = "0.8.35"
 # Registry patterns are compiled with the same engine the build step uses (README §8); linear time.
-regex = "1.12.4"
+# No Unicode tables and no perf engines: registry patterns are short, ASCII-classed and run on URL
+# parts, and the defaults would add about 800 KB to the Android library (L5 forbids \d \w \s \b \p).
+regex = { version = "1.12.4", default-features = false, features = ["std"] }
 # WHATWG URL parsing, IDNA → punycode, form-urlencoded query pairs.
 url = "2.5.8"
 
+# Only the build-time binary needs TOML; clients get the crate without it.
+toml = { version = "=1.1.2", optional = true }
+
+[features]
+build-tools = ["dep:toml"]
+
+[[bin]]
+name = "links-build"
+required-features = ["build-tools"]
+
 [dev-dependencies]
+# Only for the (ignored) one-off equivalence check of src/suffix.rs against the crate it replaces.
+psl = "=2.1.238"
 # Tests sign throwaway registries with a fresh key.
 rand = { workspace = true }
 # Tests decode the tint sample images (ADR-0063 card-visual appendix A) from test resources.
