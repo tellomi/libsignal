@@ -1801,6 +1801,135 @@ internal object Native {
   public external fun KyberSecretKey_Serialize(obj: ObjectHandle): ByteArray
 
   @JvmStatic
+  public external fun LinkJob_Destroy(handle: ObjectHandle): Unit
+
+  @JvmStatic
+  public external fun LinkJob_Finish(
+    job: ObjectHandle,
+    policy: ObjectHandle,
+  ): String
+
+  @JvmStatic
+  public external fun LinkJob_NextRequest(job: ObjectHandle): String?
+
+  @JvmStatic
+  public external fun LinkJob_OnFailure(
+    job: ObjectHandle,
+    id: Int,
+  ): Unit
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun LinkJob_OnFirstParty(
+    job: ObjectHandle,
+    id: Int,
+    result: String,
+  ): Unit
+
+  @JvmStatic
+  public external fun LinkJob_OnImage(
+    job: ObjectHandle,
+    id: Int,
+    ok: Boolean,
+  ): Unit
+
+  @JvmStatic
+  public external fun LinkJob_OnNetworkError(
+    job: ObjectHandle,
+    id: Int,
+  ): Unit
+
+  @JvmStatic
+  public external fun LinkJob_OnResponse(
+    job: ObjectHandle,
+    id: Int,
+    status: Int,
+    finalUrl: String,
+    contentType: String,
+    location: String?,
+    body: ByteArray,
+  ): Unit
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun LinkRegistry_Begin(
+    registry: ObjectHandle,
+    url: String,
+    context: String,
+  ): ObjectHandle
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun LinkRegistry_Classify(
+    registry: ObjectHandle,
+    preview: String,
+    body: String,
+    message: String,
+  ): String
+
+  @JvmStatic
+  public external fun LinkRegistry_Degraded(registry: ObjectHandle): String
+
+  @JvmStatic
+  public external fun LinkRegistry_Destroy(handle: ObjectHandle): Unit
+
+  @JvmStatic
+  public external fun LinkRegistry_Identify(
+    registry: ObjectHandle,
+    url: String,
+    location: Boolean,
+  ): String?
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun LinkRegistry_Load(envelope: ByteArray): ObjectHandle
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun LinkRegistry_LoadUpdate(
+    envelope: ByteArray,
+    signatureHex: String,
+    publicKey: ByteArray,
+    currentVersion: Long,
+  ): ObjectHandle
+
+  @JvmStatic
+  public external fun LinkRegistry_OpenPlan(
+    registry: ObjectHandle,
+    url: String,
+  ): String
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun LinkRegistry_ReceiveCheck(
+    registry: ObjectHandle,
+    preview: String,
+    body: String,
+    message: String,
+  ): String
+
+  @JvmStatic
+  public external fun LinkRegistry_Version(registry: ObjectHandle): Long
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun Links_Layout(
+    imageWidth: Int,
+    imageHeight: Int,
+    kind: String,
+    level: String,
+  ): String
+
+  @JvmStatic
+  @Throws(Exception::class)
+  public external fun Links_Tint(
+    layout: String,
+    width: Int,
+    height: Int,
+    rgba: ByteArray,
+  ): String
+
+  @JvmStatic
   public external fun LookupRequest_Destroy(handle: ObjectHandle): Unit
 
   @JvmStatic

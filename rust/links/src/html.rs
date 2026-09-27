@@ -144,6 +144,31 @@ pub(crate) fn content_type_charset(content_type: &str) -> Option<String> {
     charset_from_content_type(content_type)
 }
 
+/// The charsets the extractor reads. Labels follow the WHATWG Encoding Standard; GBK and GB2312
+/// decode with the GB18030 decoder, as browsers do. Only these two legacy families are carried
+/// (older mainland / Hong Kong / Taiwan pages); matching labels here rather than through
+/// `Encoding::for_label` keeps every other decoder out of the binary.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Charset {
+    Utf8,
+    Gb18030,
+    Big5,
+    Other,
+}
+
+impl Charset {
+    pub fn from_label(label: &str) -> Charset {
+        match label.trim().to_ascii_lowercase().as_str() {
+            "utf-8" | "utf8" | "unicode-1-1-utf-8" | "unicode11utf8" | "unicode20utf8"
+            | "x-unicode20utf8" | "us-ascii" | "ascii" => Charset::Utf8,
+            "gbk" | "x-gbk" | "gb2312" | "gb_2312" | "gb_2312-80" | "chinese" | "csgb2312"
+            | "csiso58gb231280" | "iso-ir-58" | "gb18030" => Charset::Gb18030,
+            "big5" | "big5-hkscs" | "cn-big5" | "csbig5" | "x-x-big5" => Charset::Big5,
+            _ => Charset::Other,
+        }
+    }
+}
+
 fn parse_sizes(sizes: &str) -> Option<(u32, u32)> {
     sizes
         .split_ascii_whitespace()

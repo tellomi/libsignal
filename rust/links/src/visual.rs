@@ -10,12 +10,12 @@
 //! * [`tint`]: background and text colour from the card's own image, the way iOS does it
 //!   (card-visual §2.3): no brand colour table, no `theme-color`, nothing the sender says.
 
-use serde::{Serialize, Serializer};
+use serde::{Deserialize, Serialize, Serializer};
 
 use crate::card::Level;
 use crate::limits::FIRST_PARTY_KIND_PREFIX;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Layout {
     /// tell.cc / official: Tellomi's own neutral card with an action button (card-visual §5.2).

@@ -1,11 +1,11 @@
 # Copyright 2026 重庆半格智能科技有限公司
 # SPDX-License-Identifier: AGPL-3.0-only
 
-Copied verbatim from the super repo's links/ (tellomi/tellomi#1426, branch taishi/links-registry,
-commit 665ad718017dc56fb8a4f23ca1d481b8a4deea0c, 2026-09-27), which is the ADR-0063 appendix A
-registry moved out of docs/adr/0063/registry/ (#1419):
+Copied verbatim from the super repo's links/ on tellomi/tellomi#1427 (branch taishi/links-fallback,
+commit dd0e159d1597d9dc1b776ebafb09a2f3f1e2853e, 2026-09-27): #1426's registry (merged as dd92bdd3) plus the optional
+provider field `fallback` and lint rule L24.
   kinds.toml, providers/**, tests/corpus/*.toml, tests/bad/** (incl. the icon-* overlays),
-  dist/links-2026092701.json (the build output: registry envelope, payload = {kinds, providers}).
+  dist/links-2026092702.json (the build output: registry envelope, payload = {kinds, providers}).
 Not copied: README.md, provider.schema.json, icons/ (L15/L16 are build-time rules), scripts/links/.
 libsignal cannot read super-repo paths at build time, so the tests read these copies. Refresh them
 from links/ whenever the registry format or its samples change.
