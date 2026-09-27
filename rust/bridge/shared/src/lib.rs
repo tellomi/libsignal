@@ -43,6 +43,7 @@ mod account_keys;
 mod svr2;
 
 pub mod incremental_mac;
+pub mod links;
 pub mod message_backup;
 pub mod policy;
 pub mod usernames;

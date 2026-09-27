@@ -5,6 +5,7 @@ id = "github"
 name = { zh-Hans = "GitHub", en = "GitHub" }
 tier = "structured"
 category = "dev"
+fallback = "generic"                            # 认不出对象的页面（Issue / PR / 歌手 / 播放列表……）照今天的 generic 预览，不降成品牌壳（README 第 5 条，L24）
 domains = ["github.com"]
 api_hosts = ["api.github.com"]
 title_strip = ['^GitHub - ']                        # 兜底走 OG 时，og:title 是「GitHub - owner/repo: 简介」

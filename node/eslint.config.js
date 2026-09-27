@@ -35,7 +35,10 @@ const config = defineConfig(
         [
           '',
           {
-            pattern: ' Copyright \\d{4}(-\\d{4})? Signal Messenger, LLC.',
+            // Tellomi: files the fork adds carry the company as holder
+            // (docs/legal/dev/SOURCE_COPYRIGHT.md in the super repo); upstream files keep Signal's.
+            pattern:
+              ' Copyright \\d{4}(-\\d{4})? (Signal Messenger, LLC\\.|重庆半格智能科技有限公司)',
           },
           ' SPDX-License-Identifier: AGPL-3.0-only',
           '',

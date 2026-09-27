@@ -1,0 +1,9 @@
+# 坏样例 L24
+schema = 1
+id = "zz-pay"
+name = { zh-Hans = "某支付" }
+tier = "brand"
+category = "payment"
+fallback = "generic"
+domains = ["pay.example.net"]
+evidence = "坏样例"

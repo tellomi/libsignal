@@ -5,6 +5,7 @@ id = "netease-music"
 name = { zh-Hans = "网易云音乐", zh-Hant = "網易雲音樂", en = "NetEase Cloud Music" }
 tier = "structured"
 category = "audio"
+fallback = "generic"                            # 认不出对象的页面（Issue / PR / 歌手 / 播放列表……）照今天的 generic 预览，不降成品牌壳（README 第 5 条，L24）
 # y.music.163.com/m/… 是 App 里「分享」出来的移动页；163cn.tv 是 App 的分享短链（展开到 music.163.com/m/… 或 y.music.163.com/m/…）
 domains = ["music.163.com", "y.music.163.com"]
 short_domains = ["163cn.tv"]
