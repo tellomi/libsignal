@@ -1,0 +1,5 @@
+about = "Pro 包 9 复现的篡改③：tellomi 的 domains / official_domains 加外域——加上就能给别的域名第一方身份或官方徽标"
+expect = [
+  "L22 tellomi: 第一方主机超出编译期上限 ['tell.cc']：['tell-cc.example.net']",
+  "L22 tellomi: 官网主机超出编译期上限 ['tellomi.app', 'tellomi.cn', 'www.tellomi.app', 'www.tellomi.cn']：['tellomi-support.example.net']",
+]

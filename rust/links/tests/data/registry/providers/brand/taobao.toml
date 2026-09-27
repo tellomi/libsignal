@@ -1,0 +1,20 @@
+schema = 1
+id = "taobao"
+name = { zh-Hans = "淘宝", en = "Taobao" }
+tier = "brand"
+category = "commerce"
+icon = "taobao.png"
+# m.tb.cn / e.tb.cn / s.tb.cn 是 App 分享短链，但 2026-09-27 实测回 200 的 JS 跳转页、没有 Location：展开不出东西，
+# 所以不进 short_domains（进了只会白发一个请求），直接按淘宝品牌壳出。天猫的分享也走 m.tb.cn，同样显示「淘宝」。
+domains = ["*.taobao.com", "m.tb.cn", "e.tb.cn", "s.tb.cn"]
+strip_params = ["spm", "tk", "sku_properties", "ali_refid", "ali_trackid", "scm", "pvid", "utparam", "suid", "shareUniqueId", "sourceType", "un", "share_crt_v", "un_site", "ut_sk", "sp_tk", "cpp", "shareurl", "short_name", "bxsign", "app", "tbSocialPopKey", "wxsign", "price", "stats_click"]
+evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「淘宝」（x5secdata 验证码墙，C 档）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # 路径认得出是商品，但不抓：卡片只写「淘宝 · 商品」
+id = "item"
+host = "item.taobao.com"
+path = '^/item\.htm$'
+query = { id = '^(?P<id>[0-9]{6,15})$' }
+kind = "product"
+object = "{id}"
+plan = [{ type = "none" }]

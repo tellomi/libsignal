@@ -1,0 +1,20 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "iqiyi"
+name = { zh-Hans = "爱奇艺", en = "iQIYI" }
+tier = "brand"
+category = "video"
+icon = "iqiyi.png"
+# 视频页只对浏览器 UA 给对象级 OG，对 WhatsApp/2 是站点级 <title>（§3.4.1 → 品牌壳）。没找到分享短链主机；
+# App 分享是 m.iqiyi.com/m/playShare?shareId=…（301 到 www.iqiyi.com/playShare.html），认不出对象。
+domains = ["www.iqiyi.com", "iqiyi.com", "m.iqiyi.com"]
+strip_params = ["social_platform", "vfm", "vfrm", "vfrmblk", "vfrmrst", "frmrp", "frmrs", "ht", "s2", "s3", "s4"]
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「爱奇艺」；RECHECK.md 口径 2（只给浏览器 UA）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]
+id = "video"
+path = '^/v_(?P<id>[0-9a-z]{8,16})\.html$'
+kind = "video"
+object = "{id}"
+plan = [{ type = "none" }]

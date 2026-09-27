@@ -1,0 +1,14 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+[[icon]]
+file = "taobao.png"
+provider = "taobao"
+brand = "淘宝"
+kind = "apple-touch-icon"
+official_site = "https://www.taobao.com/"
+source_url = "https://cdn.simpleicons.org/taobao"
+fetched = "2026-09-27"
+width = 114
+height = 114
+bytes = 4540
+sha256 = "c6c57174b28f92c3b5bf64b020ba8436862de7091c238ca898f252ed6d3ac8b5"

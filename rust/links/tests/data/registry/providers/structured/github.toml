@@ -1,0 +1,30 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "github"
+name = { zh-Hans = "GitHub", en = "GitHub" }
+tier = "structured"
+category = "dev"
+domains = ["github.com"]
+api_hosts = ["api.github.com"]
+title_strip = ['^GitHub - ']                        # 兜底走 OG 时，og:title 是「GitHub - owner/repo: 简介」
+terms = { url = "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service", checked = "2026-09-27", notes = "REST API 不带 token 每个 IP 每小时 60 次（https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api）；超限退到页面 OG" }
+evidence = "ecosystem-2026-09-23/G6-dev-housing-jobs-stores.md「GitHub」（仓库 / Issue / PR / 用户页 OG 对象级；REST 无需 key）；2026-09-27 首批复核（#1419 PR）"
+
+# 站点自己的一级路径（功能页、设置、搜索……）形状和「owner/repo」一样，必须排在 repo 前面拦下：认不出对象 → 品牌壳。
+# 正则引擎不许环视（L5），所以只能用「先命中的算数」来排除。
+[[route]]
+id = "site-pages"
+path = '^/(?:about|apps|collections|customer-stories|dashboard|enterprise|events|explore|features|login|marketplace|new|notifications|orgs|organizations|pricing|pulls|issues|readme|search|security|settings|signup|site|sponsors|team|topics|trending|codespaces|copilot|resources|solutions)(?:/.*)?$'
+kind = "web"
+plan = [{ type = "none" }]
+
+[[route]]
+id = "repo"
+path = '^/(?P<owner>[A-Za-z0-9][A-Za-z0-9-]{0,38})/(?P<repo>[A-Za-z0-9._-]{1,100})/?$'
+kind = "repo"
+object = "{owner}/{repo}"
+plan = [
+  { type = "public-api", url = "https://api.github.com/repos/{owner}/{repo}", doc = "https://docs.github.com/en/rest/repos/repos#get-a-repository", map = { title = "full_name", description = "description", owner = "owner.login", image = "owner.avatar_url" } },
+  { type = "og+jsonld", map = { title = "og:title", description = "og:description", image = "og:image" } },
+]

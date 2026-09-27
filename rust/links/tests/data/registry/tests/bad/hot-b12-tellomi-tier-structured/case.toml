@@ -1,0 +1,7 @@
+about = "Pro 包 7 要改 1 · B12：把 tellomi 的 tier 改成 structured（为了不撞 L13，去掉 official_domains、reserved_paths 和带片段的 route），domains 加外域，用户名路径改用 public-api 发给收集方。上一版 lint 按 tier 开关，只报构建期的错"
+remove = ["providers/first-party/tellomi.toml"]
+expect = [
+  "L13 tellomi: tellomi 必须是 first-party",
+  "L21 tellomi.user-path.plan[0]: 第一方不许有 public-api plan",
+  "L22 tellomi: 第一方主机超出编译期上限 ['tell.cc']：['tellomi-support.example.net']",
+]

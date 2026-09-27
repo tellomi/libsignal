@@ -1,0 +1,2517 @@
+{
+  "generated_at": "2026-09-27T00:00:00+00:00",
+  "generated_by": "scripts/links/build.py（一段 lint.py；二段 envelope。rust/links 的 links-build 接上后插在两段之间）",
+  "inputs": [
+    {
+      "path": "links/icons/LICENSES.toml",
+      "sha256": "bb604014852c0408c4bb674d6b784f37c0315626e0fceef71a9dd742422827fa"
+    },
+    {
+      "path": "links/icons/douban.png",
+      "sha256": "233898c91f83419348043589faeaf5373de2d54ff0edfd8a8e235073c054cb26"
+    },
+    {
+      "path": "links/icons/eleme.png",
+      "sha256": "f420451f019c0ec8f73d0005d2c79ed0dd42cfb720fcfc414374724d0cdcb071"
+    },
+    {
+      "path": "links/icons/iqiyi.png",
+      "sha256": "4f1ab1f6f2cfa0eb912fe0cb920671fc797244b0fe2e260982387c76febea30d"
+    },
+    {
+      "path": "links/icons/taobao.png",
+      "sha256": "c6c57174b28f92c3b5bf64b020ba8436862de7091c238ca898f252ed6d3ac8b5"
+    },
+    {
+      "path": "links/icons/weixin-mp.png",
+      "sha256": "058bf1b3661dac713bb1807fbadbe1e6c2b1f5513d93ecae61c986ebb76b1edf"
+    },
+    {
+      "path": "links/icons/xiaohongshu.png",
+      "sha256": "2912c4df1ab479d734ef132e9c45b4f17afa80b2aa3eaf4438acd54afc70b20a"
+    },
+    {
+      "path": "links/icons/zhihu.png",
+      "sha256": "71383b441c36573dc7ad955ab67b95bf4a36e60de69e0d118ee6bef2a0fe85a7"
+    },
+    {
+      "path": "links/kinds.toml",
+      "sha256": "a949e241808455e283a8c9e72b57e5b470602521bba2e8b70a5f256b37599b6c"
+    },
+    {
+      "path": "links/provider.schema.json",
+      "sha256": "fef3225c42617cfc6194a8e02ce33713c8d9a1d6aebd105e881c03aa8c84994e"
+    },
+    {
+      "path": "links/providers/brand/alipay.toml",
+      "sha256": "b78b120522e69fa4a153bfb68509a4bce8908a00d1e767a7462549d2ecc5e40a"
+    },
+    {
+      "path": "links/providers/brand/dianping.toml",
+      "sha256": "f54ae82bdbce00ca3102a2c0e4ff70f325d446d117d1332944384483b6ae9114"
+    },
+    {
+      "path": "links/providers/brand/douban.toml",
+      "sha256": "fda270ed1d24e67506f664708b36c612f3b2c50910bf183bd225617b879fe931"
+    },
+    {
+      "path": "links/providers/brand/douyin.toml",
+      "sha256": "55b0813d8a3dffa2f93b98dd658129a9cfca9f0e4c5bd3a1fa89038f73e4e01d"
+    },
+    {
+      "path": "links/providers/brand/eleme.toml",
+      "sha256": "e72c11b1e9310c6464aea7d8cfa6e5c2fbcb7244ba378bd5ff935d3993c6a483"
+    },
+    {
+      "path": "links/providers/brand/iqiyi.toml",
+      "sha256": "8f105562cb8f7ce8463bb4ae2a33c983b06e6ce1d4cef5a60d264d8d19d8e7e4"
+    },
+    {
+      "path": "links/providers/brand/jd.toml",
+      "sha256": "157316cb034d03412bcb7eecef3c336f690557d5bfdc75d57cf66e0df171181a"
+    },
+    {
+      "path": "links/providers/brand/kuaishou.toml",
+      "sha256": "f12aacf7ad70ef047f3b2880a86d4b227c0ab6c27285d53bddfa20dfb5aff7db"
+    },
+    {
+      "path": "links/providers/brand/meituan.toml",
+      "sha256": "cfd113183dd40c6e97967546552fbb8b416ee642f758c9f6b20e5aad327ea7ae"
+    },
+    {
+      "path": "links/providers/brand/pinduoduo.toml",
+      "sha256": "c1a7b750b10a00e76786406248d3db1632f45ea4129e144d675a0a20f3655efe"
+    },
+    {
+      "path": "links/providers/brand/qq-music.toml",
+      "sha256": "cb5475e8db71c2702d58f61c4f2041ca3625b65adab1dd16447177c0cc7bfdf4"
+    },
+    {
+      "path": "links/providers/brand/taobao.toml",
+      "sha256": "8304af37fcf843895be57ba77197425e83086ad1c03522d59580705035779cf0"
+    },
+    {
+      "path": "links/providers/brand/tmall.toml",
+      "sha256": "94ee5730dcf14f9715714509f0ba9fd4d4b2bca15cf87b8470b575e0bbcd399e"
+    },
+    {
+      "path": "links/providers/brand/unionpay.toml",
+      "sha256": "dd808dbf4bf2c5002181a101c4511a7dbc72cf86ab63d89c3b611945f56ced45"
+    },
+    {
+      "path": "links/providers/brand/weibo.toml",
+      "sha256": "608984584b8fdce1da5122cdd970b673e45b737c2beb57d7e630f5c14541edf3"
+    },
+    {
+      "path": "links/providers/brand/weixin-mp.toml",
+      "sha256": "7e7b74f09d953a6ec238703aa9b34ed5feb19161e9db4309aaa3de68ebc3a452"
+    },
+    {
+      "path": "links/providers/brand/xiaohongshu.toml",
+      "sha256": "da887688320bb4635925d6b13e9eb3f6ff69a44781f3e2ccfce7fe4a3dfc9013"
+    },
+    {
+      "path": "links/providers/brand/youku.toml",
+      "sha256": "e5cb9b7ad945e7508aa2fe3a225ec6e9e29cdc25d889044e9ce65269ee14eecf"
+    },
+    {
+      "path": "links/providers/brand/zhihu.toml",
+      "sha256": "6ce09772c8941029254ad9708f25c1373303725fe91ba0832de956fb8376cb07"
+    },
+    {
+      "path": "links/providers/first-party/tellomi.toml",
+      "sha256": "ca34f293513521e439251571139e21ad9955df9ed1c28d124bcc1bb72c80f5b0"
+    },
+    {
+      "path": "links/providers/structured/amap.toml",
+      "sha256": "856f8e4681941e1f028c89a72e87dbed039e012fee993d3e6d59beb7a47ece7a"
+    },
+    {
+      "path": "links/providers/structured/app-store.toml",
+      "sha256": "777da0861b3ba9ad0b140b39a669555e43de542392037e51849bd2b6f86dcb0e"
+    },
+    {
+      "path": "links/providers/structured/apple-maps.toml",
+      "sha256": "b7d1b7f91baa4e67de02de533129ff4941a09ddfb79418fb324e8e93b578018f"
+    },
+    {
+      "path": "links/providers/structured/baidu-map.toml",
+      "sha256": "547e4e079ed90b3c46f55e3018b1fc9fd47a38aa1bf5efcffc50f75504713f1f"
+    },
+    {
+      "path": "links/providers/structured/bilibili.toml",
+      "sha256": "fa9f98951329d63d0bf23b95f0a4ff48e07a99641498033b2917a1dc19ce95e3"
+    },
+    {
+      "path": "links/providers/structured/github.toml",
+      "sha256": "a74e402977422e06b092e114028180e9938192dafb77265dc942a54853d5f0e1"
+    },
+    {
+      "path": "links/providers/structured/netease-music.toml",
+      "sha256": "0277ba0d1c731ef1a6d531cb2aa3351e49c864ecaabcc5bb72a2d3e1a54589ce"
+    },
+    {
+      "path": "links/providers/structured/spotify.toml",
+      "sha256": "749ab46dea671755f79df04629e25663e774e64a72116177212725fad7c4d378"
+    },
+    {
+      "path": "links/providers/structured/tencent-map.toml",
+      "sha256": "16f5e2600b7674b1dbe51301fa2d6419506b463e8e973bc9ac32700d1802711b"
+    },
+    {
+      "path": "links/providers/structured/youtube.toml",
+      "sha256": "b6cc8364daf4b1d08076694bb3bbcfbb0d219929951d670c8278d0be09633345"
+    }
+  ],
+  "name": "links",
+  "payload": {
+    "kinds": {
+      "attr_types": {
+        "coord_sys": "wgs84 | gcj02 | bd09",
+        "datetime": "RFC 3339 时间",
+        "duration_ms": "非负整数毫秒",
+        "int": "十进制非负整数",
+        "lat": "十进制纬度，[-90, 90]",
+        "lng": "十进制经度，[-180, 180]",
+        "platform": "ios | android",
+        "string": "纯文本，1–256 个字符，渲染时永远不当链接"
+      },
+      "kind": [
+        {
+          "attrs": {},
+          "first_party": true,
+          "id": "tellomi.user",
+          "required": []
+        },
+        {
+          "attrs": {
+            "member_count": "int"
+          },
+          "first_party": true,
+          "id": "tellomi.group",
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "attrs": {},
+          "first_party": true,
+          "id": "tellomi.call",
+          "required": []
+        },
+        {
+          "attrs": {
+            "sticker_count": "int"
+          },
+          "first_party": true,
+          "id": "tellomi.sticker",
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "attrs": {},
+          "first_party": true,
+          "id": "tellomi.official",
+          "required": []
+        },
+        {
+          "attrs": {
+            "author": "string",
+            "duration_ms": "duration_ms",
+            "published_at": "datetime"
+          },
+          "id": "video",
+          "required": [
+            "title",
+            "image"
+          ]
+        },
+        {
+          "attrs": {
+            "author": "string"
+          },
+          "id": "channel",
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "attrs": {
+            "album": "string",
+            "artist": "string",
+            "duration_ms": "duration_ms"
+          },
+          "id": "music.track",
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "attrs": {
+            "artist": "string",
+            "track_count": "int"
+          },
+          "id": "music.album",
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "attrs": {
+            "author": "string",
+            "track_count": "int"
+          },
+          "id": "music.playlist",
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "attrs": {
+            "address": "string",
+            "coord_sys": "coord_sys",
+            "lat": "lat",
+            "lng": "lng",
+            "name": "string"
+          },
+          "id": "place",
+          "required_any": [
+            [
+              "lat",
+              "lng",
+              "coord_sys"
+            ],
+            [
+              "name"
+            ]
+          ]
+        },
+        {
+          "attrs": {
+            "developer": "string",
+            "platform": "platform"
+          },
+          "id": "app",
+          "required": [
+            "title",
+            "image"
+          ]
+        },
+        {
+          "attrs": {
+            "owner": "string"
+          },
+          "id": "repo",
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "id": "article",
+          "reserved": true
+        },
+        {
+          "id": "product",
+          "reserved": true
+        },
+        {
+          "id": "package",
+          "reserved": true
+        },
+        {
+          "id": "question",
+          "reserved": true
+        },
+        {
+          "id": "deal",
+          "reserved": true
+        },
+        {
+          "id": "ride",
+          "reserved": true
+        },
+        {
+          "id": "payment",
+          "reserved": true
+        },
+        {
+          "id": "web",
+          "reserved": true
+        }
+      ],
+      "schema": 1
+    },
+    "providers": [
+      {
+        "category": "payment",
+        "domains": [
+          "*.alipay.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「支付宝」；2026-09-27 首批复核（#1419 PR）",
+        "id": "alipay",
+        "name": {
+          "en": "Alipay",
+          "zh-Hans": "支付宝"
+        },
+        "schema": 1,
+        "tier": "brand"
+      },
+      {
+        "category": "maps",
+        "domains": [
+          "uri.amap.com",
+          "wb.amap.com",
+          "www.amap.com",
+          "ditu.amap.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G1-maps-travel.md「高德地图」；2026-09-24 重新展开 surl.amap.com/483oczN13g2s；URI API 文档 https://lbs.amap.com/api/uri-api/guide/mobile-web/point（position=经度,纬度；coordinate=gaode|wgs84，缺省 gaode = GCJ-02）；2026-09-27 首批复核（#1419 PR）",
+        "id": "amap",
+        "name": {
+          "en": "Amap",
+          "zh-Hans": "高德地图"
+        },
+        "route": [
+          {
+            "attrs": {
+              "coord_sys": "wgs84"
+            },
+            "host": "uri.amap.com",
+            "id": "marker-wgs84",
+            "kind": "place",
+            "path": "^/marker$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "coordinate": "^wgs84$",
+              "position": "^(?P<lng>-?[0-9]{1,3}\\.[0-9]+),(?P<lat>-?[0-9]{1,2}\\.[0-9]+)$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "uri.amap.com",
+            "id": "marker-named",
+            "kind": "place",
+            "path": "^/marker$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "name": "^(?P<name>[^&]{1,64})$",
+              "position": "^(?P<lng>-?[0-9]{1,3}\\.[0-9]+),(?P<lat>-?[0-9]{1,2}\\.[0-9]+)$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "uri.amap.com",
+            "id": "marker",
+            "kind": "place",
+            "path": "^/marker$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "position": "^(?P<lng>-?[0-9]{1,3}\\.[0-9]+),(?P<lat>-?[0-9]{1,2}\\.[0-9]+)$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "wb.amap.com",
+            "id": "poi-share-wb",
+            "kind": "place",
+            "object": "{poi}",
+            "path": "^/$",
+            "plan": [
+              {
+                "map": {
+                  "address": "{address}",
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "p": "^(?P<poi>[0-9A-Z]{6,16}),(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+),(?P<name>[^,]{1,64}),(?P<address>[^,]{0,128})(?:,[0-9]{6})?$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "www.amap.com",
+            "id": "poi-share-www",
+            "kind": "place",
+            "object": "{poi}",
+            "path": "^/$",
+            "plan": [
+              {
+                "map": {
+                  "address": "{address}",
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "p": "^(?P<poi>[0-9A-Z]{6,16}),(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+),(?P<name>[^,]{1,64}),(?P<address>[^,]{0,128})(?:,[0-9]{6})?$"
+            }
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "surl.amap.com"
+        ],
+        "strip_params": [
+          "src",
+          "callnative",
+          "innersrc",
+          "userRelationToken",
+          "commonBizInfo"
+        ],
+        "tier": "structured"
+      },
+      {
+        "api_hosts": [
+          "itunes.apple.com"
+        ],
+        "category": "app-store",
+        "domains": [
+          "apps.apple.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G6-dev-housing-jobs-stores.md「App Store」（itunes.apple.com/cn/lookup）；2026-09-27 首批复核（#1419 PR）",
+        "id": "app-store",
+        "name": {
+          "en": "App Store",
+          "zh-Hans": "App Store"
+        },
+        "route": [
+          {
+            "attrs": {
+              "platform": "ios"
+            },
+            "id": "app",
+            "kind": "app",
+            "object": "{id}",
+            "path": "^/(?P<cc>[a-z]{2})/app/(?:[^/]+/)?id(?P<id>[0-9]{6,12})/?$",
+            "plan": [
+              {
+                "doc": "https://performance-partners.apple.com/search-api",
+                "map": {
+                  "developer": "results[0].artistName",
+                  "image": "results[0].artworkUrl512",
+                  "title": "results[0].trackName"
+                },
+                "type": "public-api",
+                "url": "https://itunes.apple.com/{cc}/lookup?id={id}"
+              }
+            ]
+          },
+          {
+            "attrs": {
+              "platform": "ios"
+            },
+            "id": "app-no-storefront",
+            "kind": "app",
+            "object": "{id}",
+            "path": "^/app/(?:[^/]+/)?id(?P<id>[0-9]{6,12})/?$",
+            "plan": [
+              {
+                "doc": "https://performance-partners.apple.com/search-api",
+                "map": {
+                  "developer": "results[0].artistName",
+                  "image": "results[0].artworkUrl512",
+                  "title": "results[0].trackName"
+                },
+                "type": "public-api",
+                "url": "https://itunes.apple.com/lookup?id={id}"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "mt",
+          "uo",
+          "at",
+          "ct",
+          "pt",
+          "ls",
+          "l",
+          "platform",
+          "see-all",
+          "ign-mpt"
+        ],
+        "terms": {
+          "checked": "2026-09-27",
+          "notes": "官方公开、不要 key；有频率限制（约每分钟 20 次），发送端单机用量远低于此",
+          "url": "https://performance-partners.apple.com/search-api"
+        },
+        "tier": "structured"
+      },
+      {
+        "category": "maps",
+        "domains": [
+          "maps.apple.com"
+        ],
+        "evidence": "https://developer.apple.com/documentation/mapkit/unified-map-urls（coordinate=纬度,经度；place-id / auid）与旧版 Map Links（ll=纬度,经度）；ecosystem-2026-09-23/G1-maps-travel.md「Apple Maps」（地点页 OG 对象级；大陆直连 302 到 maps.apple.com.cn 站点页）；2026-09-27 首批复核（#1419 PR）",
+        "id": "apple-maps",
+        "name": {
+          "en": "Apple Maps",
+          "zh-Hans": "Apple 地图",
+          "zh-Hant": "Apple 地圖"
+        },
+        "route": [
+          {
+            "attrs": {
+              "coord_sys": "wgs84"
+            },
+            "id": "place-coordinate-named",
+            "kind": "place",
+            "path": "^/place$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "coordinate": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$",
+              "name": "^(?P<name>[^&]{1,64})$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "wgs84"
+            },
+            "id": "place-coordinate",
+            "kind": "place",
+            "path": "^/place$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "coordinate": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "wgs84"
+            },
+            "id": "ll-named",
+            "kind": "place",
+            "path": "^/$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "ll": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$",
+              "q": "^(?P<name>[^&]{1,64})$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "wgs84"
+            },
+            "id": "ll",
+            "kind": "place",
+            "path": "^/$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "ll": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$"
+            }
+          },
+          {
+            "id": "place-id",
+            "kind": "place",
+            "object": "{pid}",
+            "path": "^/place$",
+            "plan": [
+              {
+                "map": {
+                  "image": "og:image",
+                  "name": "og:title"
+                },
+                "type": "og+jsonld"
+              }
+            ],
+            "query": {
+              "place-id": "^(?P<pid>[A-Za-z0-9]{6,32})$"
+            }
+          },
+          {
+            "id": "place-auid",
+            "kind": "place",
+            "object": "auid/{auid}",
+            "path": "^/place$",
+            "plan": [
+              {
+                "map": {
+                  "image": "og:image",
+                  "name": "og:title"
+                },
+                "type": "og+jsonld"
+              }
+            ],
+            "query": {
+              "auid": "^(?P<auid>[0-9]{5,25})$"
+            }
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "maps.apple"
+        ],
+        "strip_params": [
+          "_ext",
+          "map",
+          "lsp",
+          "_provider",
+          "t",
+          "z",
+          "spn"
+        ],
+        "tier": "structured"
+      },
+      {
+        "category": "maps",
+        "domains": [
+          "api.map.baidu.com",
+          "map.baidu.com"
+        ],
+        "evidence": "URI API 文档 https://lbsyun.baidu.com/faq/api?title=webapi/uri/web（location=纬度,经度；coord_type 缺省 bd09ll，可选 gcj02 / wgs84 / bd09mc）；ecosystem-2026-09-23/G1-maps-travel.md「百度地图」；2026-09-27 首批复核（#1419 PR）",
+        "id": "baidu-map",
+        "name": {
+          "en": "Baidu Maps",
+          "zh-Hans": "百度地图"
+        },
+        "route": [
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "api.map.baidu.com",
+            "id": "marker-gcj02",
+            "kind": "place",
+            "path": "^/(?:marker|geocoder)$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "coord_type": "^gcj02$",
+              "location": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "wgs84"
+            },
+            "host": "api.map.baidu.com",
+            "id": "marker-wgs84",
+            "kind": "place",
+            "path": "^/(?:marker|geocoder)$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "coord_type": "^wgs84$",
+              "location": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "bd09"
+            },
+            "host": "api.map.baidu.com",
+            "id": "marker-named",
+            "kind": "place",
+            "path": "^/marker$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "location": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$",
+              "title": "^(?P<name>[^&]{1,64})$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "bd09"
+            },
+            "host": "api.map.baidu.com",
+            "id": "marker",
+            "kind": "place",
+            "path": "^/(?:marker|geocoder)$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "location": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "bd09"
+            },
+            "host": "map.baidu.com",
+            "id": "latlng",
+            "kind": "place",
+            "path": "^/$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "latlng": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$"
+            }
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "j.map.baidu.com"
+        ],
+        "strip_params": [
+          "src",
+          "output",
+          "autoOpen",
+          "da_src"
+        ],
+        "tier": "structured"
+      },
+      {
+        "category": "video",
+        "domains": [
+          "www.bilibili.com",
+          "m.bilibili.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「Bilibili — 视频（A）」；2026-09-24 复核 JSON-LD VideoObject；2026-09-27 首批复核（#1419 PR）",
+        "host_rewrite": {
+          "m.bilibili.com": "www.bilibili.com"
+        },
+        "id": "bilibili",
+        "name": {
+          "en": "Bilibili",
+          "zh-Hans": "哔哩哔哩"
+        },
+        "placeholders": {
+          "description": [
+            "-"
+          ]
+        },
+        "route": [
+          {
+            "id": "video",
+            "kind": "video",
+            "object": "{bv}",
+            "path": "^/video/(?P<bv>BV[0-9A-Za-z]{10})/?$",
+            "plan": [
+              {
+                "jsonld_type": "VideoObject",
+                "map": {
+                  "author": "author.name",
+                  "duration_ms": "duration|iso8601_ms",
+                  "image": "thumbnailUrl[0]",
+                  "published_at": "datePublished|rfc3339",
+                  "title": "name"
+                },
+                "type": "og+jsonld"
+              }
+            ]
+          },
+          {
+            "id": "video-av",
+            "kind": "video",
+            "object": "av{aid}",
+            "path": "^/video/av(?P<aid>[0-9]{1,12})/?$",
+            "plan": [
+              {
+                "map": {
+                  "image": "og:image",
+                  "title": "og:title"
+                },
+                "type": "og+jsonld"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "b23.tv"
+        ],
+        "strip_params": [
+          "spm_id_from",
+          "vd_source",
+          "share_source",
+          "share_medium",
+          "share_plat",
+          "share_session_id",
+          "share_tag",
+          "share_times",
+          "bbid",
+          "ts",
+          "timestamp",
+          "unique_k",
+          "from_spmid"
+        ],
+        "tier": "structured",
+        "title_strip": [
+          "_哔哩哔哩bilibili(_[^_]*)?$"
+        ]
+      },
+      {
+        "category": "local",
+        "domains": [
+          "*.dianping.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「大众点评」（C 档）；2026-09-27 首批复核（#1419 PR）",
+        "id": "dianping",
+        "name": {
+          "en": "Dianping",
+          "zh-Hans": "大众点评"
+        },
+        "schema": 1,
+        "short_domains": [
+          "dpurl.cn"
+        ],
+        "strip_params": [
+          "msource",
+          "utm_*",
+          "shareid",
+          "_spm",
+          "notitlebar"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "social",
+        "domains": [
+          "*.douban.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G3-social-news.md「豆瓣」（sec.douban.com 验证页，C 档）；2026-09-27 首批复核（#1419 PR）",
+        "icon": "douban.png",
+        "id": "douban",
+        "name": {
+          "en": "Douban",
+          "zh-Hans": "豆瓣"
+        },
+        "route": [
+          {
+            "id": "topic",
+            "kind": "article",
+            "object": "{id}",
+            "path": "^/(?:group/topic|note)/(?P<id>[0-9]{5,15})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "douc.cc"
+        ],
+        "strip_params": [
+          "_spm_id",
+          "_i",
+          "dt_dapp",
+          "dt_platform",
+          "from",
+          "s",
+          "i"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "video",
+        "domains": [
+          "www.douyin.com",
+          "douyin.com",
+          "www.iesdouyin.com",
+          "iesdouyin.com",
+          "live.douyin.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「抖音」（真实 ID 直连仍是 JS 壳，C 档）；2026-09-27 首批复核（#1419 PR）",
+        "id": "douyin",
+        "name": {
+          "en": "Douyin",
+          "zh-Hans": "抖音"
+        },
+        "route": [
+          {
+            "id": "video",
+            "kind": "video",
+            "object": "{id}",
+            "path": "^/(?:video|share/video)/(?P<id>[0-9]{15,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "host": "live.douyin.com",
+            "id": "live",
+            "kind": "channel",
+            "object": "live/{room}",
+            "path": "^/(?P<room>[A-Za-z0-9_-]{2,40})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "id": "user",
+            "kind": "channel",
+            "object": "user/{uid}",
+            "path": "^/user/(?P<uid>[A-Za-z0-9_-]{10,80})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "v.douyin.com"
+        ],
+        "strip_params": [
+          "previous_page",
+          "region",
+          "mid",
+          "u_code",
+          "did",
+          "iid",
+          "with_sec_did",
+          "titleType",
+          "share_sign",
+          "share_version",
+          "ts",
+          "from_aid",
+          "from_ssr",
+          "from",
+          "source",
+          "utm_*",
+          "modeFrom"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "local",
+        "domains": [
+          "*.ele.me"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「饿了么（已更名「淘宝闪购」）」（C 档）；2026-09-27 首批复核（#1419 PR）",
+        "icon": "eleme.png",
+        "id": "eleme",
+        "name": {
+          "en": "Ele.me",
+          "zh-Hans": "淘宝闪购（饿了么）"
+        },
+        "schema": 1,
+        "short_domains": [
+          "u.ele.me"
+        ],
+        "strip_params": [
+          "o2i_shortlink",
+          "spm",
+          "from",
+          "configKey",
+          "scene"
+        ],
+        "tier": "brand"
+      },
+      {
+        "api_hosts": [
+          "api.github.com"
+        ],
+        "category": "dev",
+        "domains": [
+          "github.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G6-dev-housing-jobs-stores.md「GitHub」（仓库 / Issue / PR / 用户页 OG 对象级；REST 无需 key）；2026-09-27 首批复核（#1419 PR）",
+        "id": "github",
+        "name": {
+          "en": "GitHub",
+          "zh-Hans": "GitHub"
+        },
+        "route": [
+          {
+            "id": "site-pages",
+            "kind": "web",
+            "path": "^/(?:about|apps|collections|customer-stories|dashboard|enterprise|events|explore|features|login|marketplace|new|notifications|orgs|organizations|pricing|pulls|issues|readme|search|security|settings|signup|site|sponsors|team|topics|trending|codespaces|copilot|resources|solutions)(?:/.*)?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "id": "repo",
+            "kind": "repo",
+            "object": "{owner}/{repo}",
+            "path": "^/(?P<owner>[A-Za-z0-9][A-Za-z0-9-]{0,38})/(?P<repo>[A-Za-z0-9._-]{1,100})/?$",
+            "plan": [
+              {
+                "doc": "https://docs.github.com/en/rest/repos/repos#get-a-repository",
+                "map": {
+                  "description": "description",
+                  "image": "owner.avatar_url",
+                  "owner": "owner.login",
+                  "title": "full_name"
+                },
+                "type": "public-api",
+                "url": "https://api.github.com/repos/{owner}/{repo}"
+              },
+              {
+                "map": {
+                  "description": "og:description",
+                  "image": "og:image",
+                  "title": "og:title"
+                },
+                "type": "og+jsonld"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "terms": {
+          "checked": "2026-09-27",
+          "notes": "REST API 不带 token 每个 IP 每小时 60 次（https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api）；超限退到页面 OG",
+          "url": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service"
+        },
+        "tier": "structured",
+        "title_strip": [
+          "^GitHub - "
+        ]
+      },
+      {
+        "category": "video",
+        "domains": [
+          "www.iqiyi.com",
+          "iqiyi.com",
+          "m.iqiyi.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「爱奇艺」；RECHECK.md 口径 2（只给浏览器 UA）；2026-09-27 首批复核（#1419 PR）",
+        "icon": "iqiyi.png",
+        "id": "iqiyi",
+        "name": {
+          "en": "iQIYI",
+          "zh-Hans": "爱奇艺"
+        },
+        "route": [
+          {
+            "id": "video",
+            "kind": "video",
+            "object": "{id}",
+            "path": "^/v_(?P<id>[0-9a-z]{8,16})\\.html$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "social_platform",
+          "vfm",
+          "vfrm",
+          "vfrmblk",
+          "vfrmrst",
+          "frmrp",
+          "frmrs",
+          "ht",
+          "s2",
+          "s3",
+          "s4"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "commerce",
+        "domains": [
+          "*.jd.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「京东」（商品页跳 cfe.m.jd.com 风控页，C 档）；2026-09-27 首批复核（#1419 PR）",
+        "id": "jd",
+        "name": {
+          "en": "JD",
+          "zh-Hans": "京东"
+        },
+        "route": [
+          {
+            "host": "item.jd.com",
+            "id": "item",
+            "kind": "product",
+            "object": "{sku}",
+            "path": "^/(?P<sku>[0-9]{5,15})\\.html$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "host": "item.m.jd.com",
+            "id": "item-m",
+            "kind": "product",
+            "object": "{sku}",
+            "path": "^/product/(?P<sku>[0-9]{5,15})\\.html$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "host": "item.m.jd.com",
+            "id": "item-ware",
+            "kind": "product",
+            "object": "{sku}",
+            "path": "^/ware/view\\.action$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ],
+            "query": {
+              "wareId": "^(?P<sku>[0-9]{5,15})$"
+            }
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "3.cn"
+        ],
+        "strip_params": [
+          "cu",
+          "utm_*",
+          "abt",
+          "gx",
+          "gxd",
+          "ad_od",
+          "shareType",
+          "sid",
+          "_ts",
+          "ptag",
+          "PTAG",
+          "wxAppName",
+          "clickUrl"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "video",
+        "domains": [
+          "www.kuaishou.com",
+          "kuaishou.com",
+          "live.kuaishou.com",
+          "m.kuaishou.com",
+          "*.chenzhongtech.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「快手」（C 档）；2026-09-27 首批复核（#1419 PR）",
+        "id": "kuaishou",
+        "name": {
+          "en": "Kuaishou",
+          "zh-Hans": "快手"
+        },
+        "route": [
+          {
+            "id": "video",
+            "kind": "video",
+            "object": "{id}",
+            "path": "^/(?:short-video|fw/photo)/(?P<id>[0-9a-z]{12,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "host": "live.kuaishou.com",
+            "id": "live",
+            "kind": "channel",
+            "object": "live/{uid}",
+            "path": "^/u/(?P<uid>[0-9a-zA-Z_-]{6,40})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "v.kuaishou.com"
+        ],
+        "strip_params": [
+          "cc",
+          "fid",
+          "followRefer",
+          "shareMethod",
+          "docId",
+          "kpn",
+          "subBiz",
+          "photoId",
+          "shareId",
+          "shareToken",
+          "shareResourceType",
+          "userId",
+          "shareType",
+          "et",
+          "timestamp",
+          "shareObjectId",
+          "streamSource",
+          "trendingId",
+          "area",
+          "kpf",
+          "utm_*"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "local",
+        "domains": [
+          "*.meituan.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「美团外卖」「美团团购」（连站点级 OG 都没有，C 档）；2026-09-27 首批复核（#1419 PR）",
+        "id": "meituan",
+        "name": {
+          "en": "Meituan",
+          "zh-Hans": "美团"
+        },
+        "route": [
+          {
+            "host": "g.meituan.com",
+            "id": "deal",
+            "kind": "deal",
+            "object": "{id}",
+            "path": "^/app/gfe-app-page-tuan/detail-mt\\.html$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ],
+            "query": {
+              "dealId": "^(?P<id>[0-9]{5,15})$"
+            }
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "lch",
+          "utm_*",
+          "channel",
+          "f",
+          "page_source",
+          "_rdt"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "audio",
+        "domains": [
+          "music.163.com",
+          "y.music.163.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「网易云音乐 — 单曲 & 歌单（A）」（完整 og:title / og:image / og:music:artist / og:music:album）；2026-09-27 首批复核（#1419 PR）",
+        "hash_route": true,
+        "id": "netease-music",
+        "name": {
+          "en": "NetEase Cloud Music",
+          "zh-Hans": "网易云音乐",
+          "zh-Hant": "網易雲音樂"
+        },
+        "placeholders": {
+          "title": [
+            "网易云音乐"
+          ]
+        },
+        "route": [
+          {
+            "id": "song",
+            "kind": "music.track",
+            "object": "song/{id}",
+            "path": "^/(?:m/)?song/?$",
+            "plan": [
+              {
+                "map": {
+                  "album": "og:music:album",
+                  "artist": "og:music:artist",
+                  "image": "og:image",
+                  "title": "og:title"
+                },
+                "type": "og+jsonld"
+              }
+            ],
+            "query": {
+              "id": "^(?P<id>[0-9]{1,12})$"
+            }
+          },
+          {
+            "id": "song-path",
+            "kind": "music.track",
+            "object": "song/{id}",
+            "path": "^/song/(?P<id>[0-9]{1,12})/?$",
+            "plan": [
+              {
+                "map": {
+                  "album": "og:music:album",
+                  "artist": "og:music:artist",
+                  "image": "og:image",
+                  "title": "og:title"
+                },
+                "type": "og+jsonld"
+              }
+            ]
+          },
+          {
+            "id": "playlist",
+            "kind": "music.playlist",
+            "object": "playlist/{id}",
+            "path": "^/(?:m/)?playlist/?$",
+            "plan": [
+              {
+                "map": {
+                  "image": "og:image",
+                  "title": "og:title"
+                },
+                "type": "og+jsonld"
+              }
+            ],
+            "query": {
+              "id": "^(?P<id>[0-9]{1,15})$"
+            }
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "163cn.tv"
+        ],
+        "strip_params": [
+          "userid",
+          "app_version",
+          "dlt",
+          "creatorId",
+          "uct2",
+          "uct",
+          "fx-wordtest",
+          "fx-listentest",
+          "fx-wechatnew",
+          "sc",
+          "tn",
+          "market"
+        ],
+        "tier": "structured",
+        "title_strip": [
+          " - (?:单曲|歌单|专辑) - 网易云音乐$"
+        ]
+      },
+      {
+        "category": "commerce",
+        "domains": [
+          "*.yangkeduo.com",
+          "*.pinduoduo.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「拼多多」（只有站点级 OG，B→C）；2026-09-27 首批复核（#1419 PR）",
+        "id": "pinduoduo",
+        "name": {
+          "en": "Pinduoduo",
+          "zh-Hans": "拼多多"
+        },
+        "route": [
+          {
+            "id": "goods",
+            "kind": "product",
+            "object": "{id}",
+            "path": "^/goods[12]?\\.html$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ],
+            "query": {
+              "goods_id": "^(?P<id>[0-9]{5,15})$"
+            }
+          },
+          {
+            "id": "goods-share",
+            "kind": "product",
+            "path": "^/goods[12]?\\.html$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ],
+            "query": {
+              "ps": "^(?P<ps>[A-Za-z0-9]{6,16})$"
+            }
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "p.pinduoduo.com"
+        ],
+        "strip_params": [
+          "page_from",
+          "pxq_secret_key",
+          "share_uin",
+          "refer_share_id",
+          "refer_share_uid",
+          "refer_share_uin",
+          "refer_share_channel",
+          "refer_share_form",
+          "_wv",
+          "_wvx",
+          "_x_*",
+          "refer_*",
+          "_pdd_*"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "audio",
+        "domains": [
+          "y.qq.com",
+          "i.y.qq.com",
+          "i2.y.qq.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「QQ音乐」；RECHECK.md 口径 2（WhatsApp/2 只回 8 字节）；2026-09-27 首批复核（#1419 PR）",
+        "id": "qq-music",
+        "name": {
+          "en": "QQ Music",
+          "zh-Hans": "QQ 音乐"
+        },
+        "route": [
+          {
+            "host": "y.qq.com",
+            "id": "song",
+            "kind": "music.track",
+            "object": "song/{mid}",
+            "path": "^/n/ryqq/songDetail/(?P<mid>[0-9A-Za-z]{1,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "host": "y.qq.com",
+            "id": "album",
+            "kind": "music.album",
+            "object": "album/{mid}",
+            "path": "^/n/ryqq/albumDetail/(?P<mid>[0-9A-Za-z]{1,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "host": "y.qq.com",
+            "id": "playlist",
+            "kind": "music.playlist",
+            "object": "playlist/{id}",
+            "path": "^/n/ryqq/playlist/(?P<id>[0-9]{3,15})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "c6.y.qq.com"
+        ],
+        "strip_params": [
+          "hosteuin",
+          "ADTAG",
+          "appshare",
+          "appversion",
+          "channelId",
+          "openinqqmusic",
+          "songtype",
+          "_wv",
+          "uin"
+        ],
+        "tier": "brand"
+      },
+      {
+        "api_hosts": [
+          "open.spotify.com"
+        ],
+        "category": "audio",
+        "domains": [
+          "open.spotify.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「Spotify」（oEmbed，✕cn）；2026-09-27 首批复核（#1419 PR）",
+        "id": "spotify",
+        "name": {
+          "en": "Spotify",
+          "zh-Hans": "Spotify"
+        },
+        "route": [
+          {
+            "id": "track",
+            "kind": "music.track",
+            "object": "track/{id}",
+            "path": "^(?:/intl-[a-z]{2}(?:-[A-Za-z]{2})?)?/track/(?P<id>[A-Za-z0-9]{22})/?$",
+            "plan": [
+              {
+                "doc": "https://developer.spotify.com/documentation/embeds/reference/oembed",
+                "endpoint": "https://open.spotify.com/oembed",
+                "map": {
+                  "image": "thumbnail_url",
+                  "title": "title"
+                },
+                "type": "oembed"
+              }
+            ]
+          },
+          {
+            "id": "album",
+            "kind": "music.album",
+            "object": "album/{id}",
+            "path": "^(?:/intl-[a-z]{2}(?:-[A-Za-z]{2})?)?/album/(?P<id>[A-Za-z0-9]{22})/?$",
+            "plan": [
+              {
+                "doc": "https://developer.spotify.com/documentation/embeds/reference/oembed",
+                "endpoint": "https://open.spotify.com/oembed",
+                "map": {
+                  "image": "thumbnail_url",
+                  "title": "title"
+                },
+                "type": "oembed"
+              }
+            ]
+          },
+          {
+            "id": "playlist",
+            "kind": "music.playlist",
+            "object": "playlist/{id}",
+            "path": "^(?:/intl-[a-z]{2}(?:-[A-Za-z]{2})?)?/playlist/(?P<id>[A-Za-z0-9]{22})/?$",
+            "plan": [
+              {
+                "doc": "https://developer.spotify.com/documentation/embeds/reference/oembed",
+                "endpoint": "https://open.spotify.com/oembed",
+                "map": {
+                  "image": "thumbnail_url",
+                  "title": "title"
+                },
+                "type": "oembed"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "spotify.link"
+        ],
+        "strip_params": [
+          "si",
+          "pi",
+          "nd",
+          "_branch_match_id",
+          "_branch_referrer",
+          "context",
+          "go",
+          "sp_cid",
+          "utm_*"
+        ],
+        "terms": {
+          "checked": "2026-09-27",
+          "url": "https://developer.spotify.com/documentation/embeds/reference/oembed"
+        },
+        "tier": "structured",
+        "unreachable_in": [
+          "cn"
+        ]
+      },
+      {
+        "category": "commerce",
+        "domains": [
+          "*.taobao.com",
+          "m.tb.cn",
+          "e.tb.cn",
+          "s.tb.cn"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「淘宝」（x5secdata 验证码墙，C 档）；2026-09-27 首批复核（#1419 PR）",
+        "icon": "taobao.png",
+        "id": "taobao",
+        "name": {
+          "en": "Taobao",
+          "zh-Hans": "淘宝"
+        },
+        "route": [
+          {
+            "host": "item.taobao.com",
+            "id": "item",
+            "kind": "product",
+            "object": "{id}",
+            "path": "^/item\\.htm$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ],
+            "query": {
+              "id": "^(?P<id>[0-9]{6,15})$"
+            }
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "spm",
+          "tk",
+          "sku_properties",
+          "ali_refid",
+          "ali_trackid",
+          "scm",
+          "pvid",
+          "utparam",
+          "suid",
+          "shareUniqueId",
+          "sourceType",
+          "un",
+          "share_crt_v",
+          "un_site",
+          "ut_sk",
+          "sp_tk",
+          "cpp",
+          "shareurl",
+          "short_name",
+          "bxsign",
+          "app",
+          "tbSocialPopKey",
+          "wxsign",
+          "price",
+          "stats_click"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "tellomi",
+        "domains": [
+          "tell.cc"
+        ],
+        "evidence": "docs/signal/LINKS_AND_SCHEMES.md「tell.cc 的路径命名空间」；ADR-0066 §六",
+        "id": "tellomi",
+        "name": {
+          "en": "Tellomi",
+          "zh-Hans": "Tellomi"
+        },
+        "official_domains": [
+          "tellomi.app"
+        ],
+        "reserved_paths": [
+          "u",
+          "g",
+          "s",
+          "call",
+          "i",
+          "m",
+          "e",
+          "a",
+          "app",
+          "b"
+        ],
+        "route": [
+          {
+            "fragment": "^u/(?P<username>[A-Za-z_][A-Za-z0-9_]{2,31}(\\.[0-9]{2,9})?)$",
+            "id": "user-username-fragment",
+            "kind": "tellomi.user",
+            "object": "{username}",
+            "path": "^/u/?$",
+            "plan": [
+              {
+                "type": "first-party"
+              }
+            ]
+          },
+          {
+            "fragment": "^eu/[A-Za-z0-9_-]{20,}$",
+            "id": "user-encrypted-link",
+            "kind": "tellomi.user",
+            "path": "^/u/?$",
+            "plan": [
+              {
+                "type": "first-party"
+              }
+            ]
+          },
+          {
+            "fragment": "^p/\\+?[0-9]{6,15}$",
+            "id": "user-phone",
+            "kind": "tellomi.user",
+            "path": "^/u/?$",
+            "plan": [
+              {
+                "type": "first-party"
+              }
+            ]
+          },
+          {
+            "fragment": "^[A-Za-z0-9_-]{16,}$",
+            "id": "group",
+            "kind": "tellomi.group",
+            "path": "^/g/?$",
+            "plan": [
+              {
+                "type": "first-party"
+              }
+            ]
+          },
+          {
+            "fragment": "^key=[^&]+(&.*)?$",
+            "id": "call",
+            "kind": "tellomi.call",
+            "path": "^/call/?$",
+            "plan": [
+              {
+                "type": "first-party"
+              }
+            ]
+          },
+          {
+            "fragment": "^pack_id=[0-9a-f]{32}&pack_key=[0-9a-f]{64}$",
+            "id": "sticker",
+            "kind": "tellomi.sticker",
+            "path": "^/s/?$",
+            "plan": [
+              {
+                "type": "first-party"
+              }
+            ]
+          },
+          {
+            "id": "user-path",
+            "kind": "tellomi.user",
+            "object": "{nickname}",
+            "path": "^/(?P<nickname>[A-Za-z_][A-Za-z0-9_]{2,31})(\\.(?P<discriminator>[0-9]{2,9}))?/?$",
+            "plan": [
+              {
+                "type": "first-party"
+              }
+            ]
+          },
+          {
+            "host": "tellomi.app",
+            "id": "official",
+            "kind": "tellomi.official",
+            "path": "^/.*$",
+            "plan": [
+              {
+                "type": "og+jsonld"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "tier": "first-party"
+      },
+      {
+        "category": "maps",
+        "domains": [
+          "apis.map.qq.com",
+          "map.qq.com",
+          "mapapi.qq.com"
+        ],
+        "evidence": "URI API 文档 https://lbs.qq.com/webApi/uriV1/uriGuide/uriWebMarker（marker=coord:纬度,经度;title:…;addr:…，缺省腾讯坐标 = GCJ-02，coord_type=1 为 GPS）；2026-09-27 首批复核（#1419 PR）",
+        "id": "tencent-map",
+        "name": {
+          "en": "Tencent Maps",
+          "zh-Hans": "腾讯地图"
+        },
+        "route": [
+          {
+            "attrs": {
+              "coord_sys": "wgs84"
+            },
+            "host": "apis.map.qq.com",
+            "id": "marker-gps",
+            "kind": "place",
+            "path": "^/(?:uri/v1/marker|tools/poimarker)$",
+            "plan": [
+              {
+                "map": {
+                  "address": "{address}",
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "coord_type": "^1$",
+              "marker": "^coord:(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)(?:;title:(?P<name>[^;]{1,64}))?(?:;addr:(?P<address>[^;]{0,128}))?$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "apis.map.qq.com",
+            "id": "marker",
+            "kind": "place",
+            "path": "^/(?:uri/v1/marker|tools/poimarker)$",
+            "plan": [
+              {
+                "map": {
+                  "address": "{address}",
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "marker": "^coord:(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)(?:;title:(?P<name>[^;]{1,64}))?(?:;addr:(?P<address>[^;]{0,128}))?$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "mapapi.qq.com",
+            "id": "location-marker",
+            "kind": "place",
+            "path": "^/web/mapComponents/locationMarker/v/index\\.html$",
+            "plan": [
+              {
+                "map": {
+                  "address": "{address}",
+                  "lat": "{lat}",
+                  "lng": "{lng}",
+                  "name": "{name}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "marker": "^coord:(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)(?:;title:(?P<name>[^;]{1,64}))?(?:;addr:(?P<address>[^;]{0,128}))?$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "apis.map.qq.com",
+            "id": "geocoder",
+            "kind": "place",
+            "path": "^/uri/v1/geocoder$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "coord": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+),(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$"
+            }
+          },
+          {
+            "attrs": {
+              "coord_sys": "gcj02"
+            },
+            "host": "map.qq.com",
+            "id": "legacy-marker",
+            "kind": "place",
+            "path": "^/$",
+            "plan": [
+              {
+                "map": {
+                  "lat": "{lat}",
+                  "lng": "{lng}"
+                },
+                "type": "url-only"
+              }
+            ],
+            "query": {
+              "pointx": "^(?P<lng>-?[0-9]{1,3}\\.[0-9]+)$",
+              "pointy": "^(?P<lat>-?[0-9]{1,2}\\.[0-9]+)$",
+              "type": "^marker$"
+            }
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "referer",
+          "key",
+          "ADTAG"
+        ],
+        "tier": "structured"
+      },
+      {
+        "category": "commerce",
+        "domains": [
+          "*.tmall.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「天猫」（阿里系 x5secdata，C 档）；2026-09-27 首批复核（#1419 PR）",
+        "id": "tmall",
+        "name": {
+          "en": "Tmall",
+          "zh-Hans": "天猫"
+        },
+        "route": [
+          {
+            "id": "item",
+            "kind": "product",
+            "object": "{id}",
+            "path": "^/item\\.htm$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ],
+            "query": {
+              "id": "^(?P<id>[0-9]{6,15})$"
+            }
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "spm",
+          "tbpm",
+          "_u",
+          "skuId",
+          "ali_refid",
+          "ali_trackid",
+          "scm",
+          "pvid",
+          "utparam",
+          "from"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "payment",
+        "domains": [
+          "*.95516.com",
+          "*.unionpay.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「云闪付」；2026-09-27 首批复核（#1419 PR）",
+        "id": "unionpay",
+        "name": {
+          "en": "UnionPay",
+          "zh-Hans": "云闪付"
+        },
+        "schema": 1,
+        "tier": "brand"
+      },
+      {
+        "category": "social",
+        "domains": [
+          "weibo.com",
+          "www.weibo.com",
+          "m.weibo.cn",
+          "video.weibo.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G3-social-news.md「微博（H5 文章型）」「微博（普通状态）」；2026-09-27 首批复核（#1419 PR）",
+        "id": "weibo",
+        "name": {
+          "en": "Weibo",
+          "zh-Hans": "微博"
+        },
+        "route": [
+          {
+            "id": "status",
+            "kind": "article",
+            "object": "{mid}",
+            "path": "^/(?P<uid>[0-9]{5,12})/(?P<mid>[0-9A-Za-z]{8,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "host": "m.weibo.cn",
+            "id": "status-m",
+            "kind": "article",
+            "object": "{mid}",
+            "path": "^/(?:status|detail)/(?P<mid>[0-9A-Za-z]{8,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "id": "ttarticle",
+            "kind": "article",
+            "object": "ttarticle/{id}",
+            "path": "^/ttarticle/p/show$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ],
+            "query": {
+              "id": "^(?P<id>[0-9]{10,25})$"
+            }
+          },
+          {
+            "id": "profile",
+            "kind": "channel",
+            "object": "u/{uid}",
+            "path": "^/u/(?P<uid>[0-9]{5,12})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "t.cn"
+        ],
+        "strip_params": [
+          "sourceType",
+          "from",
+          "wm",
+          "featurecode",
+          "type",
+          "jumpfrom",
+          "s_channel",
+          "s_trans",
+          "luicode",
+          "lfid",
+          "display",
+          "retcode",
+          "sudaref"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "social",
+        "domains": [
+          "mp.weixin.qq.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G3-social-news.md「微信公众号文章」（WhatsApp/2 进验证码页，C 档）；RECHECK.md 口径 2；2026-09-27 首批复核（#1419 PR）",
+        "icon": "weixin-mp.png",
+        "id": "weixin-mp",
+        "name": {
+          "en": "WeChat Official Accounts",
+          "zh-Hans": "微信公众号"
+        },
+        "route": [
+          {
+            "id": "article",
+            "kind": "article",
+            "object": "{id}",
+            "path": "^/s/(?P<id>[A-Za-z0-9_-]{16,32})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "id": "article-long",
+            "kind": "article",
+            "object": "{biz}/{mid}/{idx}",
+            "path": "^/s/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ],
+            "query": {
+              "__biz": "^(?P<biz>[A-Za-z0-9+/=]{8,32})$",
+              "idx": "^(?P<idx>[0-9]{1,2})$",
+              "mid": "^(?P<mid>[0-9]{5,12})$",
+              "sn": "^(?P<sn>[0-9a-f]{32})$"
+            }
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "chksm",
+          "mpshare",
+          "scene",
+          "srcid",
+          "sharer_shareinfo",
+          "sharer_shareinfo_first",
+          "sharer_sharetime",
+          "sharer_shareid",
+          "xtrack",
+          "subscene",
+          "clicktime",
+          "enterid",
+          "ascene",
+          "devicetype",
+          "version",
+          "nettype",
+          "lang",
+          "exportkey",
+          "pass_ticket",
+          "wx_header",
+          "poc_token"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "social",
+        "domains": [
+          "www.xiaohongshu.com",
+          "xiaohongshu.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G3-social-news.md「小红书」（C 档）；2026-09-27 首批复核（#1419 PR）",
+        "icon": "xiaohongshu.png",
+        "id": "xiaohongshu",
+        "name": {
+          "en": "Xiaohongshu",
+          "zh-Hans": "小红书"
+        },
+        "route": [
+          {
+            "id": "note",
+            "kind": "article",
+            "object": "{id}",
+            "path": "^/(?:explore|discovery/item)/(?P<id>[0-9a-f]{24})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "short_domains": [
+          "xhslink.com"
+        ],
+        "strip_params": [
+          "xsec_token",
+          "xsec_source",
+          "app_platform",
+          "app_version",
+          "share_from_user_hidden",
+          "type",
+          "author_share",
+          "xhsshare",
+          "shareRedId",
+          "apptime",
+          "share_id",
+          "ignoreEngage",
+          "exSource"
+        ],
+        "tier": "brand"
+      },
+      {
+        "category": "video",
+        "domains": [
+          "v.youku.com",
+          "m.youku.com",
+          "list.youku.com",
+          "v-wb.youku.com",
+          "www.youku.com",
+          "youku.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「优酷」；RECHECK.md 口径 2（WhatsApp/2 进验证码页）；2026-09-27 首批复核（#1419 PR）",
+        "id": "youku",
+        "name": {
+          "en": "Youku",
+          "zh-Hans": "优酷"
+        },
+        "route": [
+          {
+            "id": "video",
+            "kind": "video",
+            "object": "{id}",
+            "path": "^/(?:v_show|video|alipay_video)/id_(?P<id>[A-Za-z0-9=]{8,32})(?:\\.html)?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "sharefrom",
+          "sharekey",
+          "scene",
+          "spm",
+          "s",
+          "vid",
+          "x",
+          "from",
+          "playMode"
+        ],
+        "tier": "brand"
+      },
+      {
+        "api_hosts": [
+          "www.youtube.com"
+        ],
+        "category": "video",
+        "domains": [
+          "www.youtube.com",
+          "youtube.com",
+          "m.youtube.com",
+          "youtu.be"
+        ],
+        "evidence": "ecosystem-2026-09-23/G4-video-audio.md「YouTube」（oEmbed 200，title / author / thumbnail 齐全；✕cn）；2026-09-27 首批复核（#1419 PR）",
+        "host_rewrite": {
+          "m.youtube.com": "www.youtube.com",
+          "youtube.com": "www.youtube.com"
+        },
+        "id": "youtube",
+        "name": {
+          "en": "YouTube",
+          "zh-Hans": "YouTube"
+        },
+        "route": [
+          {
+            "id": "watch",
+            "kind": "video",
+            "object": "{id}",
+            "path": "^/watch$",
+            "plan": [
+              {
+                "doc": "https://oembed.com/",
+                "endpoint": "https://www.youtube.com/oembed",
+                "map": {
+                  "author": "author_name",
+                  "image": "thumbnail_url",
+                  "title": "title"
+                },
+                "type": "oembed"
+              }
+            ],
+            "query": {
+              "v": "^(?P<id>[A-Za-z0-9_-]{11})$"
+            }
+          },
+          {
+            "host": "youtu.be",
+            "id": "short-link",
+            "kind": "video",
+            "object": "{id}",
+            "path": "^/(?P<id>[A-Za-z0-9_-]{11})/?$",
+            "plan": [
+              {
+                "doc": "https://oembed.com/",
+                "endpoint": "https://www.youtube.com/oembed",
+                "map": {
+                  "author": "author_name",
+                  "image": "thumbnail_url",
+                  "title": "title"
+                },
+                "type": "oembed"
+              }
+            ]
+          },
+          {
+            "id": "shorts",
+            "kind": "video",
+            "object": "{id}",
+            "path": "^/(?:shorts|live)/(?P<id>[A-Za-z0-9_-]{11})/?$",
+            "plan": [
+              {
+                "doc": "https://oembed.com/",
+                "endpoint": "https://www.youtube.com/oembed",
+                "map": {
+                  "author": "author_name",
+                  "image": "thumbnail_url",
+                  "title": "title"
+                },
+                "type": "oembed"
+              }
+            ]
+          },
+          {
+            "id": "channel-handle",
+            "kind": "channel",
+            "object": "@{handle}",
+            "path": "^/@(?P<handle>[A-Za-z0-9._-]{3,30})(?:/(?:featured|videos|shorts|streams|playlists|community|about))?/?$",
+            "plan": [
+              {
+                "map": {
+                  "image": "og:image",
+                  "title": "og:title"
+                },
+                "type": "og+jsonld"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "si",
+          "feature",
+          "pp",
+          "t",
+          "list",
+          "index",
+          "ab_channel",
+          "app"
+        ],
+        "terms": {
+          "checked": "2026-09-27",
+          "notes": "oEmbed 端点不要 key；视频页 <link rel=alternate type=application/json+oembed> 自己声明端点（G4 实测）；YouTube 没有单独的 oEmbed 文档页，doc 写 oEmbed 规范",
+          "url": "https://www.youtube.com/t/terms"
+        },
+        "tier": "structured",
+        "unreachable_in": [
+          "cn"
+        ]
+      },
+      {
+        "category": "social",
+        "domains": [
+          "www.zhihu.com",
+          "zhihu.com",
+          "zhuanlan.zhihu.com"
+        ],
+        "evidence": "ecosystem-2026-09-23/G3-social-news.md「知乎」（直连 403，C 档）；2026-09-27 首批复核（#1419 PR）",
+        "icon": "zhihu.png",
+        "id": "zhihu",
+        "name": {
+          "en": "Zhihu",
+          "zh-Hans": "知乎"
+        },
+        "route": [
+          {
+            "id": "answer",
+            "kind": "question",
+            "object": "answer/{aid}",
+            "path": "^/question/(?P<qid>[0-9]{5,20})/answer/(?P<aid>[0-9]{5,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "id": "question",
+            "kind": "question",
+            "object": "question/{qid}",
+            "path": "^/question/(?P<qid>[0-9]{5,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "host": "zhuanlan.zhihu.com",
+            "id": "column-article",
+            "kind": "article",
+            "object": "p/{id}",
+            "path": "^/p/(?P<id>[0-9]{5,20})/?$",
+            "plan": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ],
+        "schema": 1,
+        "strip_params": [
+          "utm_psn",
+          "utmPsn",
+          "share_code",
+          "utm_*"
+        ],
+        "tier": "brand"
+      }
+    ]
+  },
+  "schema": 1,
+  "version": 2026092701
+}

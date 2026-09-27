@@ -1,0 +1,28 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "weixin-mp"
+name = { zh-Hans = "微信公众号", en = "WeChat Official Accounts" }
+tier = "brand"
+category = "social"
+icon = "weixin-mp.png"
+# 公众号文章对 WhatsApp/2 返回验证码页（wappoc_appmsgcaptcha），浏览器 UA 才有对象级 OG（§3.4.1：不为躲机器人检测换 UA → 品牌壳）。
+# 没有单独的短链主机：/s/<22 位> 本身就是短形态。
+domains = ["mp.weixin.qq.com"]
+strip_params = ["chksm", "mpshare", "scene", "srcid", "sharer_shareinfo", "sharer_shareinfo_first", "sharer_sharetime", "sharer_shareid", "xtrack", "subscene", "clicktime", "enterid", "ascene", "devicetype", "version", "nettype", "lang", "exportkey", "pass_ticket", "wx_header", "poc_token"]
+evidence = "ecosystem-2026-09-23/G3-social-news.md「微信公众号文章」（WhatsApp/2 进验证码页，C 档）；RECHECK.md 口径 2；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]
+id = "article"
+path = '^/s/(?P<id>[A-Za-z0-9_-]{16,32})/?$'
+kind = "article"
+object = "{id}"
+plan = [{ type = "none" }]
+
+[[route]]            # 长链接：/s?__biz=…&mid=…&idx=…&sn=…
+id = "article-long"
+path = '^/s/?$'
+query = { __biz = '^(?P<biz>[A-Za-z0-9+/=]{8,32})$', mid = '^(?P<mid>[0-9]{5,12})$', idx = '^(?P<idx>[0-9]{1,2})$', sn = '^(?P<sn>[0-9a-f]{32})$' }
+kind = "article"
+object = "{biz}/{mid}/{idx}"
+plan = [{ type = "none" }]

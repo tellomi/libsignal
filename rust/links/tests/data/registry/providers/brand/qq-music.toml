@@ -1,0 +1,37 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "qq-music"
+name = { zh-Hans = "QQ 音乐", en = "QQ Music" }
+tier = "brand"
+category = "audio"
+# 页面对 WhatsApp/2 只回 8 字节（C 档）。c6.y.qq.com/base/fcgi-bin/u?__=… 是 App 分享短链（302 到 i2.y.qq.com 的分享页）。
+# 官网没有声明 apple-touch-icon，不配图标。
+domains = ["y.qq.com", "i.y.qq.com", "i2.y.qq.com"]
+short_domains = ["c6.y.qq.com"]
+strip_params = ["hosteuin", "ADTAG", "appshare", "appversion", "channelId", "openinqqmusic", "songtype", "_wv", "uin"]
+evidence = "ecosystem-2026-09-23/G4-video-audio.md「QQ音乐」；RECHECK.md 口径 2（WhatsApp/2 只回 8 字节）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # 歌曲号有 14 位 mid 与纯数字两种
+id = "song"
+host = "y.qq.com"
+path = '^/n/ryqq/songDetail/(?P<mid>[0-9A-Za-z]{1,20})/?$'
+kind = "music.track"
+object = "song/{mid}"
+plan = [{ type = "none" }]
+
+[[route]]
+id = "album"
+host = "y.qq.com"
+path = '^/n/ryqq/albumDetail/(?P<mid>[0-9A-Za-z]{1,20})/?$'
+kind = "music.album"
+object = "album/{mid}"
+plan = [{ type = "none" }]
+
+[[route]]
+id = "playlist"
+host = "y.qq.com"
+path = '^/n/ryqq/playlist/(?P<id>[0-9]{3,15})/?$'
+kind = "music.playlist"
+object = "playlist/{id}"
+plan = [{ type = "none" }]

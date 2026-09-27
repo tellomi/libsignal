@@ -1,0 +1,9 @@
+# 坏样例 B16b
+schema = 1
+id = "zz-rewrite-brand"
+name = { zh-Hans = "改写" }
+tier = "brand"
+category = "general"
+domains = ["evil2.example"]
+host_rewrite = { "evil2.example" = "tellomi.app" }
+evidence = "坏样例"

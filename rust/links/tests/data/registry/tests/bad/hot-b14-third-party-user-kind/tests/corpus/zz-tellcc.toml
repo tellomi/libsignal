@@ -1,0 +1,6 @@
+provider = "zz-tellcc"
+
+[[case]]
+url = "https://tell-cc.example.net/kefu"
+source = "坏样例：匹配照常成立，只有第一方的硬规则拦得住"
+expect = { route = "user", kind = "tellomi.user", object = "kefu" }

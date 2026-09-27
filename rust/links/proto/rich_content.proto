@@ -1,0 +1,41 @@
+//
+// Copyright 2026 重庆半格智能科技有限公司
+// SPDX-License-Identifier: AGPL-3.0-only
+//
+
+// ADR-0063 §4.5: the only protocol change for link cards. Each client adds `rich = 1000` to its
+// own copy of SignalService.proto's `Preview` and these two messages next to it; this file is the
+// reference the Rust model in src/rich.rs is tested against.
+//
+// Field numbers >= 1000 are Tellomi's reserved range in every proto: upstream additions to
+// `Preview` (6, 7, …) can never collide. Fields are only ever added; never removed, renumbered or
+// given a new meaning (§7.1).
+
+syntax = "proto2";
+
+package tellomi.links;
+
+// Upstream `DataMessage.Preview`, abridged:
+//
+//   message Preview {
+//     optional string           url         = 1;
+//     optional string           title       = 2;
+//     optional AttachmentPointer image      = 3;
+//     optional string           description = 4;
+//     optional uint64           date        = 5;
+//     optional RichContent      rich        = 1000;  // Tellomi
+//   }
+
+message RichContent {
+  optional string kind          = 1;  // ADR-0063 §4.6 vocabulary
+  optional string provider      = 2;  // registry provider id
+  optional uint32 schema        = 3;  // 0 / absent = 1
+  optional string canonical_url = 4;  // identification and dedup only; never opened (§4.9)
+  repeated Attr   attrs         = 5;  // at most 16; unknown keys ignored
+  optional uint32 level         = 6;  // 1 = brand shell, 2 = structured; absent / unknown = 1
+}
+
+message Attr {
+  optional string key   = 1;  // [a-z_]{1,32}
+  optional string value = 2;  // <= 256 characters, always plain text
+}

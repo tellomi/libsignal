@@ -1,0 +1,5 @@
+about = "Pro 包 7 要改 1 · B13：新的第三方 provider 在 tellomi-support.example.net 上产出 tellomi.official（固定文字「Tellomi 官网」的卡）；外加一条本机还不认识的 tellomi.* kind"
+expect = [
+  "L7 zz-support.page: tellomi.official 是第一方 kind，只许出自 tellomi",
+  "L7 zz-support.future: tellomi.future 是第一方 kind，只许出自 tellomi",
+]

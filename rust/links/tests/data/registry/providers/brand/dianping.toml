@@ -1,0 +1,13 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+schema = 1
+id = "dianping"
+name = { zh-Hans = "大众点评", en = "Dianping" }
+tier = "brand"
+category = "local"
+# dpurl.cn 是 App 分享短链（302 到 m.dianping.com/shopshare/… 等；也可能落到美团的主机，按落点重新识别）。
+# 店铺页对不带 cookie 的请求一律进 verify.meituan.com 验证页（C 档）。官网没有声明 apple-touch-icon，不配图标。
+domains = ["*.dianping.com"]
+short_domains = ["dpurl.cn"]
+strip_params = ["msource", "utm_*", "shareid", "_spm", "notitlebar"]
+evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「大众点评」（C 档）；2026-09-27 首批复核（#1419 PR）"

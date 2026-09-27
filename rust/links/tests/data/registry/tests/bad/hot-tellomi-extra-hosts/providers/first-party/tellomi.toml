@@ -1,0 +1,71 @@
+# 坏样例：tellomi 自己加第一方主机和官网主机（Pro 包 9 复现的篡改③）。
+# First-party：tell.cc 路径表的唯一数据源（ADR-0063 §4.8）。
+# reserved_paths 由 lint L19 对照落地页 JS、Android TellomiLinks、iOS 常量、policy 保留词四处。
+schema = 1
+id = "tellomi"
+name = { zh-Hans = "Tellomi", en = "Tellomi" }
+tier = "first-party"
+category = "tellomi"
+domains = ["tell.cc", "tell-cc.example.net"]
+official_domains = ["tellomi.app", "tellomi-support.example.net"]
+reserved_paths = ["u", "g", "s", "call", "i", "m", "e", "a", "app", "b"]
+evidence = "docs/signal/LINKS_AND_SCHEMES.md「tell.cc 的路径命名空间」；ADR-0066 §六"
+
+# 匹配顺序 = 文件里 route 的顺序：一级路径在前，用户名在后（§4.8）。
+[[route]]
+id = "user-username-fragment"
+path = '^/u/?$'
+fragment = '^u/(?P<username>[A-Za-z_][A-Za-z0-9_]{2,31}(\.[0-9]{2,9})?)$'
+kind = "tellomi.user"
+object = "{username}"
+plan = [{ type = "first-party" }]
+
+[[route]]
+id = "user-encrypted-link"
+path = '^/u/?$'
+fragment = '^eu/[A-Za-z0-9_-]{20,}$'
+kind = "tellomi.user"
+plan = [{ type = "first-party" }]
+
+[[route]]
+id = "user-phone"
+path = '^/u/?$'
+fragment = '^p/\+?[0-9]{6,15}$'
+kind = "tellomi.user"
+plan = [{ type = "first-party" }]
+
+[[route]]
+id = "group"
+path = '^/g/?$'
+fragment = '^[A-Za-z0-9_-]{16,}$'
+kind = "tellomi.group"
+plan = [{ type = "first-party" }]
+
+[[route]]
+id = "call"
+path = '^/call/?$'
+fragment = '^key=[^&]+(&.*)?$'
+kind = "tellomi.call"
+plan = [{ type = "first-party" }]
+
+[[route]]
+id = "sticker"
+path = '^/s/?$'
+fragment = '^pack_id=[0-9a-f]{32}&pack_key=[0-9a-f]{64}$'
+kind = "tellomi.sticker"
+plan = [{ type = "first-party" }]
+
+# 其余单段路径按用户名：不带点 = `.01`（ADR-0066）；一级保留路径不会走到这里（L19 保证它们不合用户名语法之外的形状也被挡）。
+[[route]]
+id = "user-path"
+path = '^/(?P<nickname>[A-Za-z_][A-Za-z0-9_]{2,31})(\.(?P<discriminator>[0-9]{2,9}))?/?$'
+kind = "tellomi.user"
+object = "{nickname}"
+plan = [{ type = "first-party" }]
+
+[[route]]
+id = "official"
+host = "tellomi.app"
+path = '^/.*$'
+kind = "tellomi.official"
+plan = [{ type = "og+jsonld" }]

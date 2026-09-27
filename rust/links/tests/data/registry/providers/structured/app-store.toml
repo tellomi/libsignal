@@ -1,0 +1,26 @@
+schema = 1
+id = "app-store"
+name = { zh-Hans = "App Store", en = "App Store" }
+tier = "structured"
+category = "app-store"
+domains = ["apps.apple.com"]
+api_hosts = ["itunes.apple.com"]
+strip_params = ["mt", "uo", "at", "ct", "pt", "ls", "l", "platform", "see-all", "ign-mpt"]
+terms = { url = "https://performance-partners.apple.com/search-api", checked = "2026-09-27", notes = "官方公开、不要 key；有频率限制（约每分钟 20 次），发送端单机用量远低于此" }
+evidence = "ecosystem-2026-09-23/G6-dev-housing-jobs-stores.md「App Store」（itunes.apple.com/cn/lookup）；2026-09-27 首批复核（#1419 PR）"
+
+[[route]]            # apps.apple.com/<区>/app/<名字>/id<数字>，以及不带名字的 /<区>/app/id<数字>（后者 301 到带名字的）
+id = "app"
+path = '^/(?P<cc>[a-z]{2})/app/(?:[^/]+/)?id(?P<id>[0-9]{6,12})/?$'
+kind = "app"
+object = "{id}"
+attrs = { platform = "ios" }
+plan = [{ type = "public-api", url = "https://itunes.apple.com/{cc}/lookup?id={id}", doc = "https://performance-partners.apple.com/search-api", map = { title = "results[0].trackName", image = "results[0].artworkUrl512", developer = "results[0].artistName" } }]
+
+[[route]]            # 不带区：apps.apple.com/app/id<数字>（301 到美区）。lookup 不带区就是美区
+id = "app-no-storefront"
+path = '^/app/(?:[^/]+/)?id(?P<id>[0-9]{6,12})/?$'
+kind = "app"
+object = "{id}"
+attrs = { platform = "ios" }
+plan = [{ type = "public-api", url = "https://itunes.apple.com/lookup?id={id}", doc = "https://performance-partners.apple.com/search-api", map = { title = "results[0].trackName", image = "results[0].artworkUrl512", developer = "results[0].artistName" } }]

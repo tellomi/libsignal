@@ -1,0 +1,41 @@
+provider = "app-store"
+
+[[case]]
+url = "https://apps.apple.com/cn/app/wechat/id414478124"
+source = "G6 实测（itunes.apple.com/cn/lookup?id=414478124）"
+expect = { route = "app", kind = "app", object = "414478124", captures = { cc = "cn" } }
+
+[[case]]
+url = "https://apps.apple.com/cn/app/%E6%94%AF%E4%BB%98%E5%AE%9D-%E4%BD%A0%E7%9A%84ai%E7%94%9F%E6%B4%BB%E4%BC%99%E4%BC%B4/id333206289"
+source = "App Store 中国区真实页面（2026-09-27 lookup：支付宝-你的AI生活伙伴）"
+expect = { route = "app", kind = "app", object = "333206289", captures = { cc = "cn" } }
+
+[[case]]
+url = "https://apps.apple.com/cn/app/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9-%E5%BC%B9%E5%B9%95%E7%95%AA%E5%89%A7%E7%9B%B4%E6%92%AD%E9%AB%98%E6%B8%85%E8%A7%86%E9%A2%91/id736536022"
+source = "App Store 中国区真实页面（2026-09-27 lookup：哔哩哔哩）"
+expect = { route = "app", kind = "app", object = "736536022" }
+
+[[case]]
+url = "https://apps.apple.com/us/app/rednote/id741292507"
+source = "App Store 美区真实页面（2026-09-27 lookup：rednote = 小红书）"
+expect = { route = "app", kind = "app", object = "741292507", captures = { cc = "us" } }
+
+[[case]]
+url = "https://apps.apple.com/us/app/apple-maps/id915056765"
+source = "App Store 美区真实页面（2026-09-27 lookup：Apple Maps）"
+expect = { route = "app", kind = "app", object = "915056765" }
+
+[[case]]
+url = "https://apps.apple.com/cn/app/id414478124"
+source = "不带名字的写法（2026-09-27 实测 301 到带名字的中国区页面）"
+expect = { route = "app", kind = "app", object = "414478124", captures = { cc = "cn" } }
+
+[[case]]
+url = "https://apps.apple.com/app/id1610887466"
+source = "不带区的写法（2026-09-27 实测 301 到 /us/app/open-in-maps/…；lookup：Open In Maps）"
+expect = { route = "app-no-storefront", kind = "app", object = "1610887466" }
+
+[[case]]
+url = "https://apps.apple.com/cn/app/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE-%E9%AB%98%E5%BE%B7%E6%89%93%E8%BD%A6-%E5%AF%BC%E8%88%AA%E5%85%AC%E4%BA%A4%E5%9C%B0%E9%93%81%E5%87%BA%E8%A1%8C/id461703208"
+source = "App Store 中国区真实页面（2026-09-27 lookup：高德地图）"
+expect = { route = "app", kind = "app", object = "461703208" }
