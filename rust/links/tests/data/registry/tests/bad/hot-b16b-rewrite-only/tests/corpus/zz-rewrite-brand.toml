@@ -1,0 +1,6 @@
+provider = "zz-rewrite-brand"
+
+[[case]]
+url = "https://evil2.example/security"
+source = "坏样例：品牌壳，canonical_url 被改写成官网"
+expect = { route = "", canonical_url = "https://tellomi.app/security" }

@@ -1,0 +1,18 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+
+The ten standard samples of ADR-0063 card-visual-2026-09-25.md appendix A, downloaded once on
+2026-09-27 (curl, Safari UA) so the tint / layout tests never touch the network. Test resources
+only: none of these images ships in any app build.
+
+file                    bytes   sha256                                                            source
+meituan-og.png           1696   c993efde043b7aef26f7e33e986274be048679b88f34be92cd79276ed722adcc  https://p0.meituan.net/smartvenus/519f64f1d51d8470ecad1f9b5fce83591696.png (meituan.com og:image)
+taobao-touch.png         4540   c6c57174b28f92c3b5bf64b020ba8436862de7091c238ca898f252ed6d3ac8b5  https://img.alicdn.com/tps/i3/T1OjaVFl4dXXa.JOZB-114-114.png
+bilibili-favicon.ico     4286   2681561eb24e7435fea1acf26f3af95e4efc9f7d451587b58bef62f030f337e9  https://www.bilibili.com/favicon.ico
+jd-favicon.ico           2817   d71bcae7214e3401d42af8b8f4a288da25fdc72601e7592586e5596e45f481ba  https://storage.360buyimg.com/retail-mall/mall-common-component/favicon.ico
+qq-favicon.ico           3446   81aecc63dd1e46f38af8ddf5d7562799d561a1b5a0e2cb4aecc6ba0fdf129782  https://mat1.gtimg.com/qqcdn/qqindex2021/favicon.ico (a PNG despite the name)
+163-ipad-icon.png        4706   0fd65e4cb39a4cfce671cf188715231f0091a7db306f52209d313eb17076e50a  https://static.ws.126.net/www/logo/logo-ipad-icon.png
+tellomi-touch.png       12262   b7306e75527cad19fd2b478f67b46239401875a82088b4e87f24b232be13933f  https://www.tellomi.app/apple-touch-icon.png
+cloudflare-preview.png 352044   a2fcc66cf2a1ab6476eeaf12e2fcb68ac5e50a6dfe9d3d6285a429cf2526eeb6  https://www.cloudflare.com/preview.png
+apple-og.png            11847   d676757df94e521c467b44471d47f24bb54a5ba1ff6c4c81feb78e227060c2fa  https://www.apple.com/ac/structured-data/images/open_graph_logo.png
+youtube-1200.png         6833   56d5e95f4da139ad8475ed4e4d7f4334151b0102c7863f3f07c1dea22990ce2f  https://www.youtube.com/img/desktop/yt_1200.png

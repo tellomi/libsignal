@@ -1,0 +1,6 @@
+provider = "zz-cn"
+
+[[case]]
+url = "https://tellomi.cn/download"
+source = "坏样例：匹配照常成立，只有 L23 拦得住"
+expect = { route = "page", kind = "channel" }

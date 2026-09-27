@@ -1,0 +1,44 @@
+# Copyright 2026 重庆半格智能科技有限公司
+# SPDX-License-Identifier: AGPL-3.0-only
+# 品牌壳样本：第三方只收真实链接（不许编 ID）。2026-09-27 首批（#1419）由检索 + 本机实测收集，在线复核输出见 PR。
+provider = "jd"
+
+[[case]]
+url = "https://3.cn/CdEyF2"
+source = "检索到的京东短链（2026-09-27 大陆直连 302 到 http://h5.m.jd.com/dev/…）"
+expect = { short = true }
+
+[[case]]
+url = "https://3.cn/1-jMkHBf"
+source = "检索到的京东短链（2026-09-27 大陆直连 302 到 jos.jd.com/apilist?…）"
+expect = { short = true }
+
+[[case]]
+url = "https://u.jd.com/EDB3Atu"
+source = "检索到的京东推广短链（2026-09-27）：回 200 的 JS 跳转页、没有 Location，按域名出品牌壳"
+expect = { route = "" }
+
+[[case]]
+url = "https://item.jd.com/10029628045289.html"
+source = "检索到的京东商品页（2026-09-27）"
+expect = { route = "item", kind = "product", object = "10029628045289" }
+
+[[case]]
+url = "https://item.jd.com/100043419980.html"
+source = "检索到的京东商品页（2026-09-27）"
+expect = { route = "item", kind = "product", object = "100043419980" }
+
+[[case]]
+url = "https://item.m.jd.com/product/10233199497108.html"
+source = "检索到的京东移动商品页（2026-09-27）"
+expect = { route = "item-m", kind = "product", object = "10233199497108" }
+
+[[case]]
+url = "https://item.m.jd.com/ware/view.action?clickUrl=&wareId=100028288250"
+source = "检索到的京东老移动商品页（2026-09-27）"
+expect = { route = "item-ware", kind = "product", object = "100028288250" }
+
+[[case]]
+url = "https://mall.jd.com/index-1000004123.html"
+source = "检索到的京东店铺页（2026-09-27）：店铺认不出对象 → 品牌壳"
+expect = { route = "" }

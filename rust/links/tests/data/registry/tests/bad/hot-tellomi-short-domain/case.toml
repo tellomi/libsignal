@@ -1,0 +1,2 @@
+about = "独立复核：tellomi 的 short_domains 写 tell.cc。上一版 L22 只要求它在 {tell.cc} 里，这样写就放过去了；发送端会去「展开」每条 tell.cc 链接，把 /用户名 送进 CDN 日志（§6.5 说这条泄露随 0.1.x 淘汰）。现在 tellomi 的 short_domains 必须为空"
+expect = ["L22 tellomi: 不许有 short_domains"]
