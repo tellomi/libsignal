@@ -12,9 +12,8 @@ pub use libsignal_bridge_types::net::{
     BuildVariant, ConnectionManager, Environment, TokioAsyncContext,
 };
 use libsignal_core::LogSafeDisplay;
-use libsignal_net::infra::route::HttpVersion;
 use libsignal_net::connect_state::infer_proxy_mode_for_config;
-use libsignal_net::infra::route::ConnectionProxyConfig;
+use libsignal_net::infra::route::{ConnectionProxyConfig, HttpVersion};
 
 use crate::support::*;
 use crate::*;
@@ -112,6 +111,7 @@ fn ConnectionManager_new(
 /// Tellomi: a ConnectionManager for a self-hosted Signal-Server (see `libsignal_net::env::custom_server_env`).
 /// `root_certificate_der` empty = platform trust store. `http_version` is 1 or 2.
 #[bridge_fn]
+#[expect(clippy::too_many_arguments)]
 fn ConnectionManager_newCustomServer(
     hostname: String,
     chat_port: AsType<NonZeroU16, u16>,

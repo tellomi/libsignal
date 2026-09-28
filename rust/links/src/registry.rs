@@ -19,9 +19,8 @@ use crate::extract::{Converter, Seg, parse_json_path};
 use crate::kinds::{self, WEB};
 use crate::limits::*;
 use crate::model::{LinksPayload, PlanFile, ProviderFile, RouteFile};
-use crate::pattern;
 use crate::spoof::KnownDomains;
-use crate::urlx;
+use crate::{pattern, urlx};
 
 /// A provider's display name (`name` in the provider file).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
