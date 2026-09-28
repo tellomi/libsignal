@@ -24,7 +24,11 @@ repositories {
 allprojects {
     // Tellomi：带后缀发布，避免和上游 0.102.2 的坐标撞上（Signal-Android 的 mavenLocal 排在
     // mavenCentral 之后，同版本号会被上游那份抢走）。改 fork 里的东西就换一个后缀。
-    version = project.findProperty("tellomiVersion") ?: "0.102.2"
+    // 默认值单独一行，bin/update_versions.py 才读得到。
+    version = "0.102.2"
+    if (project.hasProperty("tellomiVersion")) {
+        version = project.property("tellomiVersion")
+    }
     group   = "org.signal"
 
     tasks.withType(JavaCompile) {
