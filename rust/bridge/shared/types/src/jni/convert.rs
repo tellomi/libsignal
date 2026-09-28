@@ -1585,11 +1585,11 @@ impl<'a> ResultTypeInfo<'a> for String {
 nice_identity_result_converter!(String, "String");
 
 impl<'a> ResultTypeInfo<'a> for Option<String> {
-    type ResultType = JString<'a>;
+    type ResultType = Nullable<JString<'a>>;
     fn convert_into(self, env: &mut jni::Env<'a>) -> Result<Self::ResultType, BridgeLayerError> {
         match self {
-            Some(s) => s.convert_into(env),
-            None => Ok(JString::null()),
+            Some(s) => s.convert_into(env).map(Nullable),
+            None => Ok(Nullable(JString::null())),
         }
     }
 }
@@ -3153,7 +3153,7 @@ impl<'a> ResultTypeInfo<'a> for MessageBackupValidationOutcome {
             element_class,
             found_unknown_fields.into_iter().map(|f| f.to_string()),
         )?;
-        let error_message = error_message.convert_into(env)?;
+        let Nullable(error_message) = error_message.convert_into(env)?;
 
         new_instance(
             env,
