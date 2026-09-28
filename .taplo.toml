@@ -1,4 +1,6 @@
 include = ["Cargo.toml", "rust/**/*.toml"]
+# Tellomi: link registry fixtures are data copied from the tellomi/tellomi `links/` tree, not config.
+exclude = ["rust/links/tests/data/**"]
 
 [formatting]
 align_comments = false
