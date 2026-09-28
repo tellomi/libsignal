@@ -120,13 +120,30 @@ export class TokioAsyncContext {
 export type NetConstructorOptions = Readonly<
   | {
       localTestServer?: false;
+      customServer?: undefined;
       env: Environment;
       userAgent: string;
       remoteConfig?: Map<string, string>;
       buildVariant?: BuildVariant;
     }
   | {
+      // Tellomi: a self-hosted Signal-Server; see ConnectionManager_newCustomServer.
+      localTestServer?: false;
+      customServer: {
+        hostname: string;
+        chatPort: number;
+        cdsiPort?: number;
+        svr2Port?: number;
+        svrBPort?: number;
+        /** Omitted = platform trust store. */
+        rootCertificateDer?: Uint8Array<ArrayBuffer>;
+        httpVersion?: 1 | 2;
+      };
+      userAgent: string;
+    }
+  | {
       localTestServer: true;
+      customServer?: undefined;
       userAgent: string;
       TESTING_localServer_chatPort: number;
       TESTING_localServer_cdsiPort: number;
@@ -263,7 +280,10 @@ export class Net {
     listener: ConnectionEventsListener,
     options?: { languages?: string[]; abortSignal?: AbortSignal }
   ): Promise<UnauthenticatedChatConnection> {
-    const env = this.options.localTestServer ? undefined : this.options.env;
+    const env =
+      this.options.localTestServer || this.options.customServer
+        ? undefined
+        : this.options.env;
     return UnauthenticatedChatConnection.connect(
       this.asyncContext,
       this._connectionManager,
@@ -680,9 +700,10 @@ export class Net {
    * @see {@link SvrB}
    */
   svrB(auth: Readonly<ServiceAuth>): SvrB {
-    const env = this.options.localTestServer
-      ? Environment.Staging
-      : this.options.env;
+    const env =
+      this.options.localTestServer || this.options.customServer
+        ? Environment.Staging
+        : this.options.env;
     return new SvrB(this.asyncContext, this._connectionManager, auth, env);
   }
 
@@ -697,9 +718,10 @@ export class Net {
    * @see {@link Svr2}
    */
   svr2(auth: Readonly<ServiceAuth>): Svr2 {
-    const env = this.options.localTestServer
-      ? Environment.Staging
-      : this.options.env;
+    const env =
+      this.options.localTestServer || this.options.customServer
+        ? Environment.Staging
+        : this.options.env;
     return new Svr2(this.asyncContext, this._connectionManager, auth, env);
   }
 }
