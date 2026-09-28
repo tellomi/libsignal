@@ -32,12 +32,11 @@ use url::Url;
 
 use crate::card::{self, Level};
 use crate::extract::{self, Converter};
-use crate::html;
 use crate::kinds::{self, KindDef, WEB};
 use crate::limits::*;
 use crate::registry::{MapEntry, Plan, Provider, Registry, Source, Tier, fill_template, host_in};
 use crate::rich::{Attr, LEVEL_BRAND, LEVEL_STRUCTURED, RichContent};
-use crate::urlx;
+use crate::{html, urlx};
 
 fn global() -> Region {
     Region::Global
