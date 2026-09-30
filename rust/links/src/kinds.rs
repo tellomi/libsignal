@@ -55,12 +55,16 @@ impl AttrType {
     pub fn validate(self, value: &str) -> Option<String> {
         match self {
             AttrType::String => {
-                let chars = value.chars().count();
-                let ok = (1..=MAX_ATTR_VALUE_CHARS).contains(&chars)
-                    && !value.trim().is_empty()
-                    && !value.chars().any(char::is_control)
-                    && !looks_like_link(value);
-                ok.then(|| value.to_owned())
+                // The size limit is about what travelled; the rest is about what would be shown
+                // (§6.1: zero-width and bidi control characters handled first, so that neither can
+                // hide a link or a control character from the checks below).
+                let travelled = value.chars().count();
+                let text = crate::text::display_text(value);
+                let ok = (1..=MAX_ATTR_VALUE_CHARS).contains(&travelled)
+                    && !text.is_empty()
+                    && !text.chars().any(char::is_control)
+                    && !looks_like_link(&text);
+                ok.then_some(text)
             }
             AttrType::Int | AttrType::DurationMs => {
                 let ok = !value.is_empty()

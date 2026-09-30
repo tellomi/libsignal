@@ -222,7 +222,7 @@
       "name": "§6.1 lookalike domain (punycode Cyrillic аррӏе.com) → plain link, flagged",
       "preview": {"url": "https://xn--80ak6aa92e.com/login", "title": "Apple ID"},
       "body": "https://xn--80ak6aa92e.com/login",
-      "expect": {"level": "plain_link", "lookalike": "apple.com", "reason": "lookalike"}
+      "expect": {"level": "plain_link", "lookalike": "apple.com", "reason": "lookalike", "domain": "xn--80ak6aa92e.com"}
     },
     {
       "name": "§6.1 ASCII lookalike of a provider, dressed up with its rich → plain link, flagged",
@@ -308,6 +308,47 @@
         "rich": {"kind": "tellomi.official", "provider": "tellomi", "level": 2}},
       "body": "https://www.tellomi.app/security",
       "expect": {"level": "generic", "official_badge": false}
+    },
+    {
+      "name": "§6.1 zero-width characters in a snapshot title are stripped; ZWJ, ZWNJ and LRM stay",
+      "preview": {"url": "https://www.163.com/", "title": "Ti\u200btle\u2060 \ufeffx \ud83d\udc69\u200d\ud83d\udc68 \u0645\u06cc\u200c\u062e\u0648\u0627\u0647\u0645 a\u200eb", "has_image": false},
+      "body": "https://www.163.com/",
+      "expect": {"level": "generic", "title": "Title x \ud83d\udc69\u200d\ud83d\udc68 \u0645\u06cc\u200c\u062e\u0648\u0627\u0647\u0645 a\u200eb"}
+    },
+    {
+      "name": "§6.1 a bidi override in a title is balanced: the RLO gets its PDF, nothing leaks past the title",
+      "preview": {"url": "https://www.163.com/", "title": "\u202efdp.exe"},
+      "body": "https://www.163.com/",
+      "expect": {"level": "generic", "title": "\u202efdp.exe\u202c"}
+    },
+    {
+      "name": "§6.1 a title with nothing visible left is no title: plain link",
+      "preview": {"url": "https://www.163.com/", "title": "\u200b \u2060\ufeff"},
+      "body": "https://www.163.com/",
+      "expect": {"level": "plain_link", "reason": "no_title"}
+    },
+    {
+      "name": "§6.1 an attr value is cleaned like a title (zero-width stripped, bidi balanced)",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "《柯洁围棋入门课》", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "schema": 1, "canonical_url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "level": 2,
+          "attrs": [["author", "\u200b柯洁\u202b"]]}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "structured", "attrs": [{"key": "author", "value": "柯洁\u202b\u202c"}]}
+    },
+    {
+      "name": "§6.1 a link cannot hide in an attr behind a zero-width character: the attr is dropped, the card stays",
+      "preview": {"url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "title": "《柯洁围棋入门课》", "has_image": true,
+        "rich": {"kind": "video", "provider": "bilibili", "schema": 1, "canonical_url": "https://www.bilibili.com/video/BV1YDhJ6ZEL6", "level": 2,
+          "attrs": [["author", "ht\u200btp://evil.example/x"]]}},
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "expect": {"level": "structured", "attrs": []}
+    },
+    {
+      "name": "§6.1 a group name is cleaned like a title",
+      "preview": {"url": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "title": "\u200b周末\u2060爬山群\u200d", "has_image": true,
+        "rich": {"kind": "tellomi.group", "provider": "tellomi"}},
+      "body": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expect": {"level": "first_party", "first_party": {"type": "group", "title": "周末爬山群"}}
     }
   ]
 }
