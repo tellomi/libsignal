@@ -251,7 +251,7 @@
     },
     {
       "body": "https://xn--80ak6aa92e.com/login",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"аррӏе.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":\"apple.com\",\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"lookalike\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"xn--80ak6aa92e.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":\"apple.com\",\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"lookalike\"}",
       "message": "{}",
       "name": "§6.1 lookalike domain (punycode Cyrillic аррӏе.com) → plain link, flagged",
       "preview": "{\"title\":\"Apple ID\",\"url\":\"https://xn--80ak6aa92e.com/login\"}",
@@ -359,6 +359,54 @@
       "message": "{}",
       "name": "an official host the registry has not enabled (www.tellomi.app) is an ordinary page",
       "preview": "{\"rich\":\"0a1074656c6c6f6d692e6f6666696369616c120774656c6c6f6d693002\",\"title\":\"Tellomi\",\"url\":\"https://www.tellomi.app/security\"}",
+      "receive_check": "{\"keep_preview\":true,\"keep_rich\":true}"
+    },
+    {
+      "body": "https://www.163.com/",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"Title x 👩‍👨 می‌خواهم a‎b\",\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
+      "message": "{}",
+      "name": "§6.1 zero-width characters in a snapshot title are stripped; ZWJ, ZWNJ and LRM stay",
+      "preview": "{\"has_image\":false,\"title\":\"Ti​tle⁠ ﻿x 👩‍👨 می‌خواهم a‎b\",\"url\":\"https://www.163.com/\"}",
+      "receive_check": "{\"keep_preview\":true,\"keep_rich\":false}"
+    },
+    {
+      "body": "https://www.163.com/",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"‮fdp.exe‬\",\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
+      "message": "{}",
+      "name": "§6.1 a bidi override in a title is balanced: the RLO gets its PDF, nothing leaks past the title",
+      "preview": "{\"title\":\"‮fdp.exe\",\"url\":\"https://www.163.com/\"}",
+      "receive_check": "{\"keep_preview\":true,\"keep_rich\":false}"
+    },
+    {
+      "body": "https://www.163.com/",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"no_title\"}",
+      "message": "{}",
+      "name": "§6.1 a title with nothing visible left is no title: plain link",
+      "preview": "{\"title\":\"​ ⁠﻿\",\"url\":\"https://www.163.com/\"}",
+      "receive_check": "{\"keep_preview\":true,\"keep_rich\":false}"
+    },
+    {
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"《柯洁围棋入门课》\",\"description\":null,\"attrs\":[{\"key\":\"author\",\"value\":\"柯洁‫‬\"}],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "message": "{}",
+      "name": "§6.1 an attr value is cleaned like a title (zero-width stripped, bidi balanced)",
+      "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c691801222b68747470733a2f2f7777772e62696c6962696c692e636f6d2f766964656f2f4256315944684a365a454c362a160a06617574686f72120ce2808be69fafe6b481e280ab3002\",\"title\":\"《柯洁围棋入门课》\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
+      "receive_check": "{\"keep_preview\":true,\"keep_rich\":true}"
+    },
+    {
+      "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
+      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"《柯洁围棋入门课》\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "message": "{}",
+      "name": "§6.1 a link cannot hide in an attr behind a zero-width character: the attr is dropped, the card stays",
+      "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c691801222b68747470733a2f2f7777772e62696c6962696c692e636f6d2f766964656f2f4256315944684a365a454c362a220a06617574686f7212186874e2808b74703a2f2f6576696c2e6578616d706c652f783002\",\"title\":\"《柯洁围棋入门课》\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
+      "receive_check": "{\"keep_preview\":true,\"keep_rich\":true}"
+    },
+    {
+      "body": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.group\",\"route\":\"group\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"group\",\"title\":\"周末爬山群\",\"member_count\":null},\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "message": "{}",
+      "name": "§6.1 a group name is cleaned like a title",
+      "preview": "{\"has_image\":true,\"rich\":\"0a0d74656c6c6f6d692e67726f7570120774656c6c6f6d69\",\"title\":\"​周末⁠爬山群‍\",\"url\":\"https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"}",
       "receive_check": "{\"keep_preview\":true,\"keep_rich\":true}"
     }
   ],
