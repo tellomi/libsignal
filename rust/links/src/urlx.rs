@@ -171,8 +171,11 @@ pub fn registrable_domain(host: &str) -> Option<String> {
     crate::suffix::registrable(host)
 }
 
-/// Unicode form of an ASCII (punycode) host, when showing it is safe: every label is written in
-/// one script and does not mix ASCII with non-ASCII (card-visual §3.4). Otherwise the ASCII form.
+/// Unicode form of an ASCII (punycode) host, when showing it is safe (card-visual §3.4): every
+/// label is written in one script, does not mix ASCII with non-ASCII, and is not a whole-script
+/// lookalike of an ASCII word — the UTS #39 skeleton of the label must still contain a non-ASCII
+/// character (Cyrillic `аррӏе` reduces to plain ASCII, so it is shown as punycode). Otherwise the
+/// ASCII form.
 pub(crate) fn display_host(ascii_host: &str) -> String {
     if !ascii_host.split('.').any(|l| l.starts_with("xn--")) {
         return ascii_host.to_owned();
@@ -181,7 +184,9 @@ pub(crate) fn display_host(ascii_host: &str) -> String {
     let safe = !unicode.is_empty()
         && unicode.split('.').all(|label| {
             label.is_ascii()
-                || (label.chars().all(|c| !c.is_ascii() || c == '-') && label.is_single_script())
+                || (label.chars().all(|c| !c.is_ascii() || c == '-')
+                    && label.is_single_script()
+                    && !unicode_security::skeleton(label).all(|c| c.is_ascii()))
         });
     if safe { unicode } else { ascii_host.to_owned() }
 }
@@ -292,6 +297,27 @@ mod tests {
             display_domain("https://login.apple.com.evil.cn/").as_deref(),
             Some("evil.cn")
         );
+    }
+
+    #[test]
+    fn whole_script_lookalikes_are_shown_as_punycode() {
+        // Cyrillic аррӏе.com: one script, no ASCII mixed in, but it reads as an ASCII word.
+        let cyrillic = Url::parse("https://аррӏе.com/").unwrap();
+        let host = cyrillic.host_str().unwrap();
+        assert!(host.starts_with("xn--"), "{host}");
+        assert_eq!(display_host(host), host);
+        assert_eq!(display_domain("https://аррӏе.com/x").as_deref(), Some(host));
+        // Words in their own script are still shown as written.
+        for (url, shown) in [
+            ("https://淘宝.com/", "淘宝.com"),
+            ("https://例え.jp/", "例え.jp"),
+            ("https://россия.рф/", "россия.рф"),
+            ("https://مثال.إختبار/", "مثال.إختبار"),
+        ] {
+            let host = Url::parse(url).unwrap().host_str().unwrap().to_owned();
+            assert!(host.contains("xn--"), "{host}");
+            assert_eq!(display_host(&host), shown, "{url}");
+        }
     }
 
     #[test]
