@@ -3,7 +3,7 @@
   "classify": [
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"《柯洁围棋入门课》\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"no_rich\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"《柯洁围棋入门课》\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_rich\"}",
       "message": "{}",
       "name": "old sender, no rich: generic (§5.3 'old client' / 'no rich')",
       "preview": "{\"has_image\":true,\"title\":\"《柯洁围棋入门课》\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -11,7 +11,7 @@
     },
     {
       "body": "看 https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"《柯洁围棋入门课》\",\"description\":null,\"attrs\":[{\"key\":\"author\",\"value\":\"柯洁\"},{\"key\":\"duration_ms\",\"value\":\"499000\"},{\"key\":\"published_at\",\"value\":\"2026-09-22T09:25:33.000Z\"}],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"《柯洁围棋入门课》\",\"description\":null,\"attrs\":[{\"key\":\"author\",\"value\":\"柯洁\"},{\"key\":\"duration_ms\",\"value\":\"499000\"},{\"key\":\"published_at\",\"value\":\"2026-09-22T09:25:33.000Z\"}],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "structured video: sender level 2, required fields present",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c691801222b68747470733a2f2f7777772e62696c6962696c692e636f6d2f766964656f2f4256315944684a365a454c362a100a06617574686f721206e69fafe6b4812a150a0b6475726174696f6e5f6d7312063439393030302a280a0c7075626c69736865645f61741218323032362d30392d32325430393a32353a33332e3030305a3002\",\"title\":\"《柯洁围棋入门课》\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -19,7 +19,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "§6.1 lying about level: level 2 but the video has no image → brand",
       "preview": "{\"has_image\":false,\"rich\":\"0a05766964656f120862696c6962696c692a100a06617574686f721206e69fafe6b4813002\",\"title\":\"《柯洁围棋入门课》\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -27,7 +27,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "sender says brand (level 1) although fields are complete → brand (min of the two)",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c693001\",\"title\":\"《柯洁围棋入门课》\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -35,7 +35,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "level absent → brand",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c69\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -43,7 +43,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "unknown level value (7) → brand",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c693007\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -51,7 +51,7 @@
     },
     {
       "body": "https://item.taobao.com/item.htm?id=100032608854",
-      "card": "{\"level\":\"brand\",\"provider\":\"taobao\",\"provider_name\":{\"zh-Hans\":\"淘宝\",\"en\":\"Taobao\"},\"kind\":\"product\",\"route\":\"item\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"taobao.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"brand\",\"provider\":\"taobao\",\"provider_name\":{\"zh-Hans\":\"淘宝\",\"en\":\"Taobao\"},\"kind\":\"product\",\"route\":\"item\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"taobao.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":\"taobao.png\",\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "§6.1 brand-tier platform claiming a structured card with attrs → brand, no attrs",
       "preview": "{\"has_image\":true,\"rich\":\"0a0770726f64756374120674616f62616f2a0a0a0570726963651201313002\",\"title\":\"iPhone 18 Pro 5 折\",\"url\":\"https://item.taobao.com/item.htm?id=100032608854\"}",
@@ -59,7 +59,7 @@
     },
     {
       "body": "https://render.alipay.com/p/f/fd-j5rqp49m/index.html",
-      "card": "{\"level\":\"brand\",\"provider\":\"alipay\",\"provider_name\":{\"zh-Hans\":\"支付宝\",\"en\":\"Alipay\"},\"kind\":\"web\",\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"alipay.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":true,\"reason\":null}",
+      "card": "{\"level\":\"brand\",\"provider\":\"alipay\",\"provider_name\":{\"zh-Hans\":\"支付宝\",\"en\":\"Alipay\"},\"kind\":\"web\",\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"alipay.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":true,\"reason\":null}",
       "message": "{}",
       "name": "payment platform: brand, locked, never tinted",
       "preview": "{\"rich\":\"0a037765621206616c697061793001\",\"title\":\"支付宝\",\"url\":\"https://render.alipay.com/p/f/fd-j5rqp49m/index.html\"}",
@@ -67,7 +67,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"provider_mismatch\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"provider_mismatch\"}",
       "message": "{}",
       "name": "§6.1 provider does not match the URL → drop rich, generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a0b6d757369632e747261636b120773706f746966793002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -75,7 +75,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"unknown_kind\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"unknown_kind\"}",
       "message": "{}",
       "name": "§6.1 kind this build does not know → generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a0b766964656f2e73686f7274120862696c6962696c693002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -83,7 +83,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"kind_mismatch\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"kind_mismatch\"}",
       "message": "{}",
       "name": "kind known but not what the URL is → generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a076368616e6e656c120862696c6962696c693002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -91,7 +91,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"rich_schema\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"rich_schema\"}",
       "message": "{}",
       "name": "RichContent.schema beyond this build → generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c6918023002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -99,7 +99,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "schema 0 means 1",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c6918003002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -107,7 +107,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"canonical_mismatch\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"canonical_mismatch\"}",
       "message": "{}",
       "name": "canonical_url on another provider (non-short) → generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c69223568747470733a2f2f6f70656e2e73706f746966792e636f6d2f747261636b2f3771695a6655346459316c576c6c7a58376d504249333002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -115,7 +115,7 @@
     },
     {
       "body": "https://b23.tv/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"《柯洁围棋入门课》\",\"description\":null,\"attrs\":[],\"domain\":\"b23.tv\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"《柯洁围棋入门课》\",\"description\":null,\"attrs\":[],\"domain\":\"b23.tv\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "short link: kind from canonical_url on the same provider",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c69222b68747470733a2f2f7777772e62696c6962696c692e636f6d2f766964656f2f4256315944684a365a454c363002\",\"title\":\"《柯洁围棋入门课》\",\"url\":\"https://b23.tv/BV1YDhJ6ZEL6\"}",
@@ -123,7 +123,7 @@
     },
     {
       "body": "https://b23.tv/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"b23.tv\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"canonical_mismatch\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"b23.tv\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"canonical_mismatch\"}",
       "message": "{}",
       "name": "§6.1 short link switching provider through canonical_url → generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a0b6d757369632e747261636b120862696c6962696c69223568747470733a2f2f6f70656e2e73706f746966792e636f6d2f747261636b2f3771695a6655346459316c576c6c7a58376d504249333002\",\"title\":\"t\",\"url\":\"https://b23.tv/BV1YDhJ6ZEL6\"}",
@@ -131,7 +131,7 @@
     },
     {
       "body": "https://b23.tv/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"b23.tv\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"kind_mismatch\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"b23.tv\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"kind_mismatch\"}",
       "message": "{}",
       "name": "short link without canonical_url claiming an object kind: unverifiable → generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c693002\",\"title\":\"t\",\"url\":\"https://b23.tv/BV1YDhJ6ZEL6\"}",
@@ -139,7 +139,7 @@
     },
     {
       "body": "https://b23.tv/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"web\",\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"b23.tv\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"brand\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"web\",\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"b23.tv\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "short link that was never expanded: brand of the short domain's provider",
       "preview": "{\"rich\":\"0a03776562120862696c6962696c693001\",\"title\":\"哔哩哔哩\",\"url\":\"https://b23.tv/BV1YDhJ6ZEL6\"}",
@@ -147,7 +147,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"no_title\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"no_title\"}",
       "message": "{}",
       "name": "rich present but the snapshot has no title → plain link",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c693002\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -155,7 +155,7 @@
     },
     {
       "body": "https://www.163.com/news/article/K1234.html",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"no_title\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"no_title\"}",
       "message": "{}",
       "name": "no provider and no title → plain link",
       "preview": "{\"url\":\"https://www.163.com/news/article/K1234.html\"}",
@@ -163,7 +163,7 @@
     },
     {
       "body": "hello",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":null,\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"not_in_body\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":null,\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"not_in_body\"}",
       "message": "{}",
       "name": "Preview.url not in the body → plain link",
       "preview": "{\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -171,7 +171,7 @@
     },
     {
       "body": "https://tellomi.app.evil.cn/login",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":null,\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"not_in_body\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":null,\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"not_in_body\"}",
       "message": "{}",
       "name": "Preview.url only as the prefix of a longer host in the body → plain link",
       "preview": "{\"title\":\"Tellomi\",\"url\":\"https://tellomi.app\"}",
@@ -179,7 +179,7 @@
     },
     {
       "body": "",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
       "message": "{\"is_story\":true}",
       "name": "story: URL need not be in the body",
       "preview": "{\"title\":\"t\",\"url\":\"https://www.163.com/news/article/K1234.html\"}",
@@ -187,7 +187,7 @@
     },
     {
       "body": "https://www.163.com/news/article/K1234.html",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":null,\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"attachments\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":null,\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"attachments\"}",
       "message": "{\"attachment_content_types\":[\"image/jpeg\"]}",
       "name": "an image attachment drops the preview (§5.1 rule 4, iOS rule for all)",
       "preview": "{\"title\":\"t\",\"url\":\"https://www.163.com/news/article/K1234.html\"}",
@@ -195,7 +195,7 @@
     },
     {
       "body": "https://www.163.com/news/article/K1234.html",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"163.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
       "message": "{\"attachment_content_types\":[\"text/x-signal-plain\"]}",
       "name": "a single long-text attachment keeps it",
       "preview": "{\"title\":\"t\",\"url\":\"https://www.163.com/news/article/K1234.html\"}",
@@ -203,7 +203,7 @@
     },
     {
       "body": "https://www.163.com/news/article/K1234.html",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":null,\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"attachments\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":null,\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"attachments\"}",
       "message": "{\"attachment_content_types\":[\"text/x-signal-plain\",\"text/x-signal-plain\"]}",
       "name": "two attachments drop it",
       "preview": "{\"title\":\"t\",\"url\":\"https://www.163.com/news/article/K1234.html\"}",
@@ -211,7 +211,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"no_rich\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_rich\"}",
       "message": "{}",
       "name": "§6.1 oversized RichContent (kind of 33 characters) is dropped whole → generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a22766964656f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f120862696c6962696c693002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -219,7 +219,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"no_rich\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_rich\"}",
       "message": "{}",
       "name": "§6.1 17 attrs: the whole rich is dropped → generic",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c692a060a01611201312a060a01621201312a060a01631201312a060a01641201312a060a01651201312a060a01661201312a060a01671201312a060a01681201312a060a01691201312a060a016a1201312a060a016b1201312a060a016c1201312a060a016d1201312a060a016e1201312a060a016f1201312a060a01701201312a060a01711201313002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -227,7 +227,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"t\",\"description\":null,\"attrs\":[{\"key\":\"published_at\",\"value\":\"2026-09-22T09:25:33Z\"}],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"structured\",\"provider\":\"bilibili\",\"provider_name\":{\"zh-Hans\":\"哔哩哔哩\",\"en\":\"Bilibili\"},\"kind\":\"video\",\"route\":\"video\",\"title\":\"t\",\"description\":null,\"attrs\":[{\"key\":\"published_at\",\"value\":\"2026-09-22T09:25:33Z\"}],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "§6.1 malformed attrs are dropped one by one, the card stays",
       "preview": "{\"has_image\":true,\"rich\":\"0a05766964656f120862696c6962696c692a1a0a06617574686f72121068747470733a2f2f6576696c2e636e2f2a110a0b6475726174696f6e5f6d7312022d352a240a0c7075626c69736865645f61741214323032362d30392d32325430393a32353a33335a2a0c0a07556e6b6e6f776e1201782a0a0a0570726963651201312a240a0c7075626c69736865645f61741214323032302d30312d30315430303a30303a30305a3002\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -235,7 +235,7 @@
     },
     {
       "body": "https://www.bilibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"tintable\":true,\"payment\":false,\"reason\":\"no_rich\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"t\",\"description\":null,\"attrs\":[],\"domain\":\"bilibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_rich\"}",
       "message": "{}",
       "name": "not even protobuf → rich ignored → generic",
       "preview": "{\"has_image\":true,\"rich\":\"ffffffff\",\"title\":\"t\",\"url\":\"https://www.bilibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -243,7 +243,7 @@
     },
     {
       "body": "https://uri.amap.com/marker?position=116.47,39.99",
-      "card": "{\"level\":\"structured\",\"provider\":\"amap\",\"provider_name\":{\"zh-Hans\":\"高德地图\",\"en\":\"Amap\"},\"kind\":\"place\",\"route\":\"marker\",\"title\":\"高德地图\",\"description\":null,\"attrs\":[{\"key\":\"coord_sys\",\"value\":\"gcj02\"},{\"key\":\"lat\",\"value\":\"39.99\"},{\"key\":\"lng\",\"value\":\"116.47\"}],\"domain\":\"amap.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"structured\",\"provider\":\"amap\",\"provider_name\":{\"zh-Hans\":\"高德地图\",\"en\":\"Amap\"},\"kind\":\"place\",\"route\":\"marker\",\"title\":\"高德地图\",\"description\":null,\"attrs\":[{\"key\":\"coord_sys\",\"value\":\"gcj02\"},{\"key\":\"lat\",\"value\":\"39.99\"},{\"key\":\"lng\",\"value\":\"116.47\"}],\"domain\":\"amap.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "place from the URL (U tier): structured without an image",
       "preview": "{\"rich\":\"0a05706c6163651204616d6170223168747470733a2f2f7572692e616d61702e636f6d2f6d61726b65723f706f736974696f6e3d3131362e34372c33392e39392a0c0a036c6174120533392e39392a0d0a036c6e6712063131362e34372a120a09636f6f72645f737973120567636a30323002\",\"title\":\"高德地图\",\"url\":\"https://uri.amap.com/marker?position=116.47,39.99\"}",
@@ -251,7 +251,7 @@
     },
     {
       "body": "https://xn--80ak6aa92e.com/login",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"аррӏе.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":\"apple.com\",\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"lookalike\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"аррӏе.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":\"apple.com\",\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"lookalike\"}",
       "message": "{}",
       "name": "§6.1 lookalike domain (punycode Cyrillic аррӏе.com) → plain link, flagged",
       "preview": "{\"title\":\"Apple ID\",\"url\":\"https://xn--80ak6aa92e.com/login\"}",
@@ -259,7 +259,7 @@
     },
     {
       "body": "https://www.bi1ibili.com/video/BV1YDhJ6ZEL6",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bi1ibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":\"bilibili.com\",\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"lookalike\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"bi1ibili.com\",\"official_badge\":false,\"first_party\":null,\"lookalike\":\"bilibili.com\",\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"lookalike\"}",
       "message": "{}",
       "name": "§6.1 ASCII lookalike of a provider, dressed up with its rich → plain link, flagged",
       "preview": "{\"rich\":\"0a05766964656f120862696c6962696c693002\",\"title\":\"t\",\"url\":\"https://www.bi1ibili.com/video/BV1YDhJ6ZEL6\"}",
@@ -267,7 +267,7 @@
     },
     {
       "body": "https://tell.cc/scam01",
-      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.user\",\"route\":\"user-path\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"user\",\"display\":\"@scam01\",\"username\":\"scam01.01\"},\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.user\",\"route\":\"user-path\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"user\",\"display\":\"@scam01\",\"username\":\"scam01.01\"},\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "§6.1 tell.cc user: the name comes from the URL, not the snapshot (@kefu is ignored)",
       "preview": "{\"rich\":\"0a0c74656c6c6f6d692e75736572120774656c6c6f6d693001\",\"title\":\"@kefu\",\"url\":\"https://tell.cc/scam01\"}",
@@ -275,7 +275,7 @@
     },
     {
       "body": "https://tell.cc/ceshi.57",
-      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.user\",\"route\":\"user-path\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"user\",\"display\":\"@ceshi.57\",\"username\":\"ceshi.57\"},\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.user\",\"route\":\"user-path\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"user\",\"display\":\"@ceshi.57\",\"username\":\"ceshi.57\"},\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "tell.cc user without rich (old sender) is still a first-party card",
       "preview": "{\"url\":\"https://tell.cc/ceshi.57\"}",
@@ -283,7 +283,7 @@
     },
     {
       "body": "https://tell.cc/u#eu/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.user\",\"route\":\"user-encrypted-link\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"user\",\"display\":null,\"username\":null},\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.user\",\"route\":\"user-encrypted-link\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"user\",\"display\":null,\"username\":null},\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "encrypted username link: fixed 'Tellomi user'",
       "preview": "{\"title\":\"@kefu\",\"url\":\"https://tell.cc/u#eu/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"}",
@@ -291,7 +291,7 @@
     },
     {
       "body": "https://tell.cc/app",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"not_an_object\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"not_an_object\"}",
       "message": "{}",
       "name": "reserved first-level path is not a user → plain link",
       "preview": "{\"rich\":\"0a0c74656c6c6f6d692e75736572120774656c6c6f6d693002\",\"title\":\"@app\",\"url\":\"https://tell.cc/app\"}",
@@ -299,7 +299,7 @@
     },
     {
       "body": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.group\",\"route\":\"group\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"group\",\"title\":\"周末爬山群\",\"member_count\":12},\"lookalike\":null,\"show_image\":true,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.group\",\"route\":\"group\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"group\",\"title\":\"周末爬山群\",\"member_count\":12},\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "group: name from the snapshot, member count from a rich that agrees",
       "preview": "{\"has_image\":true,\"rich\":\"0a0d74656c6c6f6d692e67726f7570120774656c6c6f6d692a120a0c6d656d6265725f636f756e7412023132\",\"title\":\"周末爬山群\",\"url\":\"https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"}",
@@ -307,7 +307,7 @@
     },
     {
       "body": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":\"no_title\"}",
+      "card": "{\"level\":\"plain_link\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":\"no_title\"}",
       "message": "{}",
       "name": "group without a name → plain link",
       "preview": "{\"url\":\"https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"}",
@@ -315,7 +315,7 @@
     },
     {
       "body": "https://tell.cc/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz",
-      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.call\",\"route\":\"call\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"call\",\"title\":null},\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.call\",\"route\":\"call\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"call\",\"title\":null},\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "call link without a room name is still a card",
       "preview": "{\"url\":\"https://tell.cc/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz\"}",
@@ -323,7 +323,7 @@
     },
     {
       "body": "https://tell.cc/s#pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000",
-      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.sticker\",\"route\":\"sticker\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"sticker\",\"title\":\"猫猫\",\"sticker_count\":null},\"lookalike\":null,\"show_image\":true,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.sticker\",\"route\":\"sticker\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tell.cc\",\"official_badge\":false,\"first_party\":{\"type\":\"sticker\",\"title\":\"猫猫\",\"sticker_count\":null},\"lookalike\":null,\"show_image\":true,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "sticker pack",
       "preview": "{\"has_image\":true,\"title\":\"猫猫\",\"url\":\"https://tell.cc/s#pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000\"}",
@@ -331,7 +331,7 @@
     },
     {
       "body": "https://tellomi.app/security",
-      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.official\",\"route\":\"official\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tellomi.app\",\"official_badge\":true,\"first_party\":{\"type\":\"official\",\"path\":\"/security\"},\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.official\",\"route\":\"official\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tellomi.app\",\"official_badge\":true,\"first_party\":{\"type\":\"official\",\"path\":\"/security\"},\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "§6.1 official card: badge from the host, fixed text + path, nothing the sender wrote",
       "preview": "{\"has_image\":true,\"rich\":\"0a1074656c6c6f6d692e6f6666696369616c120774656c6c6f6d693002\",\"title\":\"Tellomi 安全中心：账号异常，请回复验证码\",\"url\":\"https://tellomi.app/security\"}",
@@ -339,7 +339,7 @@
     },
     {
       "body": "https://tellomi.app/账号异常请回复验证码",
-      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.official\",\"route\":\"official\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tellomi.app\",\"official_badge\":true,\"first_party\":{\"type\":\"official\",\"path\":\"/%E8%B4%A6%E5%8F%B7%E5%BC%82%E5%…\"},\"lookalike\":null,\"show_image\":false,\"tintable\":false,\"payment\":false,\"reason\":null}",
+      "card": "{\"level\":\"first_party\",\"provider\":\"tellomi\",\"provider_name\":{\"zh-Hans\":\"Tellomi\",\"en\":\"Tellomi\"},\"kind\":\"tellomi.official\",\"route\":\"official\",\"title\":null,\"description\":null,\"attrs\":[],\"domain\":\"tellomi.app\",\"official_badge\":true,\"first_party\":{\"type\":\"official\",\"path\":\"/%E8%B4%A6%E5%8F%B7%E5%BC%82%E5%…\"},\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":false,\"payment\":false,\"reason\":null}",
       "message": "{}",
       "name": "§6.1 official path is shown encoded and truncated, never decoded",
       "preview": "{\"title\":\"x\",\"url\":\"https://tellomi.app/账号异常请回复验证码\"}",
@@ -347,7 +347,7 @@
     },
     {
       "body": "https://tellomi-support.net/security",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"Tellomi 安全中心\",\"description\":null,\"attrs\":[],\"domain\":\"tellomi-support.net\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"Tellomi 安全中心\",\"description\":null,\"attrs\":[],\"domain\":\"tellomi-support.net\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
       "message": "{}",
       "name": "§6.1 impersonating first party / the badge from another host (canonical_url says tellomi.app) → generic, no badge",
       "preview": "{\"rich\":\"0a1074656c6c6f6d692e6f6666696369616c120774656c6c6f6d69221c68747470733a2f2f74656c6c6f6d692e6170702f73656375726974793002\",\"title\":\"Tellomi 安全中心\",\"url\":\"https://tellomi-support.net/security\"}",
@@ -355,7 +355,7 @@
     },
     {
       "body": "https://www.tellomi.app/security",
-      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"Tellomi\",\"description\":null,\"attrs\":[],\"domain\":\"tellomi.app\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
+      "card": "{\"level\":\"generic\",\"provider\":null,\"provider_name\":null,\"kind\":null,\"route\":null,\"title\":\"Tellomi\",\"description\":null,\"attrs\":[],\"domain\":\"tellomi.app\",\"official_badge\":false,\"first_party\":null,\"lookalike\":null,\"show_image\":false,\"icon\":null,\"tintable\":true,\"payment\":false,\"reason\":\"no_provider\"}",
       "message": "{}",
       "name": "an official host the registry has not enabled (www.tellomi.app) is an ordinary page",
       "preview": "{\"rich\":\"0a1074656c6c6f6d692e6f6666696369616c120774656c6c6f6d693002\",\"title\":\"Tellomi\",\"url\":\"https://www.tellomi.app/security\"}",
@@ -423,6 +423,20 @@
       "layout": "icon",
       "level": "brand",
       "width": 1200
+    },
+    {
+      "height": 114,
+      "kind": "product",
+      "layout": "icon",
+      "level": "brand",
+      "width": 114
+    },
+    {
+      "height": 0,
+      "kind": "product",
+      "layout": "no_image",
+      "level": "brand",
+      "width": 0
     },
     {
       "height": 630,
