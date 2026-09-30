@@ -133,6 +133,9 @@ pub(crate) struct Provider {
     pub id: String,
     pub name: LocalizedName,
     pub tier: Tier,
+    /// Bundled brand-shell icon: a file name under `links/icons/` (ADR-0063 §九.6). The clients ship
+    /// the files; this crate only carries the name (its shape is checked at load).
+    pub icon: Option<String>,
     /// Payment / ride-hailing (by category or by any route's kind): brand only, browser only (L10).
     pub locked: bool,
     pub domains: Vec<String>,
@@ -1190,6 +1193,7 @@ impl Loader {
                 en: f.name.en.clone(),
             },
             tier,
+            icon: f.icon.clone(),
             locked,
             domains: f.domains.clone(),
             short_domains: f.short_domains.clone(),

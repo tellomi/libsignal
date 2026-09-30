@@ -50,14 +50,14 @@
       "preview": {"url": "https://item.taobao.com/item.htm?id=100032608854", "title": "iPhone 18 Pro 5 折", "has_image": true,
         "rich": {"kind": "product", "provider": "taobao", "level": 2, "attrs": [["price", "1"]]}},
       "body": "https://item.taobao.com/item.htm?id=100032608854",
-      "expect": {"level": "brand", "provider": "taobao", "kind": "product", "attrs": [], "title": null, "show_image": false, "payment": false}
+      "expect": {"level": "brand", "provider": "taobao", "kind": "product", "attrs": [], "title": null, "show_image": false, "icon": "taobao.png", "tintable": true, "payment": false}
     },
     {
       "name": "payment platform: brand, locked, never tinted",
       "preview": {"url": "https://render.alipay.com/p/f/fd-j5rqp49m/index.html", "title": "支付宝",
         "rich": {"kind": "web", "provider": "alipay", "level": 1}},
       "body": "https://render.alipay.com/p/f/fd-j5rqp49m/index.html",
-      "expect": {"level": "brand", "kind": "web", "payment": true, "tintable": false}
+      "expect": {"level": "brand", "kind": "web", "icon": null, "payment": true, "tintable": false}
     },
     {
       "name": "§6.1 provider does not match the URL → drop rich, generic",
