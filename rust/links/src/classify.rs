@@ -109,6 +109,9 @@ pub struct Card {
     /// Download and show `Preview.image` (§7.4: not for plain links, brand shells, user and
     /// official cards).
     pub show_image: bool,
+    /// Brand shell only: the bundled icon's file name (`links/icons/`), drawn by the client from
+    /// its own package and never fetched (ADR-0063 §5.1, §九.6). `None` = name + domain only.
+    pub icon: Option<String>,
     /// Colour from the image (card-visual §3.3): third-party cards only; never first-party,
     /// payment, or anything in a message request (the client knows the last one).
     pub tintable: bool,
@@ -134,6 +137,7 @@ impl Card {
             first_party: None,
             lookalike: None,
             show_image: false,
+            icon: None,
             tintable: false,
             payment: false,
             reason: Some(reason),
@@ -355,6 +359,11 @@ impl Registry {
             first_party: None,
             lookalike: None,
             show_image: structured && preview.has_image,
+            icon: if structured {
+                None
+            } else {
+                provider.icon.clone()
+            },
             tintable: !provider.locked,
             payment: provider.locked,
             reason: None,
