@@ -180,6 +180,10 @@ fn generate() -> Value {
         (100, 100, "", "generic"),
         (0, 0, "", "generic"),
         (1200, 630, "product", "brand"),
+        // A brand shell asks with its bundled icon's size (card-visual §3.9): an icon card; without
+        // an icon it asks with 0 × 0: no image.
+        (114, 114, "product", "brand"),
+        (0, 0, "product", "brand"),
         (1200, 630, "tellomi.group", "first_party"),
     ];
     // A 4×4 image: three quarters orange, one quarter transparent.
