@@ -54,6 +54,7 @@ mod registry;
 mod rich;
 mod spoof;
 mod suffix;
+mod text;
 mod time;
 mod urlx;
 mod visual;

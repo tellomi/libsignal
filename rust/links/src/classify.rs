@@ -154,9 +154,11 @@ pub struct ReceiveCheck {
     pub keep_rich: bool,
 }
 
+/// Sender-written text as it may be shown (ADR-0063 §6.1: zero-width and bidi control characters
+/// handled, see `text`); `None` when nothing visible is left.
 fn non_empty(s: &Option<String>) -> Option<String> {
-    s.as_ref()
-        .map(|t| t.trim().to_owned())
+    s.as_deref()
+        .map(crate::text::display_text)
         .filter(|t| !t.is_empty())
 }
 
