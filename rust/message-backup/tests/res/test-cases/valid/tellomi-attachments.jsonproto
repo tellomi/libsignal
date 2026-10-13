@@ -1,5 +1,6 @@
-// Tellomi (ADR-0068 §4.5 / §4.7): an attachment shown as a file, a covered one, a live photo,
-// and the caption above the media. Validators must know these fields (no unknown fields).
+// Tellomi (ADR-0068 §4.5 / §4.7, ADR-0075): an attachment shown as a file, a covered one, a live
+// photo, the caption above the media, a per-media caption and the caption for the whole message.
+// Validators must know these fields (no unknown fields).
 [
   {
     "backupTimeMs": "123456",
@@ -119,6 +120,8 @@
           {
             "pointer": {
               "contentType": "image/jpeg",
+              // ADR-0075: a per-media caption is upstream's FilePointer.caption
+              "caption": "Sunset",
               "locatorInfo": {},
             },
             "tellomi": {
@@ -140,6 +143,8 @@
         ],
         "tellomi": {
           "captionAboveMedia": true,
+          // ADR-0075: the caption for the whole message
+          "messageCaption": "Caption drawn above the pictures",
         },
       },
     }
