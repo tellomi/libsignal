@@ -691,7 +691,9 @@ mod test {
             attachment
                 .try_into_with(&TestContext::default())
                 .map(|_: MessageAttachment| ()),
-            Err(MessageAttachmentError::TellomiLivePhotoVideo(FilePointerError::NoLocatorInfo))
+            Err(MessageAttachmentError::TellomiLivePhotoVideo(
+                FilePointerError::NoLocatorInfo
+            ))
         );
     }
 }
