@@ -576,6 +576,16 @@ message StandardMessage {
   repeated LinkPreview linkPreview = 4;
   optional FilePointer longText = 5;
   repeated Reaction reactions = 6;
+  // Tellomi (ADR-0068 §4.7): caption above the media. Field numbers from 1000
+  // on are Tellomi's (docs/signal/VERSIONS.md in tellomi/tellomi).
+  optional TellomiStandardMessage tellomi = 1000;
+}
+
+// Tellomi (ADR-0068 §4.7), same as SignalService.TellomiDataMessage.
+message TellomiStandardMessage {
+  // The body is drawn above the media instead of below. Only meaningful with
+  // a body and at least one image / video shown as media; ignored otherwise.
+  bool captionAboveMedia = 1;
 }
 
 message ContactMessage {
@@ -777,6 +787,22 @@ message MessageAttachment {
   // Cross-client identifier for this attachment among all attachments on the
   // owning message. See: SignalService.AttachmentPointer.clientUuid.
   optional bytes clientUuid = 4;
+  // Tellomi (ADR-0068 §4.5): how it is presented. Field numbers from 1000 on
+  // are Tellomi's (docs/signal/VERSIONS.md in tellomi/tellomi).
+  optional TellomiAttachment tellomi = 1001;
+}
+
+// Tellomi (ADR-0068 §4.1 / §4.5), same fields as SignalService.TellomiAttachment.
+// Combinations a receiver would ignore (a spoiler on something sent as a file,
+// a live photo video on a video, ...) are kept as they are: importers apply the
+// same rules as when the message was received.
+message TellomiAttachment {
+  // Shown as a file row: original bytes and file name.
+  bool asFile = 1;
+  // Covered until tapped. Whether it was uncovered on a device is not backed up.
+  bool spoiler = 2;
+  // The moving half (video) of a live photo whose still is this attachment.
+  FilePointer livePhotoVideo = 3;
 }
 
 message FilePointer {

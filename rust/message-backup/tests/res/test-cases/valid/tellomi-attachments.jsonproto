@@ -1,0 +1,147 @@
+// Tellomi (ADR-0068 §4.5 / §4.7): an attachment shown as a file, a covered one, a live photo,
+// and the caption above the media. Validators must know these fields (no unknown fields).
+[
+  {
+    "backupTimeMs": "123456",
+    "version": "1",
+    "mediaRootBackupKey": "q6urq6urq6urq6urq6urq6urq6urq6urq6urq6urq6s=",
+  },
+  {
+    "account": {
+      "profileKey": "YQKRq+3DQklInaOaMcmlzZnN0m/1hzLiaONX7gB12dg=",
+      "givenName": "Boba",
+      "familyName": "Fett",
+      "avatarUrlPath": "",
+      "accountSettings": {
+        "readReceipts": false,
+        "sealedSenderIndicators": true,
+        "typingIndicators": false,
+        "linkPreviews": false,
+        "notDiscoverableByPhoneNumber": false,
+        "preferContactAvatars": false,
+        "universalExpireTimerSeconds": 0,
+        "preferredReactionEmoji": [],
+        "displayBadgesOnProfile": false,
+        "keepMutedChatsArchived": false,
+        "hasSetMyStoriesPrivacy": false,
+        "hasViewedOnboardingStory": false,
+        "storiesDisabled": false,
+        "storyViewReceiptsEnabled": false,
+        "hasSeenGroupStoryEducationSheet": false,
+        "hasCompletedUsernameOnboarding": false,
+        "phoneNumberSharingMode": "NOBODY",
+        "defaultSentMediaQuality": "STANDARD",
+        "appTheme": "SYSTEM",
+        "callsUseLessDataSetting": "MOBILE_DATA_ONLY"
+      },
+      "androidSpecificSettings": {
+        "useSystemEmoji": true,
+        "screenshotSecurity": true,
+        "navigationBarSize": "NORMAL"
+      }
+    }
+  },
+  {
+    "recipient": {
+      "id": "1",
+      "self": {}
+    }
+  },
+  {
+    "recipient": {
+      "id": "2",
+      "releaseNotes": {}
+    }
+  },
+  {
+    "recipient": {
+      "id": "3",
+      "distributionList": {
+        "distributionId": "AAAAAAAAAAAAAAAAAAAAAA==",
+        "distributionList": {
+          "allowReplies": true,
+          "memberRecipientIds": [],
+          "name": "My Story",
+          "privacyMode": "ALL"
+        }
+      }
+    }
+  },
+  {
+    "recipient": {
+      "id": "4",
+      "contact": {
+        "aci": "X4xWjQEZR72BqruHybcZlQ==",
+        "profileKey": "YtHHVK+Wo4nPcVpWhC3roMEDu2Tw6kYc9JpLRMq1Q94=",
+        "profileSharing": true,
+        "profileFamilyName": "Solo",
+        "profileGivenName": "Han",
+        "registered": {},
+        "hideStory": false,
+      }
+    }
+  },
+  {
+    "chat": {
+      "id": 1,
+      "recipientId": 4, // Han Solo
+      "archived": false,
+      "markedUnread": false,
+      "dontNotifyForMentionsIfMuted": false,
+    }
+  },
+  {
+    "chatItem": {
+      "authorId": 4,
+      "chatId": 1,
+      "dateSent": 3000,
+      "incoming": {
+        "dateReceived": 3002,
+        "dateServerSent": 3001,
+        "read": true,
+        "sealedSender": true,
+      },
+      "standardMessage": {
+        "text": {
+          "body": "Caption drawn above the pictures",
+        },
+        "attachments": [
+          {
+            "pointer": {
+              "contentType": "image/heic",
+              "fileName": "IMG_0001.HEIC",
+              "locatorInfo": {},
+            },
+            "tellomi": {
+              "asFile": true,
+            },
+          },
+          {
+            "pointer": {
+              "contentType": "image/jpeg",
+              "locatorInfo": {},
+            },
+            "tellomi": {
+              "spoiler": true,
+            },
+          },
+          {
+            "pointer": {
+              "contentType": "image/jpeg",
+              "locatorInfo": {},
+            },
+            "tellomi": {
+              "livePhotoVideo": {
+                "contentType": "video/mp4",
+                "locatorInfo": {},
+              },
+            },
+          },
+        ],
+        "tellomi": {
+          "captionAboveMedia": true,
+        },
+      },
+    }
+  },
+]
