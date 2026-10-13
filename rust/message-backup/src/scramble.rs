@@ -971,6 +971,7 @@ impl Visit<Scrambler> for proto::StandardMessage {
             linkPreview,
             longText,
             reactions,
+            tellomi: _,
             special_fields: _,
         } = self;
 
@@ -1076,12 +1077,26 @@ impl Visit<Scrambler> for proto::MessageAttachment {
             flag: _,
             wasDownloaded: _,
             clientUuid,
+            tellomi,
             special_fields: _,
         } = self;
         pointer.accept(visitor);
         if let Some(uuid) = clientUuid {
             visitor.replace_service_id(uuid);
         }
+        tellomi.accept(visitor);
+    }
+}
+
+impl Visit<Scrambler> for proto::TellomiAttachment {
+    fn accept(&mut self, visitor: &mut Scrambler) {
+        let Self {
+            asFile: _,
+            spoiler: _,
+            livePhotoVideo,
+            special_fields: _,
+        } = self;
+        livePhotoVideo.accept(visitor);
     }
 }
 
