@@ -40,16 +40,20 @@ pub struct StandardMessage<Recipient> {
 #[cfg_attr(test, derive(PartialEq))]
 pub struct TellomiStandardMessage {
     pub caption_above_media: bool,
+    /// ADR-0075: the caption for the whole message; per-media captions are in each file pointer.
+    pub message_caption: Option<String>,
 }
 
 impl From<proto::TellomiStandardMessage> for TellomiStandardMessage {
     fn from(value: proto::TellomiStandardMessage) -> Self {
         let proto::TellomiStandardMessage {
             captionAboveMedia,
+            messageCaption,
             special_fields: _,
         } = value;
         Self {
             caption_above_media: captionAboveMedia,
+            message_caption: Some(messageCaption).filter(|caption| !caption.is_empty()),
         }
     }
 }
@@ -236,6 +240,30 @@ mod test {
             message.tellomi,
             Some(TellomiStandardMessage {
                 caption_above_media: true,
+                message_caption: None,
+            })
+        );
+    }
+
+    /// Tellomi (ADR-0075)
+    #[test]
+    fn tellomi_message_caption() {
+        let message = proto::StandardMessage {
+            tellomi: Some(proto::TellomiStandardMessage {
+                messageCaption: "Trip".into(),
+                ..Default::default()
+            })
+            .into(),
+            ..proto::StandardMessage::test_data()
+        };
+        let message: StandardMessage<FullRecipientData> = message
+            .try_into_with(&TestContext::default())
+            .expect("valid");
+        assert_eq!(
+            message.tellomi,
+            Some(TellomiStandardMessage {
+                caption_above_media: false,
+                message_caption: Some("Trip".into()),
             })
         );
     }
