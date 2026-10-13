@@ -604,6 +604,9 @@ message TellomiStandardMessage {
   // The body is drawn above the media instead of below. Only meaningful with
   // a body and at least one image / video shown as media; ignored otherwise.
   bool captionAboveMedia = 1;
+  // ADR-0075: the caption for the whole message (input box). Per-media captions
+  // travel in FilePointer.caption. Empty means none.
+  string messageCaption = 2;
 }
 
 message ContactMessage {
