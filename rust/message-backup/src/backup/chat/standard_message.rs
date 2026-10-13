@@ -29,7 +29,29 @@ pub struct StandardMessage<Recipient> {
     pub reactions: ReactionSet<Recipient>,
     pub link_previews: Vec<LinkPreview>,
     pub long_text: Option<Box<FilePointer>>,
+    /// Tellomi (ADR-0068 §4.7). Left out of the serialized form when absent.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tellomi: Option<TellomiStandardMessage>,
     _limit_construction_to_module: (),
+}
+
+/// Validated version of [`proto::TellomiStandardMessage`] (Tellomi, ADR-0068 §4.7).
+#[derive(Debug, serde::Serialize)]
+#[cfg_attr(test, derive(PartialEq))]
+pub struct TellomiStandardMessage {
+    pub caption_above_media: bool,
+}
+
+impl From<proto::TellomiStandardMessage> for TellomiStandardMessage {
+    fn from(value: proto::TellomiStandardMessage) -> Self {
+        let proto::TellomiStandardMessage {
+            captionAboveMedia,
+            special_fields: _,
+        } = value;
+        Self {
+            caption_above_media: captionAboveMedia,
+        }
+    }
 }
 
 impl<R: Clone, C: LookupPair<RecipientId, MinimalRecipientData, R> + ReportUnusualTimestamp>
@@ -45,10 +67,13 @@ impl<R: Clone, C: LookupPair<RecipientId, MinimalRecipientData, R> + ReportUnusu
             reactions,
             linkPreview,
             longText,
+            tellomi,
             special_fields: _,
         } = self;
 
         let reactions = reactions.try_into_with(context)?;
+
+        let tellomi = tellomi.into_option().map(TellomiStandardMessage::from);
 
         let quote = quote
             .into_option()
@@ -105,6 +130,7 @@ impl<R: Clone, C: LookupPair<RecipientId, MinimalRecipientData, R> + ReportUnusu
             reactions,
             link_previews,
             long_text: long_text.map(Box::new),
+            tellomi,
             _limit_construction_to_module: (),
         })
     }
@@ -152,6 +178,7 @@ mod test {
                 quote: Some(Box::new(Quote::from_proto_test_data())),
                 long_text: Some(Box::new(FilePointer::default())),
                 link_previews: vec![],
+                tellomi: None,
                 _limit_construction_to_module: (),
             }
         }
@@ -189,5 +216,27 @@ mod test {
         message
             .try_into_with(&TestContext::default())
             .map(|_: StandardMessage<FullRecipientData>| ())
+    }
+
+    /// Tellomi (ADR-0068 §4.7)
+    #[test]
+    fn tellomi_caption_above_media() {
+        let message = proto::StandardMessage {
+            tellomi: Some(proto::TellomiStandardMessage {
+                captionAboveMedia: true,
+                ..Default::default()
+            })
+            .into(),
+            ..proto::StandardMessage::test_data()
+        };
+        let message: StandardMessage<FullRecipientData> = message
+            .try_into_with(&TestContext::default())
+            .expect("valid");
+        assert_eq!(
+            message.tellomi,
+            Some(TellomiStandardMessage {
+                caption_above_media: true,
+            })
+        );
     }
 }
