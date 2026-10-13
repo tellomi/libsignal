@@ -57,6 +57,8 @@ impl<R: Clone, C: LookupPair<RecipientId, MinimalRecipientData, R> + ReportUnusu
             attachments,
             linkPreview,
             longText,
+            // Tellomi: caption above media means nothing on a voice message
+            tellomi: _,
             special_fields: _,
         } = self;
 
