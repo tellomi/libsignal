@@ -299,8 +299,22 @@ pub struct MessageAttachment {
     #[serde_as(as = "serialize::EnumAsString")]
     pub flag: proto::message_attachment::Flag,
     pub client_uuid: Option<Uuid>,
+    /// Tellomi (ADR-0068 §4.5). Left out of the serialized form when absent.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tellomi: Option<TellomiAttachment>,
     #[serde(skip)]
     _limit_construction_to_module: (),
+}
+
+/// Validated version of [`proto::TellomiAttachment`] (Tellomi, ADR-0068 §4.1 / §4.5).
+///
+/// Combinations a receiver ignores are kept as they are; importers apply the receiving rules.
+#[derive(Debug, serde::Serialize)]
+#[cfg_attr(test, derive(Default, PartialEq))]
+pub struct TellomiAttachment {
+    pub as_file: bool,
+    pub spoiler: bool,
+    pub live_photo_video: Option<Box<FilePointer>>,
 }
 
 #[derive(Debug, displaydoc::Display, thiserror::Error)]
@@ -312,6 +326,8 @@ pub enum MessageAttachmentError {
     FilePointer(#[from] FilePointerError),
     /// clientUuid is present but invalid
     InvalidUuid,
+    /// Tellomi live photo video: {0}
+    TellomiLivePhotoVideo(FilePointerError),
 }
 
 impl<C: ReportUnusualTimestamp + ?Sized> TryIntoWith<MessageAttachment, C>
@@ -325,6 +341,7 @@ impl<C: ReportUnusualTimestamp + ?Sized> TryIntoWith<MessageAttachment, C>
             flag,
             clientUuid,
             wasDownloaded: _,
+            tellomi,
             special_fields: _,
         } = self;
 
@@ -338,11 +355,44 @@ impl<C: ReportUnusualTimestamp + ?Sized> TryIntoWith<MessageAttachment, C>
             .ok_or(MessageAttachmentError::NoFilePointer)?
             .try_into_with(context)?;
 
+        let tellomi = tellomi
+            .into_option()
+            .map(|tellomi| tellomi.try_into_with(context))
+            .transpose()?;
+
         Ok(MessageAttachment {
             pointer,
             flag: flag.enum_value_or_default(),
             client_uuid,
+            tellomi,
             _limit_construction_to_module: (),
+        })
+    }
+}
+
+impl<C: ReportUnusualTimestamp + ?Sized> TryIntoWith<TellomiAttachment, C>
+    for proto::TellomiAttachment
+{
+    type Error = MessageAttachmentError;
+
+    fn try_into_with(self, context: &C) -> Result<TellomiAttachment, Self::Error> {
+        let proto::TellomiAttachment {
+            asFile,
+            spoiler,
+            livePhotoVideo,
+            special_fields: _,
+        } = self;
+
+        let live_photo_video = livePhotoVideo
+            .into_option()
+            .map(|pointer| pointer.try_into_with(context))
+            .transpose()
+            .map_err(MessageAttachmentError::TellomiLivePhotoVideo)?;
+
+        Ok(TellomiAttachment {
+            as_file: asFile,
+            spoiler,
+            live_photo_video: live_photo_video.map(Box::new),
         })
     }
 }
@@ -589,6 +639,7 @@ mod test {
                 pointer: FilePointer::default(),
                 client_uuid: Some(uuid::Uuid::from_bytes(proto::MessageAttachment::TEST_UUID)),
                 flag: Default::default(),
+                tellomi: None,
                 _limit_construction_to_module: (),
             }
         }
@@ -599,5 +650,48 @@ mod test {
                 ..Self::from_proto_test_data()
             }
         }
+    }
+
+    /// Tellomi (ADR-0068 §4.5)
+    #[test]
+    fn tellomi_attachment() {
+        let attachment = proto::MessageAttachment {
+            tellomi: Some(proto::TellomiAttachment {
+                spoiler: true,
+                livePhotoVideo: Some(proto::FilePointer::minimal_test_data()).into(),
+                ..Default::default()
+            })
+            .into(),
+            ..proto::MessageAttachment::test_data()
+        };
+        let attachment: MessageAttachment = attachment
+            .try_into_with(&TestContext::default())
+            .expect("valid");
+        assert_eq!(
+            attachment.tellomi,
+            Some(TellomiAttachment {
+                as_file: false,
+                spoiler: true,
+                live_photo_video: Some(Box::new(FilePointer::default())),
+            })
+        );
+    }
+
+    #[test]
+    fn tellomi_live_photo_video_is_checked_like_any_file() {
+        let attachment = proto::MessageAttachment {
+            tellomi: Some(proto::TellomiAttachment {
+                livePhotoVideo: Some(proto::FilePointer::default()).into(),
+                ..Default::default()
+            })
+            .into(),
+            ..proto::MessageAttachment::test_data()
+        };
+        assert_eq!(
+            attachment
+                .try_into_with(&TestContext::default())
+                .map(|_: MessageAttachment| ()),
+            Err(MessageAttachmentError::TellomiLivePhotoVideo(FilePointerError::NoLocatorInfo))
+        );
     }
 }
