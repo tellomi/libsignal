@@ -255,6 +255,42 @@ impl Registry {
         };
         let provider = &self.providers[pid];
         let Some(rich) = rich else {
+            if provider.tier == Tier::Claimed && !short {
+                // Owner 2026-10-19, "claimed but fetched": the sender fetched the page like a
+                // generic link and sends no `rich`. The card is the page's own snapshot plus the
+                // platform's bundled icon; without a title it is the platform's brand shell.
+                return match title {
+                    Some(title) => Card {
+                        level: Level::Generic,
+                        title: Some(title),
+                        description: non_empty(&preview.description),
+                        domain,
+                        show_image: preview.has_image,
+                        icon: provider.icon.clone(),
+                        tintable: !provider.locked,
+                        payment: provider.locked,
+                        reason: Some("claimed"),
+                        ..Card::plain("claimed")
+                    },
+                    None => Card {
+                        level: Level::Brand,
+                        provider: Some(provider.id.clone()),
+                        provider_name: Some(provider.name.clone()),
+                        kind: Some(
+                            m.route
+                                .map_or(WEB, |r| provider.routes[r].kind.as_str())
+                                .to_owned(),
+                        ),
+                        route: m.route.map(|r| provider.routes[r].id.clone()),
+                        domain,
+                        icon: provider.icon.clone(),
+                        tintable: !provider.locked,
+                        payment: provider.locked,
+                        reason: Some("claimed_no_title"),
+                        ..Card::plain("claimed_no_title")
+                    },
+                };
+            }
             return generic("no_rich");
         };
         // A rich whose schema this build does not know, or whose kind it cannot render, is

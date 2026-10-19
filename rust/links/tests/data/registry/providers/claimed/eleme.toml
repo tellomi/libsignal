@@ -3,11 +3,14 @@
 schema = 1
 id = "eleme"
 name = { zh-Hans = "淘宝闪购（饿了么）", en = "Ele.me" }
-tier = "brand"
+# 2026-10-19（owner 定，#claimed-tier）：从 brand 挪到 claimed——注册表仍认领（随包图标、http / 没写协议的链接按 https 出卡片、仿冒提醒、
+# 打开规则照旧），但发送端像普通链接一样抓页面（标题、描述、图片或站点图标）；页面没给标题（风控页、JS 页）时退回品牌壳。
+# 2026-10-19 本机实测（WhatsApp/2 UA）：og:title、描述、og:image 都有（淘宝闪购）。
+tier = "claimed"
 category = "local"
 icon = "eleme.png"
 # 饿了么 2025 年起叫「淘宝闪购」，www.ele.me 跳到 taobaoshangou.ele.me。u.ele.me 是分享短链（302）。
-domains = ["*.ele.me"]
+domains = ["ele.me", "*.ele.me"]
 short_domains = ["u.ele.me"]
 strip_params = ["o2i_shortlink", "spm", "from", "configKey", "scene"]
 evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「饿了么（已更名「淘宝闪购」）」（C 档）；2026-09-27 首批复核（#1419 PR）"

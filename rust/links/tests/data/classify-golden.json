@@ -349,6 +349,18 @@
         "rich": {"kind": "tellomi.group", "provider": "tellomi"}},
       "body": "https://tell.cc/g#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
       "expect": {"level": "first_party", "first_party": {"type": "group", "title": "周末爬山群"}}
+    },
+    {
+      "name": "claimed tier (2026-10-19), no rich: the page's own card with the platform icon",
+      "preview": {"url": "https://item.taobao.com/item.htm?id=100032608854", "title": "某某商品", "has_image": true},
+      "body": "https://item.taobao.com/item.htm?id=100032608854",
+      "expect": {"level": "generic", "provider": null, "title": "某某商品", "show_image": true, "icon": "taobao.png", "tintable": true, "payment": false}
+    },
+    {
+      "name": "claimed tier (2026-10-19), no rich, no title: the platform's brand shell",
+      "preview": {"url": "https://item.taobao.com/item.htm?id=100032608854", "has_image": false},
+      "body": "https://item.taobao.com/item.htm?id=100032608854",
+      "expect": {"level": "brand", "provider": "taobao", "kind": "product", "title": null, "show_image": false, "icon": "taobao.png"}
     }
   ]
 }
