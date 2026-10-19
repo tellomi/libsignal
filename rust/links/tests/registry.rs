@@ -31,12 +31,12 @@ fn draft_registry_loads_cleanly() {
     );
 }
 
-/// The build output itself (`links/dist/links-2026092702.json`, payload = {kinds, providers}).
+/// The build output itself (`links/dist/links-2026101901.json`, payload = {kinds, providers}).
 #[test]
 fn the_built_dist_envelope_loads() {
     let registry =
-        Registry::load(&read("registry/dist/links-2026092702.json")).expect("dist loads");
-    assert_eq!(registry.version(), 2026092702);
+        Registry::load(&read("registry/dist/links-2026101901.json")).expect("dist loads");
+    assert_eq!(registry.version(), 2026101901);
     assert_eq!(
         (registry.provider_count(), registry.route_count()),
         (30, 74)
@@ -204,7 +204,7 @@ fn every_bad_sample_is_refused_for_the_rule_it_breaks() {
         .map(|e| e.expect("entry").path())
         .collect();
     cases.sort();
-    assert_eq!(cases.len(), 20);
+    assert_eq!(cases.len(), 21);
     for dir in cases {
         let name = dir
             .file_name()

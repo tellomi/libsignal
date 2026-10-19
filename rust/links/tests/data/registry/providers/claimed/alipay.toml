@@ -2,9 +2,12 @@
 schema = 1
 id = "alipay"
 name = { zh-Hans = "支付宝", en = "Alipay" }
-tier = "brand"
+# 2026-10-19（owner 定，#claimed-tier）：从 brand 挪到 claimed——注册表仍认领（随包图标、http / 没写协议的链接按 https 出卡片、仿冒提醒、
+# 打开规则照旧），但发送端像普通链接一样抓页面（标题、描述、图片或站点图标）；页面没给标题（风控页、JS 页）时退回品牌壳。
+# 2026-10-19 本机实测（WhatsApp/2 UA）：首页有标题和描述；render 页有标题。支付类照旧不着色、只在浏览器打开（L10 的 locked 不变）。
+tier = "claimed"
 category = "payment"
 # ur.alipay.com 是分享短链（302 到 render.alipay.com/p/s/i/?scheme=alipays://…）。支付类链接不展开（不为它多发请求），
 # 放在 domains 里直接出品牌壳；qr.alipay.com 这类收款码也被通配盖住，同样只出「打开将跳转到支付宝」。官网没有声明 apple-touch-icon，不配图标。
-domains = ["*.alipay.com"]
+domains = ["alipay.com", "*.alipay.com"]
 evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「支付宝」；2026-09-27 首批复核（#1419 PR）"

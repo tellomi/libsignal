@@ -520,7 +520,7 @@ fn brand_tier_sends_nothing_and_says_only_the_platform_name() {
     };
     let r = run_with(
         &base_registry(),
-        "https://item.taobao.com/item.htm?id=100032608854",
+        "https://weibo.com/2803301701/NEfBc8VJE",
         &ctx,
         &Script::default(),
         None,
@@ -534,11 +534,11 @@ fn brand_tier_sends_nothing_and_says_only_the_platform_name() {
             p.description.as_deref(),
             p.image_url.as_deref()
         ),
-        (Some("淘宝"), None, None)
+        (Some("微博"), None, None)
     );
     assert_eq!(
         (r.rich().kind.as_deref(), r.rich().level),
-        (Some("product"), Some(LEVEL_BRAND))
+        (Some("article"), Some(LEVEL_BRAND))
     );
     let en = SendContext {
         locale: "en-US".into(),
@@ -546,14 +546,14 @@ fn brand_tier_sends_nothing_and_says_only_the_platform_name() {
     };
     let r = run_with(
         &base_registry(),
-        "https://render.alipay.com/p/f/fd-j5rqp49m/index.html",
+        "https://www.dianping.com/shop/2972056",
         &en,
         &Script::default(),
         None,
     );
     assert_eq!(
         r.out.preview.as_ref().unwrap().title.as_deref(),
-        Some("Alipay")
+        Some("Dianping")
     );
     assert_eq!(
         r.rich().kind.as_deref(),
@@ -972,13 +972,10 @@ fn invalid_attrs_are_dropped_one_by_one() {
 
 #[test]
 fn outcomes_serialize_for_the_bridges() {
-    let r = run(
-        "https://item.taobao.com/item.htm?id=100032608854",
-        &Script::default(),
-    );
+    let r = run("https://weibo.com/2803301701/NEfBc8VJE", &Script::default());
     let v = serde_json::to_value(&r.out).expect("serializes");
     assert_eq!(v["level"], "brand");
-    assert_eq!(v["preview"]["rich"]["kind"], "product");
+    assert_eq!(v["preview"]["rich"]["kind"], "article");
     let req = base_registry()
         .begin(BV, &SendContext::default())
         .next_request()
@@ -1042,13 +1039,25 @@ fn hash_routes_fetch_the_rewritten_canonical_url() {
 
 #[test]
 fn js_redirect_short_domains_are_brand_shells_without_a_request() {
-    // m.tb.cn / u.jd.com answer 200 with a JS page and no Location: they sit in `domains`.
+    // m.tb.cn / u.jd.com answer 200 with a JS page and no Location: they sit in `domains`. Both
+    // platforms are `claimed` now (2026-10-19), so the page is asked once; a JS page has no title,
+    // which makes it the platform's brand shell.
     for (url, provider) in [
         ("https://m.tb.cn/h.TBxLfpbarZpWrRH", "taobao"),
         ("https://u.jd.com/EDB3Atu", "jd"),
     ] {
-        let r = run(url, &Script::default());
-        assert!(r.requests.is_empty(), "{url}");
+        let script = Script {
+            replies: HashMap::from([(
+                url.to_owned(),
+                page(
+                    url,
+                    "<script>location.href='https://item.taobao.com/'</script>",
+                ),
+            )]),
+            ..Default::default()
+        };
+        let r = run(url, &script);
+        assert_eq!(r.urls(), vec![url.to_owned()], "{url}");
         assert_eq!(
             (r.out.level, r.out.provider.as_deref()),
             (Level::Brand, Some(provider)),
@@ -1150,6 +1159,7 @@ fn fallback_generic_respects_the_region_gate() {
 #[test]
 fn fallback_generic_is_dropped_where_it_may_not_apply() {
     // Payment / ride-hailing (L10) and tellomi: a compatibility drop back to brand, not a reject.
+    // (Alipay is `claimed` since 2026-10-19; put it back on the brand tier to test the L10 lock.)
     for (id, url, level) in [
         (
             "alipay",
@@ -1158,9 +1168,14 @@ fn fallback_generic_is_dropped_where_it_may_not_apply() {
         ),
         ("tellomi", "https://tell.cc/app", Level::PlainLink),
         // L24: a brand-tier platform (not payment) may not fall through to generic either.
-        ("taobao", "https://item.taobao.com/", Level::Brand),
+        ("weibo", "https://weibo.com/", Level::Brand),
     ] {
-        let registry = with_fallback(id, "generic");
+        let mut providers = base_providers();
+        if id == "alipay" {
+            providers.get_mut(id).unwrap()["tier"] = json!("brand");
+        }
+        providers.get_mut(id).unwrap()["fallback"] = json!("generic");
+        let registry = load_providers(&providers).expect("loads");
         let dropped = registry.degraded_routes();
         assert_eq!(dropped.len(), 1, "{id}: {dropped:?}");
         assert_eq!(
@@ -1188,4 +1203,233 @@ fn fallback_generic_is_dropped_where_it_may_not_apply() {
         None,
     );
     assert_eq!(r.out.level, Level::Brand);
+}
+
+// ------------------------------------------------ claimed tier + declared site icons (owner 2026-10-19)
+
+const JD_ITEM: &str = "https://item.jd.com/10029628045289.html";
+
+#[test]
+fn claimed_tier_fetches_the_page_like_a_generic_link() {
+    let html = r#"<title>【京东】某某手机 12GB+256GB</title><meta name="description" content="京东价 ¥2999">
+        <meta property="og:image" content="https://img14.360buyimg.com/n1/abc.jpg">"#;
+    let script = Script {
+        replies: HashMap::from([(JD_ITEM.to_owned(), page(JD_ITEM, html))]),
+        image_ok: true,
+        ..Default::default()
+    };
+    let r = run(JD_ITEM, &script);
+    assert_eq!(
+        r.urls(),
+        vec![
+            JD_ITEM.to_owned(),
+            "image https://img14.360buyimg.com/n1/abc.jpg".to_owned()
+        ]
+    );
+    assert_eq!(r.out.level, Level::Generic);
+    let p = r.out.preview.as_ref().expect("preview");
+    assert_eq!(p.title.as_deref(), Some("【京东】某某手机 12GB+256GB"));
+    assert_eq!(p.description.as_deref(), Some("京东价 ¥2999"));
+    assert_eq!(
+        p.image_url.as_deref(),
+        Some("https://img14.360buyimg.com/n1/abc.jpg")
+    );
+    assert!(
+        p.rich.is_none() && p.rich_bytes().is_none(),
+        "a generic snapshot carries no rich"
+    );
+}
+
+#[test]
+fn claimed_page_without_a_title_is_the_brand_shell() {
+    let script = Script {
+        replies: HashMap::from([(
+            JD_ITEM.to_owned(),
+            page(JD_ITEM, "<html><body><script>risk()</script></body></html>"),
+        )]),
+        image_ok: true,
+        ..Default::default()
+    };
+    let ctx = SendContext {
+        locale: "zh-Hans".into(),
+        ..Default::default()
+    };
+    let r = run_with(&base_registry(), JD_ITEM, &ctx, &script, None);
+    assert_eq!(
+        r.urls(),
+        vec![JD_ITEM.to_owned()],
+        "no image request for a brand shell"
+    );
+    assert_eq!(
+        (
+            r.out.level,
+            r.out.provider.as_deref(),
+            r.out.kind.as_deref()
+        ),
+        (Level::Brand, Some("jd"), Some("product"))
+    );
+    let p = r.out.preview.as_ref().expect("preview");
+    assert_eq!(
+        (p.title.as_deref(), p.image_url.as_deref()),
+        (Some("京东"), None)
+    );
+    assert_eq!(r.rich().level, Some(LEVEL_BRAND));
+    assert_eq!(r.rich().provider.as_deref(), Some("jd"));
+}
+
+#[test]
+fn claimed_page_must_stay_on_its_provider() {
+    // An open redirect off the platform's hosts must not put another site's title under its icon.
+    let script = Script {
+        replies: HashMap::from([(
+            JD_ITEM.to_owned(),
+            page("https://evil.example.net/x", "<title>中奖了</title>"),
+        )]),
+        ..Default::default()
+    };
+    let r = run(JD_ITEM, &script);
+    assert_eq!(r.out.level, Level::Brand);
+    assert!(r.out.failures.contains(&Failure::WrongHost));
+    // Another host of the same platform is fine (jd.com → global.jd.com).
+    let script = Script {
+        replies: HashMap::from([(
+            "https://jd.com/".to_owned(),
+            page("https://global.jd.com/", "<title>京东全球版</title>"),
+        )]),
+        ..Default::default()
+    };
+    let r = run("https://jd.com/", &script);
+    assert_eq!(r.out.level, Level::Generic);
+}
+
+#[test]
+fn claimed_short_link_expands_then_fetches() {
+    let short = "https://3.cn/CdEyF2";
+    let script = Script {
+        replies: HashMap::from([
+            (short.to_owned(), redirect(JD_ITEM)),
+            (JD_ITEM.to_owned(), page(JD_ITEM, "<title>某某手机</title>")),
+        ]),
+        ..Default::default()
+    };
+    let r = run(short, &script);
+    assert_eq!(r.urls()[..2], [short.to_owned(), JD_ITEM.to_owned()]);
+    assert_eq!(r.out.level, Level::Generic);
+    // An http:// Location identifies only: no plain-text fetch, the brand shell.
+    let script = Script {
+        replies: HashMap::from([(
+            short.to_owned(),
+            redirect("http://item.jd.com/10029628045289.html"),
+        )]),
+        ..Default::default()
+    };
+    let r = run(short, &script);
+    assert_eq!(r.urls(), vec![short.to_owned()]);
+    assert_eq!(r.out.level, Level::Brand);
+}
+
+#[test]
+fn claimed_apex_hosts_are_recognised() {
+    let registry = base_registry();
+    for (url, provider) in [
+        ("https://jd.com/", "jd"),
+        ("https://taobao.com/", "taobao"),
+        ("https://meituan.com/", "meituan"),
+        ("https://ele.me/", "eleme"),
+        ("https://alipay.com/", "alipay"),
+    ] {
+        let got = registry
+            .identify(url, false)
+            .unwrap_or_else(|| panic!("{url}"));
+        assert_eq!(got.provider, provider, "{url}");
+        assert_eq!(got.fallback.as_deref(), Some("generic"), "{url}");
+    }
+}
+
+fn icon_request(html: &str) -> Option<String> {
+    let url = "https://www.zol.com.cn/";
+    let script = Script {
+        replies: HashMap::from([(
+            url.to_owned(),
+            page(url, &format!("<title>站点</title>{html}")),
+        )]),
+        image_ok: true,
+        ..Default::default()
+    };
+    run(url, &script)
+        .urls()
+        .into_iter()
+        .find_map(|u| u.strip_prefix("image ").map(str::to_owned))
+}
+
+#[test]
+fn declared_site_icons_prefer_apple_touch_and_larger() {
+    let base = "https://www.zol.com.cn";
+    // apple-touch-icon beats a larger plain icon; an undeclared touch icon counts as 180 px.
+    assert_eq!(
+        icon_request(
+            r#"<link rel="icon" sizes="192x192" href="/i192.png"><link rel="apple-touch-icon" href="/touch.png">"#
+        ),
+        Some(format!("{base}/touch.png"))
+    );
+    // Among touch icons, the larger.
+    assert_eq!(
+        icon_request(
+            r#"<link rel="apple-touch-icon" sizes="120x120" href="/t120.png"><link rel="apple-touch-icon" sizes="180x180" href="/t180.png">"#
+        ),
+        Some(format!("{base}/t180.png"))
+    );
+    // A plain icon of a usable size beats an undeclared favicon.
+    assert_eq!(
+        icon_request(
+            r#"<link rel="shortcut icon" href="/favicon.ico"><link rel="icon" sizes="96x96" href="/i96.png">"#
+        ),
+        Some(format!("{base}/i96.png"))
+    );
+    // Only an undeclared favicon (baidu's case): use it instead of guessing.
+    assert_eq!(
+        icon_request(r#"<link rel="icon" href="//www.baidu.com/favicon.ico" type="image/x-icon">"#),
+        Some("https://www.baidu.com/favicon.ico".to_owned())
+    );
+    // A favicon of unknown size beats one declared too small.
+    assert_eq!(
+        icon_request(
+            r#"<link rel="icon" sizes="16x16" href="/f16.png"><link rel="icon" href="/favicon.ico">"#
+        ),
+        Some(format!("{base}/favicon.ico"))
+    );
+    // Small ones are still better than nothing, the larger first.
+    assert_eq!(
+        icon_request(
+            r#"<link rel="icon" sizes="16x16" href="/f16.png"><link rel="icon" sizes="32x32" href="/f32.png">"#
+        ),
+        Some(format!("{base}/f32.png"))
+    );
+}
+
+#[test]
+fn unusable_declared_icons_fall_back_to_the_guess() {
+    let guess = Some("https://www.zol.com.cn/apple-touch-icon.png".to_owned());
+    assert_eq!(icon_request(""), guess, "nothing declared");
+    assert_eq!(
+        icon_request(
+            r#"<link rel="icon" type="image/svg+xml" href="/logo.svg"><link rel="icon" href="/mask.SVG?v=2">"#
+        ),
+        guess,
+        "SVG is never picked"
+    );
+    assert_eq!(
+        icon_request(
+            r#"<link rel="apple-touch-icon" href="http://www.zol.com.cn/t.png"><link rel="icon" href="data:image/png;base64,AAAA">"#
+        ),
+        guess,
+        "only https icons"
+    );
+    // An unusable best candidate does not hide a usable one behind it.
+    assert_eq!(
+        icon_request(
+            r#"<link rel="apple-touch-icon" href="http://cdn.zol.com.cn/t.png"><link rel="icon" href="/favicon.ico">"#
+        ),
+        Some("https://www.zol.com.cn/favicon.ico".to_owned())
+    );
 }
