@@ -3,7 +3,10 @@
 schema = 1
 id = "iqiyi"
 name = { zh-Hans = "爱奇艺", en = "iQIYI" }
-tier = "brand"
+# 2026-10-19（owner 定，#claimed-tier）：从 brand 挪到 claimed——注册表仍认领（随包图标、http / 没写协议的链接按 https 出卡片、仿冒提醒、
+# 打开规则照旧），但发送端像普通链接一样抓页面（标题、描述、图片或站点图标）；页面没给标题（风控页、JS 页）时退回品牌壳。
+# 2026-10-19 本机实测（WhatsApp/2 UA）：首页和播放页有标题和描述（Safari UA 的播放页标题更好）。
+tier = "claimed"
 category = "video"
 icon = "iqiyi.png"
 # 视频页只对浏览器 UA 给对象级 OG，对 WhatsApp/2 是站点级 <title>（§3.4.1 → 品牌壳）。没找到分享短链主机；

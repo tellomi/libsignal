@@ -1,12 +1,15 @@
 schema = 1
 id = "taobao"
 name = { zh-Hans = "淘宝", en = "Taobao" }
-tier = "brand"
+# 2026-10-19（owner 定，#claimed-tier）：从 brand 挪到 claimed——注册表仍认领（随包图标、http / 没写协议的链接按 https 出卡片、仿冒提醒、
+# 打开规则照旧），但发送端像普通链接一样抓页面（标题、描述、图片或站点图标）；页面没给标题（风控页、JS 页）时退回品牌壳。
+# 2026-10-19 本机实测（WhatsApp/2 UA）：首页有标题和描述；商品页是空页 / JS 页，没有标题，退回带随包图标的品牌壳。
+tier = "claimed"
 category = "commerce"
 icon = "taobao.png"
 # m.tb.cn / e.tb.cn / s.tb.cn 是 App 分享短链，但 2026-09-27 实测回 200 的 JS 跳转页、没有 Location：展开不出东西，
 # 所以不进 short_domains（进了只会白发一个请求），直接按淘宝品牌壳出。天猫的分享也走 m.tb.cn，同样显示「淘宝」。
-domains = ["*.taobao.com", "m.tb.cn", "e.tb.cn", "s.tb.cn"]
+domains = ["taobao.com", "*.taobao.com", "m.tb.cn", "e.tb.cn", "s.tb.cn"]
 strip_params = ["spm", "tk", "sku_properties", "ali_refid", "ali_trackid", "scm", "pvid", "utparam", "suid", "shareUniqueId", "sourceType", "un", "share_crt_v", "un_site", "ut_sk", "sp_tk", "cpp", "shareurl", "short_name", "bxsign", "app", "tbSocialPopKey", "wxsign", "price", "stats_click"]
 evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「淘宝」（x5secdata 验证码墙，C 档）；2026-09-27 首批复核（#1419 PR）"
 
