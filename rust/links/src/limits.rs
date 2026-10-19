@@ -66,7 +66,8 @@ pub const FIRST_PARTY_KIND_PREFIX: &str = "tellomi.";
 /// An `og:image` whose declared short side is below this is treated as absent, and the one image
 /// request goes to the site icon instead (§4.4 icon fallback).
 pub const SMALL_OG_IMAGE_PX: u32 = 150;
-/// Icons are only picked from `<link>` tags that declare at least this size.
+/// Icons declaring at least this size are preferred; smaller or undeclared ones are a last resort
+/// before the `/apple-touch-icon.png` guess (`html::best_icon`).
 pub const MIN_ICON_PX: u32 = 64;
 
 /// The official card shows the parsed path, never decoded, truncated to this many characters

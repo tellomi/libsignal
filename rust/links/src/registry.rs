@@ -61,6 +61,11 @@ pub enum Tier {
     FirstParty,
     Structured,
     Brand,
+    /// "Claimed but fetched" (owner 2026-10-19): the registry still recognises the platform — its
+    /// bundled icon, http / scheme-less links over https (§5.6), lookalike checks, open rules — but
+    /// the sender fetches the page itself like a generic link (title, description, image or site
+    /// icon). A page that gives no title falls back to the brand shell.
+    Claimed,
 }
 
 #[derive(Debug, Clone)]
@@ -408,7 +413,8 @@ pub struct Identified {
     pub canonical_url: Option<String>,
     pub short: bool,
     /// Only when no route recognised an object on a third-party host: what that link gets —
-    /// `"brand"` (a brand shell) or `"generic"` (the provider's `fallback`, README §3 rule 5).
+    /// `"brand"` (a brand shell) or `"generic"` (the provider's `fallback`, README §3 rule 5, or a
+    /// `claimed` provider: the page is fetched).
     pub fallback: Option<String>,
 }
 
@@ -612,7 +618,7 @@ impl Registry {
             canonical_url: (!short).then_some(m.canonical),
             short,
             fallback: (route.is_none() && !short && !provider.is_tellomi()).then(|| {
-                if provider.fallback_generic {
+                if provider.fallback_generic || provider.tier == Tier::Claimed {
                     "generic"
                 } else {
                     "brand"
@@ -797,7 +803,10 @@ impl Loader {
                 bad(self, format!("name.{lang} length"));
             }
         }
-        if !matches!(f.tier.as_str(), "first-party" | "structured" | "brand") {
+        if !matches!(
+            f.tier.as_str(),
+            "first-party" | "structured" | "brand" | "claimed"
+        ) {
             bad(self, format!("tier {:?}", f.tier));
         }
         if f.domains.is_empty() {
@@ -1015,6 +1024,8 @@ impl Loader {
                 "fetch is not allowed (the UA is always WhatsApp/2)",
             );
         }
+        // L10 is unchanged by the `claimed` tier: payment / ride-hailing stay `brand` (no page
+        // fetch at all), so Alipay / UnionPay keep the brand shell.
         if locked && f.tier != "brand" {
             self.violate("L10", pid, "payment / ride-hailing must be brand");
         }
@@ -1071,6 +1082,7 @@ impl Loader {
         let tier = match f.tier.as_str() {
             "first-party" => Tier::FirstParty,
             "brand" => Tier::Brand,
+            "claimed" => Tier::Claimed,
             _ => Tier::Structured,
         };
         let mut all_caps: HashMap<String, Vec<String>> = HashMap::new();
@@ -1276,8 +1288,8 @@ impl Loader {
         for (i, pl) in r.plan.iter().enumerate() {
             let pw = format!("{at}.plan[{i}]");
             let t = pl.kind.as_str();
-            if tier == "brand" && t != "none" {
-                self.violate("L10", pid, format!("{pw}: brand allows only plan none"));
+            if matches!(tier, "brand" | "claimed") && t != "none" {
+                self.violate("L10", pid, format!("{pw}: {tier} allows only plan none"));
             }
             if t == "first-party" && !is_tellomi {
                 self.violate(

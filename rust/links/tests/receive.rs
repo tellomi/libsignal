@@ -191,8 +191,8 @@ fn chinese_path_keeps_its_preview_in_either_spelling() {
 fn sender_output_classifies_to_the_same_level() {
     let registry = base_registry();
     for url in [
-        "https://item.taobao.com/item.htm?id=100032608854",
-        "https://render.alipay.com/p/f/fd-j5rqp49m/index.html",
+        "https://weibo.com/2803301701/NEfBc8VJE",
+        "https://www.dianping.com/shop/2972056",
         "https://www.bilibili.com/",
         "https://tell.cc/hk881qb",
         "https://tell.cc/u#p/+8613800000006",
@@ -278,4 +278,70 @@ fn preview_input_round_trips_through_json_with_hex_rich() {
     let back: PreviewInput = serde_json::from_value(v).expect("parses");
     assert_eq!(back.rich, input.rich);
     assert!(serde_json::from_value::<PreviewInput>(json!({"url": "x", "rich": "中文"})).is_err());
+}
+
+/// Owner 2026-10-19, "claimed but fetched": a generic snapshot (no rich) on a claimed platform is
+/// the page's own card plus the platform's bundled icon; without a title it is the brand shell.
+#[test]
+fn claimed_platforms_show_the_page_with_their_icon() {
+    let registry = base_registry();
+    let url = "https://item.taobao.com/item.htm?id=100032608854";
+    let msg = MessageContext::default();
+    let preview = PreviewInput {
+        url: url.into(),
+        title: Some("某某商品".into()),
+        description: Some("描述".into()),
+        has_image: true,
+        date: None,
+        rich: None,
+    };
+    let card = registry.classify(&preview, url, &msg);
+    assert_eq!(card.level, Level::Generic);
+    assert_eq!(card.title.as_deref(), Some("某某商品"));
+    assert_eq!(card.description.as_deref(), Some("描述"));
+    assert!(card.show_image);
+    assert_eq!(card.icon.as_deref(), Some("taobao.png"));
+    assert!(card.tintable && !card.payment);
+
+    let untitled = PreviewInput {
+        title: None,
+        has_image: false,
+        description: None,
+        ..preview.clone()
+    };
+    let card = registry.classify(&untitled, url, &msg);
+    assert_eq!(
+        (card.level, card.provider.as_deref(), card.kind.as_deref()),
+        (Level::Brand, Some("taobao"), Some("product"))
+    );
+    assert_eq!(card.icon.as_deref(), Some("taobao.png"));
+    assert!(!card.show_image);
+
+    // Payment platforms are never claimed (L10 unchanged): Alipay stays brand, so a snapshot
+    // without rich is handled exactly like any brand platform below — no bundled icon.
+    let alipay = "https://render.alipay.com/p/f/fd-j5rqp49m/index.html";
+    let card = registry.classify(
+        &PreviewInput {
+            url: alipay.into(),
+            ..preview.clone()
+        },
+        alipay,
+        &msg,
+    );
+    assert_eq!(card.level, Level::Generic);
+    assert_eq!(card.icon, None);
+    assert_ne!(card.reason, Some("claimed"));
+
+    // A brand platform is unchanged: no rich → generic page card, no icon.
+    let weibo = "https://weibo.com/2803301701/NEfBc8VJE";
+    let card = registry.classify(
+        &PreviewInput {
+            url: weibo.into(),
+            ..preview
+        },
+        weibo,
+        &msg,
+    );
+    assert_eq!(card.level, Level::Generic);
+    assert_eq!(card.icon, None);
 }
