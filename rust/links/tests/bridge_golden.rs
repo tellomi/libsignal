@@ -19,7 +19,7 @@ use common::*;
 use serde_json::{Value, json};
 use tellomi_links::{Attr, Registry, RichContent, json as api};
 
-const DIST: &str = "registry/dist/links-2026092702.json";
+const DIST: &str = "registry/dist/links-2026101901.json";
 
 fn hex(b: &[u8]) -> String {
     b.iter().map(|x| format!("{x:02x}")).collect()
@@ -57,7 +57,7 @@ fn send_cases() -> Vec<Value> {
     let lookup = json!({"resultCount": 1, "results": [{"trackName": "微信", "artistName": "WeChat",
         "artworkUrl512": "https://is1-ssl.mzstatic.com/image/thumb/512x512bb.jpg"}]});
     vec![
-        json!({"name": "brand shell, no request", "url": "https://item.taobao.com/item.htm?id=100032608854",
+        json!({"name": "brand shell, no request", "url": "https://weibo.com/2803301701/NEfBc8VJE",
                "context": "{\"locale\":\"zh-Hans\"}", "script": {}}),
         json!({"name": "tell.cc user, no request", "url": "https://tell.cc/ceshi.57", "context": "{}", "script": {}}),
         json!({"name": "App Store public API + image", "url": "https://apps.apple.com/cn/app/wechat/id414478124",
