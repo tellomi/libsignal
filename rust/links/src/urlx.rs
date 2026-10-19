@@ -207,24 +207,174 @@ pub fn display_domain(url: &str) -> Option<String> {
 /// safe: the occurrence must start at a boundary and must not be the prefix of a longer URL —
 /// otherwise `https://tellomi.app` would "appear" inside `https://tellomi.app.evil.cn/login`.
 /// Trailing sentence punctuation is allowed, and so is Android's trailing-slash leniency.
+///
+/// Non-ASCII text after the host (PM 2026-10-19, §5.6) may be written either way on either side:
+/// as typed (`/wiki/中国`, the IRI) or percent-encoded as UTF-8 (`/wiki/%E4%B8%AD%E5%9B%BD`, what
+/// iOS sends). Both sides are compared in the encoded form, so a preview whose URL is the encoded
+/// spelling of a link in the body appears in it. A URL whose non-ASCII text hides characters
+/// (format and bidi controls, zero-width, private use) never matches that way.
 pub fn url_appears_in_body(url: &str, body: &str) -> bool {
     let url = url.trim();
     if url.is_empty() {
         return false;
     }
-    let bare = url
-        .strip_suffix('/')
-        .filter(|b| !b.ends_with('/') && !b.ends_with(':'));
-    let needle = bare.unwrap_or(url);
+    let needle = without_trailing_slash(url);
     body.match_indices(needle).any(|(at, _)| {
-        let before_ok = body[..at]
-            .chars()
-            .next_back()
-            .is_none_or(|c| !(c.is_ascii_alphanumeric() || "-._~:/?#@$&*+=%".contains(c)));
         let rest = &body[at + needle.len()..];
-        // One trailing slash may be on either side (Android compares without it).
-        before_ok && (ends_link(rest) || rest.strip_prefix('/').is_some_and(ends_link))
+        starts_link(body, at) && ends_link_with_slash(rest)
+    }) || iri_appears_in_body(url, body)
+}
+
+fn without_trailing_slash(url: &str) -> &str {
+    url.strip_suffix('/')
+        .filter(|b| !b.ends_with('/') && !b.ends_with(':'))
+        .unwrap_or(url)
+}
+
+/// Nothing URL-like right before `at`.
+fn starts_link(body: &str, at: usize) -> bool {
+    body[..at]
+        .chars()
+        .next_back()
+        .is_none_or(|c| !(c.is_ascii_alphanumeric() || "-._~:/?#@$&*+=%".contains(c)))
+}
+
+/// One trailing slash may be on either side (Android compares without it).
+fn ends_link_with_slash(rest: &str) -> bool {
+    ends_link(rest) || rest.strip_prefix('/').is_some_and(ends_link)
+}
+
+/// `url` in the encoded form: every non-ASCII character as `%XX` UTF-8 bytes and every `%xx`
+/// escape with upper-case hex digits.
+fn percent_encoded_iri(url: &str) -> String {
+    let mut out = String::with_capacity(url.len() * 3);
+    let mut chars = url.char_indices();
+    while let Some((i, c)) = chars.next() {
+        if c == '%' && is_hex_escape(&url[i..]) {
+            out.push('%');
+            out.push_str(&url[i + 1..i + 3].to_ascii_uppercase());
+            chars.next();
+            chars.next();
+        } else if c.is_ascii() {
+            out.push(c);
+        } else {
+            push_utf8_escapes(&mut out, c);
+        }
+    }
+    out
+}
+
+fn is_hex_escape(at: &str) -> bool {
+    let b = at.as_bytes();
+    b.len() >= 3 && b[0] == b'%' && b[1].is_ascii_hexdigit() && b[2].is_ascii_hexdigit()
+}
+
+fn push_utf8_escapes(out: &mut String, c: char) {
+    const HEX: &[u8; 16] = b"0123456789ABCDEF";
+    let mut buf = [0u8; 4];
+    for byte in c.encode_utf8(&mut buf).bytes() {
+        out.push('%');
+        out.push(char::from(HEX[usize::from(byte >> 4)]));
+        out.push(char::from(HEX[usize::from(byte & 0xF)]));
+    }
+}
+
+/// The characters the `%XX` escapes of byte 0x80 and up spell, if they are UTF-8.
+fn decoded_non_ascii(encoded: &str) -> Option<String> {
+    let mut bytes = Vec::new();
+    let mut i = 0;
+    while i < encoded.len() {
+        if is_hex_escape(&encoded[i..]) {
+            let byte = u8::from_str_radix(&encoded[i + 1..i + 3], 16).ok()?;
+            if byte >= 0x80 {
+                bytes.push(byte);
+            }
+            i += 3;
+        } else {
+            i += 1;
+        }
+    }
+    String::from_utf8(bytes).ok()
+}
+
+/// Characters a reader cannot see, or that change how the text around them is laid out.
+fn is_hidden_in_link(c: char) -> bool {
+    c.is_control()
+        || c.is_whitespace()
+        || matches!(
+            c,
+            '\u{00AD}'
+                | '\u{034F}'
+                | '\u{061C}'
+                | '\u{115F}'
+                | '\u{1160}'
+                | '\u{180E}'
+                | '\u{200B}'..='\u{200F}'
+                | '\u{202A}'..='\u{202E}'
+                | '\u{2060}'..='\u{206F}'
+                | '\u{3164}'
+                | '\u{FE00}'..='\u{FE0F}'
+                | '\u{FEFF}'
+                | '\u{FFA0}'
+                | '\u{FFF0}'..='\u{FFFB}'
+                | '\u{E000}'..='\u{F8FF}'
+                | '\u{E0000}'..='\u{E0FFF}'
+                | '\u{F0000}'..
+        )
+}
+
+fn iri_appears_in_body(url: &str, body: &str) -> bool {
+    let encoded = percent_encoded_iri(url);
+    // Only for URLs with non-ASCII text in them; every other URL is matched as written.
+    let Some(text) = decoded_non_ascii(&encoded) else {
+        return false;
+    };
+    if text.is_empty() || text.chars().any(is_hidden_in_link) {
+        return false;
+    }
+    let needle = without_trailing_slash(&encoded);
+    // Up to the first escape the URL is ASCII written one way only (scheme and host included).
+    let Some(literal) = needle.find('%').map(|end| &needle[..end]) else {
+        return false;
+    };
+    if literal.is_empty() {
+        return false;
+    }
+    body.match_indices(literal).any(|(at, _)| {
+        starts_link(body, at)
+            && encoded_match_end(body, at + literal.len(), &needle[literal.len()..])
+                .is_some_and(|end| ends_link_with_slash(&body[end..]))
     })
+}
+
+/// Does `body` from `from` on spell `encoded` (in either form)? Where it ends if so.
+fn encoded_match_end(body: &str, from: usize, encoded: &str) -> Option<usize> {
+    let want = encoded.as_bytes();
+    let mut j = 0;
+    let mut i = from;
+    let mut spelt = String::new();
+    while j < want.len() {
+        let rest = &body[i..];
+        let c = rest.chars().next()?;
+        spelt.clear();
+        if c == '%' && is_hex_escape(rest) {
+            spelt.push('%');
+            spelt.push_str(&rest[1..3].to_ascii_uppercase());
+            i += 3;
+        } else if c.is_ascii() {
+            spelt.push(c);
+            i += 1;
+        } else {
+            push_utf8_escapes(&mut spelt, c);
+            i += c.len_utf8();
+        }
+        let got = spelt.as_bytes();
+        if want.len() - j < got.len() || &want[j..j + got.len()] != got {
+            return None;
+        }
+        j += got.len();
+    }
+    Some(i)
 }
 
 fn ends_link(rest: &str) -> bool {
@@ -347,6 +497,83 @@ mod tests {
             "【视频】https://www.bilibili.com/video/BV1YDhJ6ZEL6，快看"
         ));
         assert!(!url_appears_in_body(u, "nothing here"));
+    }
+
+    // PM 2026-10-19 (§5.6): Chinese after the host, written as typed or percent-encoded.
+    #[test]
+    fn non_ascii_path_appears_in_body_in_either_spelling() {
+        let raw = "https://zh.wikipedia.org/wiki/中国";
+        let encoded = "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD";
+        let lower = "https://zh.wikipedia.org/wiki/%e4%b8%ad%e5%9b%bd";
+        for body in [
+            "https://zh.wikipedia.org/wiki/中国",
+            "看 https://zh.wikipedia.org/wiki/中国 吧",
+            "https://zh.wikipedia.org/wiki/中国，很好",
+            "https://zh.wikipedia.org/wiki/中国。",
+            "(https://zh.wikipedia.org/wiki/中国)",
+            "https://zh.wikipedia.org/wiki/中国/",
+            "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD",
+            "https://zh.wikipedia.org/wiki/%E4%B8%AD国",
+        ] {
+            for url in [raw, encoded, lower] {
+                assert!(url_appears_in_body(url, body), "{url} in {body}");
+            }
+        }
+        let q = "https://www.baidu.com/s?wd=%E5%A4%A9%E6%B0%94";
+        assert!(url_appears_in_body(q, "搜 https://www.baidu.com/s?wd=天气"));
+        assert!(url_appears_in_body(
+            "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD#%E5%8E%86%E5%8F%B2",
+            "https://zh.wikipedia.org/wiki/中国#历史"
+        ));
+
+        // Still a link of its own: no longer URL, no prefix of a longer one, no other host.
+        assert!(!url_appears_in_body(
+            encoded,
+            "https://zh.wikipedia.org/wiki/中国x"
+        ));
+        assert!(!url_appears_in_body(
+            encoded,
+            "https://zh.wikipedia.org/wiki/中国/x"
+        ));
+        assert!(!url_appears_in_body(
+            encoded,
+            "https://zh.wikipedia.org/wiki/中"
+        ));
+        assert!(!url_appears_in_body(
+            encoded,
+            "https://zh.wikipedia.org.evil.cn/wiki/中国"
+        ));
+        assert!(!url_appears_in_body(
+            encoded,
+            "https://x.cn/?to=https://zh.wikipedia.org/wiki/中国"
+        ));
+        assert!(!url_appears_in_body(
+            encoded,
+            "https://zh.wikipedia.org/wiki/中华"
+        ));
+        // Hidden characters never match through the encoded form.
+        assert!(!url_appears_in_body(
+            "https://zh.wikipedia.org/wiki/%E4%B8%AD%E2%80%8B%E5%9B%BD",
+            "https://zh.wikipedia.org/wiki/中\u{200B}国"
+        ));
+        assert!(!url_appears_in_body(
+            "https://zh.wikipedia.org/wiki/%E4%B8%AD%E2%81%A6%E5%9B%BD",
+            "https://zh.wikipedia.org/wiki/中\u{2066}国"
+        ));
+        // Not UTF-8 (a GBK escape): matched only as written, as before.
+        assert!(!url_appears_in_body(
+            "https://www.baidu.com/s?wd=%CC%EC",
+            "https://www.baidu.com/s?wd=天"
+        ));
+        assert!(url_appears_in_body(
+            "https://www.baidu.com/s?wd=%CC%EC",
+            "https://www.baidu.com/s?wd=%CC%EC"
+        ));
+        // Encoded ASCII stays as written: %2F is not a slash.
+        assert!(!url_appears_in_body(
+            "https://a.cn/x%2F%E4%B8%AD",
+            "https://a.cn/x/中"
+        ));
     }
 
     #[test]
