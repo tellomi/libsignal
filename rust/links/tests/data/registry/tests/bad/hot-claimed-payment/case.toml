@@ -1,0 +1,5 @@
+about = "2026-10-19 claimed 档：支付金融（L10 锁）不进 claimed，支付宝、银联留在品牌壳、不抓页面（owner 规则 L10 不变）"
+remove = ["providers/brand/alipay.toml"]
+expect = [
+  "L10 alipay: payment 只能是 brand",
+]

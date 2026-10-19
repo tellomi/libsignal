@@ -14,6 +14,49 @@ pub(crate) struct Icon {
     pub href: String,
     pub touch: bool,
     pub size: Option<(u32, u32)>,
+    /// `type="image/svg+xml"` or an `.svg` href: no client decodes SVG for a card, so never picked.
+    pub svg: bool,
+}
+
+/// Apple's default size for an `apple-touch-icon` that declares none.
+const TOUCH_ICON_DEFAULT_PX: u32 = 180;
+
+/// The site icon to use for a card (owner 2026-10-19): `apple-touch-icon` first, larger first.
+///
+/// Ranked by (bucket, touch, size):
+/// 1. icons at least `min_px` on their short side (an undeclared `apple-touch-icon` counts as
+///    180 px, Apple's default) — an `apple-touch-icon` before a plain `icon`, then the larger;
+/// 2. a plain `icon` that declares no size (usually `/favicon.ico`);
+/// 3. icons that declare a size below `min_px`, the larger first.
+///
+/// SVG icons are skipped. `None` when the page declares no usable icon: the caller then guesses
+/// `/apple-touch-icon.png`.
+pub(crate) fn best_icon(icons: &[Icon], min_px: u32) -> Option<&Icon> {
+    icons
+        .iter()
+        .filter(|i| !i.svg)
+        .map(|i| {
+            let side = match (i.size, i.touch) {
+                (Some((w, h)), _) => Some(w.min(h)),
+                (None, true) => Some(TOUCH_ICON_DEFAULT_PX),
+                (None, false) => None,
+            };
+            let bucket = match side {
+                Some(s) if s >= min_px => 2,
+                None => 1,
+                Some(_) => 0,
+            };
+            ((bucket, i.touch, side.unwrap_or(0)), i)
+        })
+        // `max_by_key` keeps the last of equals; prefer the first declared, as browsers do.
+        .rev()
+        .max_by_key(|(key, _)| *key)
+        .map(|(_, i)| i)
+}
+
+fn is_svg_href(href: &str) -> bool {
+    let path = href.split(['?', '#']).next().unwrap_or("");
+    path.len() >= 4 && path[path.len() - 4..].eq_ignore_ascii_case(".svg")
 }
 
 #[derive(Debug, Default)]
@@ -275,10 +318,14 @@ pub(crate) fn scan(html: &str) -> Page {
                 if (touch || tokens.contains(&"icon"))
                     && let Some(href) = attr(&attrs, "href").filter(|h| !h.trim().is_empty())
                 {
+                    let svg = attr(&attrs, "type")
+                        .is_some_and(|t| t.to_ascii_lowercase().contains("svg"))
+                        || is_svg_href(href.trim());
                     page.icons.push(Icon {
                         href: href.trim().to_owned(),
                         touch,
                         size: attr(&attrs, "sizes").and_then(parse_sizes),
+                        svg,
                     });
                 }
             }

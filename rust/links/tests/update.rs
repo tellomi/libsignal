@@ -57,7 +57,7 @@ impl Signer {
 }
 
 fn dist() -> Vec<u8> {
-    read("registry/dist/links-2026092702.json")
+    read("registry/dist/links-2026101901.json")
 }
 
 fn with(bytes: &[u8], f: impl FnOnce(&mut Value)) -> Vec<u8> {
@@ -114,7 +114,7 @@ fn a_signed_newer_update_loads() {
     let sig = signer.sign(&bytes);
     let registry =
         Registry::load_update(&bytes, &sig, &signer.public(), Some(2026092612)).expect("loads");
-    assert_eq!(registry.version(), 2026092702);
+    assert_eq!(registry.version(), 2026101901);
     Registry::load_update(&bytes, &sig, &signer.public(), None).expect("no current version yet");
 }
 
@@ -162,11 +162,11 @@ fn verification_order_and_every_refusal() {
     ));
 
     // 4. Version only increases: equal (a replay) and older (a rollback) are both refused.
-    for current in [2026092702, 2026092703] {
+    for current in [2026101901, 2026101902] {
         assert!(matches!(
             Registry::load_update(&bytes, &sig, &key, Some(current)),
             Err(LoadError::NotNewer {
-                found: 2026092702,
+                found: 2026101901,
                 ..
             })
         ));

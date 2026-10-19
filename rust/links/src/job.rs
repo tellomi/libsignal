@@ -254,10 +254,13 @@ impl Fields {
 #[derive(Debug)]
 enum Target {
     PlainLink,
-    /// Signal's snapshot preview of this page (no provider, or a provider whose `fallback` is
-    /// `generic` and no route recognised an object).
+    /// Signal's snapshot preview of this page (no provider, a provider whose `fallback` is
+    /// `generic` and no route recognised an object, or a `claimed` provider).
     Generic {
         fetch: Url,
+        /// A `claimed` provider's own target: the page must stay on that provider's hosts, and a
+        /// page that gives no title falls back to this (its brand shell).
+        claimed: Option<Box<Target>>,
     },
     FirstParty {
         route: usize,
@@ -439,6 +442,16 @@ impl Registry {
             return job;
         }
         let m = provider.match_url(&parsed, &host);
+        if provider.tier == Tier::Claimed {
+            let unreachable = provider.unreachable_from(ctx.region);
+            job.set_claimed_target(provider, m, false);
+            if unreachable {
+                job.failures.push(Failure::RegionUnreachable);
+            } else {
+                job.switch_to_claimed(parsed);
+            }
+            return job;
+        }
         if m.route.is_none() && provider.fallback_generic {
             if provider.unreachable_from(ctx.region) {
                 job.failures.push(Failure::RegionUnreachable);
@@ -478,7 +491,49 @@ fn truncate_chars(s: &str, max: usize) -> String {
 impl Job {
     fn switch_to_generic(&mut self, mut fetch: Url) {
         fetch.set_fragment(None);
-        self.target = Target::Generic { fetch };
+        self.target = Target::Generic {
+            fetch,
+            claimed: None,
+        };
+        self.queue.clear();
+        self.queue.push_back(Step::GenericPage);
+    }
+
+    /// A `claimed` provider: its brand-shell target, kept as the fallback, without the
+    /// "not an object" diagnostic (claimed providers do not need a route).
+    fn set_claimed_target(
+        &mut self,
+        provider: Provider,
+        m: crate::registry::RouteMatch,
+        via_http: bool,
+    ) {
+        let before = self.failures.len();
+        self.set_provider_target(
+            provider,
+            m.route,
+            m.captures,
+            Some(m.canonical),
+            m.object,
+            via_http,
+        );
+        let mut i = before;
+        while i < self.failures.len() {
+            if matches!(self.failures[i], Failure::NotAnObject) {
+                self.failures.remove(i);
+            } else {
+                i += 1;
+            }
+        }
+    }
+
+    /// Fetch the page the generic way, keeping the provider target set by `set_claimed_target`.
+    fn switch_to_claimed(&mut self, mut fetch: Url) {
+        fetch.set_fragment(None);
+        let fallback = std::mem::replace(&mut self.target, Target::PlainLink);
+        self.target = Target::Generic {
+            fetch,
+            claimed: Some(Box::new(fallback)),
+        };
         self.queue.clear();
         self.queue.push_back(Step::GenericPage);
     }
@@ -646,7 +701,7 @@ impl Job {
                 })
             }
             Step::GenericPage => {
-                let Target::Generic { fetch } = &self.target else {
+                let Target::Generic { fetch, .. } = &self.target else {
                     return None;
                 };
                 let url = fetch.clone();
@@ -771,7 +826,11 @@ impl Job {
         }
         self.image_decided = true;
         let wanted = match &self.target {
-            Target::Generic { .. } => true,
+            Target::Generic { claimed: None, .. } => true,
+            // A claimed page without a title becomes the brand shell, which carries no image.
+            Target::Generic {
+                claimed: Some(_), ..
+            } => self.fields.title.is_some(),
             Target::FirstParty { .. } => self
                 .provider_route()
                 .is_some_and(|(_, r)| r.kind == "tellomi.official"),
@@ -948,6 +1007,14 @@ impl Job {
         }
         let m = provider.match_url(&next, &host);
         let via_http = next.scheme() == "http";
+        if provider.tier == Tier::Claimed {
+            let fetch = !via_http && !provider.unreachable_from(self.ctx.region);
+            self.set_claimed_target(provider, m, via_http);
+            if fetch {
+                self.switch_to_claimed(next);
+            }
+            return;
+        }
         if m.route.is_none()
             && provider.fallback_generic
             && !via_http
@@ -968,7 +1035,19 @@ impl Job {
 
     fn allowed_final_host(&self, plan: Option<usize>, host: &str) -> bool {
         match (&self.target, plan) {
-            (Target::Generic { .. }, None) => true,
+            (Target::Generic { claimed: None, .. }, None) => true,
+            // A claimed provider's page must end on that provider (as a structured step, §4.4): an
+            // open redirect must not put someone else's page under the platform's icon.
+            (
+                Target::Generic {
+                    claimed: Some(fallback),
+                    ..
+                },
+                None,
+            ) => match fallback.as_ref() {
+                Target::Provider { provider, .. } => host_in(host, &provider.domains),
+                _ => false,
+            },
             (Target::FirstParty { .. }, Some(_)) => {
                 self.tellomi.official_domains.iter().any(|h| h == host)
             }
@@ -1112,15 +1191,19 @@ impl Job {
         if let Some(img) = og_image {
             self.offer("image", img, Conf::Object, kind, false);
         } else if self.fields.image.is_none() {
-            // Icon fallback: the largest declared icon ≥ 64 px, else /apple-touch-icon.png.
-            let icon = page
+            // Icon fallback (owner 2026-10-19): the icon the page declares — apple-touch-icon
+            // first, larger first (`html::best_icon`) — else a guess at /apple-touch-icon.png.
+            // Still one image request, under the same size, timeout and host rules.
+            let usable: Vec<html::Icon> = page
                 .icons
                 .iter()
-                .filter_map(|i| i.size.map(|(w, h)| (w.min(h), i)))
-                .filter(|(side, _)| *side >= MIN_ICON_PX)
-                .max_by_key(|(side, _)| *side)
-                .and_then(|(_, i)| self.resolve_image(&final_url, &i.href))
-                .or_else(|| self.resolve_image(&final_url, "/apple-touch-icon.png"));
+                .filter(|i| self.resolve_image(&final_url, &i.href).is_some())
+                .cloned()
+                .collect();
+            let icon = match html::best_icon(&usable, MIN_ICON_PX) {
+                Some(i) => self.resolve_image(&final_url, &i.href),
+                None => self.resolve_image(&final_url, "/apple-touch-icon.png"),
+            };
             if let Some(icon) = icon {
                 self.offer("image", icon, Conf::Low, kind, false);
             }
@@ -1315,6 +1398,14 @@ impl Job {
             rich: None,
             rich_hex: None,
         };
+        // A claimed provider's page that gave no title: its brand shell instead (no image).
+        if self.fields.title.is_none()
+            && let Target::Generic { claimed, .. } = &mut self.target
+            && let Some(fallback) = claimed.take()
+        {
+            self.target = *fallback;
+            self.image_ok = false;
+        }
         let best = |v: &Option<Value>| v.as_ref().map(|v| v.text.clone());
         let image = self
             .fields
@@ -1440,7 +1531,7 @@ impl Job {
                 } else {
                     // A brand-tier platform says only its name; a structured one that came up
                     // short keeps the best title it found, title-meta included (§4.5).
-                    let title = if provider.tier == Tier::Brand {
+                    let title = if matches!(provider.tier, Tier::Brand | Tier::Claimed) {
                         platform
                     } else {
                         best(&self.fields.title).unwrap_or(platform)

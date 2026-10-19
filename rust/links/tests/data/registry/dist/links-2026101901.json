@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-27T00:00:00+00:00",
+  "generated_at": "2026-10-19T00:00:00+00:00",
   "generated_by": "scripts/links/build.py（一段 lint.py；二段 envelope。rust/links 的 links-build 接上后插在两段之间）",
   "inputs": [
     {
@@ -40,7 +40,7 @@
     },
     {
       "path": "links/provider.schema.json",
-      "sha256": "d5c586ace4825eb283adae7d8c1229ece3c2e80b461eb4fb8ca788a69f9e3898"
+      "sha256": "33d5184c57ca148e642b6ea37d9c93a65a4d1ea4a5180b5b88b98470e790431a"
     },
     {
       "path": "links/providers/brand/alipay.toml",
@@ -59,40 +59,12 @@
       "sha256": "55b0813d8a3dffa2f93b98dd658129a9cfca9f0e4c5bd3a1fa89038f73e4e01d"
     },
     {
-      "path": "links/providers/brand/eleme.toml",
-      "sha256": "e72c11b1e9310c6464aea7d8cfa6e5c2fbcb7244ba378bd5ff935d3993c6a483"
-    },
-    {
-      "path": "links/providers/brand/iqiyi.toml",
-      "sha256": "8f105562cb8f7ce8463bb4ae2a33c983b06e6ce1d4cef5a60d264d8d19d8e7e4"
-    },
-    {
-      "path": "links/providers/brand/jd.toml",
-      "sha256": "157316cb034d03412bcb7eecef3c336f690557d5bfdc75d57cf66e0df171181a"
-    },
-    {
       "path": "links/providers/brand/kuaishou.toml",
       "sha256": "f12aacf7ad70ef047f3b2880a86d4b227c0ab6c27285d53bddfa20dfb5aff7db"
     },
     {
-      "path": "links/providers/brand/meituan.toml",
-      "sha256": "cfd113183dd40c6e97967546552fbb8b416ee642f758c9f6b20e5aad327ea7ae"
-    },
-    {
-      "path": "links/providers/brand/pinduoduo.toml",
-      "sha256": "c1a7b750b10a00e76786406248d3db1632f45ea4129e144d675a0a20f3655efe"
-    },
-    {
       "path": "links/providers/brand/qq-music.toml",
       "sha256": "cb5475e8db71c2702d58f61c4f2041ca3625b65adab1dd16447177c0cc7bfdf4"
-    },
-    {
-      "path": "links/providers/brand/taobao.toml",
-      "sha256": "8304af37fcf843895be57ba77197425e83086ad1c03522d59580705035779cf0"
-    },
-    {
-      "path": "links/providers/brand/tmall.toml",
-      "sha256": "94ee5730dcf14f9715714509f0ba9fd4d4b2bca15cf87b8470b575e0bbcd399e"
     },
     {
       "path": "links/providers/brand/unionpay.toml",
@@ -117,6 +89,34 @@
     {
       "path": "links/providers/brand/zhihu.toml",
       "sha256": "6ce09772c8941029254ad9708f25c1373303725fe91ba0832de956fb8376cb07"
+    },
+    {
+      "path": "links/providers/claimed/eleme.toml",
+      "sha256": "5213e92f1c29ca9772b6542b2a65f0a2cd196025c0caa7004a8987d82108eacb"
+    },
+    {
+      "path": "links/providers/claimed/iqiyi.toml",
+      "sha256": "270926f66ee5ae8ce27b5cf180c385688c79f99116bac6696c06cac0a07d93a5"
+    },
+    {
+      "path": "links/providers/claimed/jd.toml",
+      "sha256": "034d55f9d7f13c3ecdd0307d0fdacb4082a327df64919362050aee725eae9703"
+    },
+    {
+      "path": "links/providers/claimed/meituan.toml",
+      "sha256": "9d009a327c997c8445b6bbee74d2e7a7779c04d956fe0d1f7d769428e23e4f45"
+    },
+    {
+      "path": "links/providers/claimed/pinduoduo.toml",
+      "sha256": "7f9cc1ff8dccc9660e5cc00e38fe5e467b946c70c9bbd8022357338b4871305b"
+    },
+    {
+      "path": "links/providers/claimed/taobao.toml",
+      "sha256": "48f8f961a7832bc5ce51f8bc0baaba9c6b98538de6fa897921300ff985bdcdcc"
+    },
+    {
+      "path": "links/providers/claimed/tmall.toml",
+      "sha256": "30ac8c636e18e3dcb27944f21316f22c361604af28130b56a2b10c000a40e98d"
     },
     {
       "path": "links/providers/first-party/tellomi.toml",
@@ -1085,6 +1085,7 @@
       {
         "category": "local",
         "domains": [
+          "ele.me",
           "*.ele.me"
         ],
         "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「饿了么（已更名「淘宝闪购」）」（C 档）；2026-09-27 首批复核（#1419 PR）",
@@ -1105,7 +1106,7 @@
           "configKey",
           "scene"
         ],
-        "tier": "brand"
+        "tier": "claimed"
       },
       {
         "api_hosts": [
@@ -1213,11 +1214,12 @@
           "s3",
           "s4"
         ],
-        "tier": "brand"
+        "tier": "claimed"
       },
       {
         "category": "commerce",
         "domains": [
+          "jd.com",
           "*.jd.com"
         ],
         "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「京东」（商品页跳 cfe.m.jd.com 风控页，C 档）；2026-09-27 首批复核（#1419 PR）",
@@ -1286,7 +1288,7 @@
           "wxAppName",
           "clickUrl"
         ],
-        "tier": "brand"
+        "tier": "claimed"
       },
       {
         "category": "video",
@@ -1360,6 +1362,7 @@
       {
         "category": "local",
         "domains": [
+          "meituan.com",
           "*.meituan.com"
         ],
         "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「美团外卖」「美团团购」（连站点级 OG 都没有，C 档）；2026-09-27 首批复核（#1419 PR）",
@@ -1394,7 +1397,7 @@
           "page_source",
           "_rdt"
         ],
-        "tier": "brand"
+        "tier": "claimed"
       },
       {
         "category": "audio",
@@ -1499,6 +1502,8 @@
       {
         "category": "commerce",
         "domains": [
+          "pinduoduo.com",
+          "yangkeduo.com",
           "*.yangkeduo.com",
           "*.pinduoduo.com"
         ],
@@ -1556,7 +1561,7 @@
           "refer_*",
           "_pdd_*"
         ],
-        "tier": "brand"
+        "tier": "claimed"
       },
       {
         "category": "audio",
@@ -1721,6 +1726,7 @@
       {
         "category": "commerce",
         "domains": [
+          "taobao.com",
           "*.taobao.com",
           "m.tb.cn",
           "e.tb.cn",
@@ -1778,7 +1784,7 @@
           "price",
           "stats_click"
         ],
-        "tier": "brand"
+        "tier": "claimed"
       },
       {
         "category": "tellomi",
@@ -2040,6 +2046,7 @@
       {
         "category": "commerce",
         "domains": [
+          "tmall.com",
           "*.tmall.com"
         ],
         "evidence": "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「天猫」（阿里系 x5secdata，C 档）；2026-09-27 首批复核（#1419 PR）",
@@ -2077,7 +2084,7 @@
           "utparam",
           "from"
         ],
-        "tier": "brand"
+        "tier": "claimed"
       },
       {
         "category": "payment",
@@ -2517,5 +2524,5 @@
     ]
   },
   "schema": 1,
-  "version": 2026092702
+  "version": 2026101901
 }

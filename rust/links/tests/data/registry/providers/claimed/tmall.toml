@@ -3,10 +3,13 @@
 schema = 1
 id = "tmall"
 name = { zh-Hans = "天猫", en = "Tmall" }
-tier = "brand"
+# 2026-10-19（owner 定，#claimed-tier）：从 brand 挪到 claimed——注册表仍认领（随包图标、http / 没写协议的链接按 https 出卡片、仿冒提醒、
+# 打开规则照旧），但发送端像普通链接一样抓页面（标题、描述、图片或站点图标）；页面没给标题（风控页、JS 页）时退回品牌壳。
+# 2026-10-19 本机实测（WhatsApp/2 UA）：首页有标题和描述；商品页是空页 / JS 页，没有标题，退回品牌壳。
+tier = "claimed"
 category = "commerce"
 # 天猫没有自己的分享短链：App 分享出来的是 m.tb.cn（归淘宝）。官网首页声明的 apple-touch-icon 是淘宝的「淘」字，不配图标。
-domains = ["*.tmall.com"]
+domains = ["tmall.com", "*.tmall.com"]
 strip_params = ["spm", "tbpm", "_u", "skuId", "ali_refid", "ali_trackid", "scm", "pvid", "utparam", "from"]
 evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「天猫」（阿里系 x5secdata，C 档）；2026-09-27 首批复核（#1419 PR）"
 

@@ -3,11 +3,14 @@
 schema = 1
 id = "jd"
 name = { zh-Hans = "京东", en = "JD" }
-tier = "brand"
+# 2026-10-19（owner 定，#claimed-tier）：从 brand 挪到 claimed——注册表仍认领（随包图标、http / 没写协议的链接按 https 出卡片、仿冒提醒、
+# 打开规则照旧），但发送端像普通链接一样抓页面（标题、描述、图片或站点图标）；页面没给标题（风控页、JS 页）时退回品牌壳。
+# 2026-10-19 本机实测（WhatsApp/2 UA）：jd.com / www 301 到 global.jd.com 有标题和描述；m.jd.com 有标题；item.m.jd.com、mall.jd.com 有标题和描述；item.jd.com 只有京东首页的通用标题（Safari UA 才有商品标题）。
+tier = "claimed"
 category = "commerce"
 # 3.cn 是京东的短链（302，2026-09-27 实测，Location 可能是 http 或广告点击跳转 ccc-x.jd.com）；
 # u.jd.com 是推广短链，回 200 的 JS 跳转页、没有 Location，按域名直接出品牌壳。官网没有声明 apple-touch-icon，不配图标。
-domains = ["*.jd.com"]
+domains = ["jd.com", "*.jd.com"]
 short_domains = ["3.cn"]
 strip_params = ["cu", "utm_*", "abt", "gx", "gxd", "ad_od", "shareType", "sid", "_ts", "ptag", "PTAG", "wxAppName", "clickUrl"]
 evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「京东」（商品页跳 cfe.m.jd.com 风控页，C 档）；2026-09-27 首批复核（#1419 PR）"
