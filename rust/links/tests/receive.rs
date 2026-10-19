@@ -151,6 +151,40 @@ fn receive_check_keeps_or_drops_before_storing() {
     );
 }
 
+/// PM 2026-10-19 (§5.6): a link with Chinese in its path keeps its preview whether the sender
+/// wrote the preview URL as typed (Android, Desktop) or percent-encoded (iOS), and its card is
+/// classified the same way.
+#[test]
+fn chinese_path_keeps_its_preview_in_either_spelling() {
+    let registry = base_registry();
+    let msg = MessageContext::default();
+    let body = "看 https://zh.wikipedia.org/wiki/中国，很好";
+    for url in [
+        "https://zh.wikipedia.org/wiki/中国",
+        "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD",
+    ] {
+        let preview = PreviewInput {
+            url: url.into(),
+            title: Some("中国 - 维基百科".into()),
+            ..Default::default()
+        };
+        assert!(
+            registry.receive_check(&preview, body, &msg).keep_preview,
+            "{url}"
+        );
+        let card = registry.classify(&preview, body, &msg);
+        assert_ne!(card.reason, Some("not_in_body"), "{url}");
+        assert_eq!(card.title.as_deref(), Some("中国 - 维基百科"), "{url}");
+    }
+    // Some other article is still not in the body.
+    let other = PreviewInput {
+        url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E".into(),
+        title: Some("t".into()),
+        ..Default::default()
+    };
+    assert!(!registry.receive_check(&other, body, &msg).keep_preview);
+}
+
 /// Whatever a sender produces, a receiver on the same registry lands on the same level (§5.1
 /// rule 4), and the bytes go through `rich_bytes` → `classify` unchanged.
 #[test]
