@@ -5,7 +5,15 @@ Copied verbatim from the super repo's links/ on tellomi/tellomi#1427 (branch tai
 commit dd0e159d1597d9dc1b776ebafb09a2f3f1e2853e, 2026-09-27): #1426's registry (merged as dd92bdd3) plus the optional
 provider field `fallback` and lint rule L24.
   kinds.toml, providers/**, tests/corpus/*.toml, tests/bad/** (incl. the icon-* overlays),
-  dist/links-2026092702.json (the build output: registry envelope, payload = {kinds, providers}).
+  dist/links-2026101901.json (the build output: registry envelope, payload = {kinds, providers}).
 Not copied: README.md, provider.schema.json, icons/ (L15/L16 are build-time rules), scripts/links/.
 libsignal cannot read super-repo paths at build time, so the tests read these copies. Refresh them
 from links/ whenever the registry format or its samples change.
+
+2026-10-19 refresh (tellomi/tellomi branch bot/links-claimed-tier-r1, not yet merged): the `claimed` tier
+("claimed but fetched", owner 2026-10-19) — jd, meituan, eleme, iqiyi, taobao, tmall and
+pinduoduo moved from providers/brand/ to providers/claimed/ (apex hosts added to their domains), the bad
+sample hot-claimed-with-plan, and the rebuilt
+dist/links-2026101901.json (replaces links-2026092702.json).
+Second commit on that branch (2026-10-19): alipay and unionpay stay in providers/brand/ unchanged (payment,
+L10 unchanged: brand only); bad sample hot-claimed-payment; dist links-2026101901.json rebuilt.

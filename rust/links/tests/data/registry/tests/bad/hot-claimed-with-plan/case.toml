@@ -1,0 +1,4 @@
+about = "2026-10-19 claimed 档：认领但抓页面，只走 generic 的抓法；route 不许带取数 plan（同 brand 的 L10），不然就成了不经审核的 structured"
+expect = [
+  "L10 jd.item.plan[0]: claimed 只许 plan none",
+]
