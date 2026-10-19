@@ -1025,14 +1025,10 @@ impl Loader {
                 "fetch is not allowed (the UA is always WhatsApp/2)",
             );
         }
-        // Owner 2026-10-19: a payment platform may also be `claimed` (its own pages' titles, e.g.
-        // Alipay / UnionPay homepages); it stays untinted and browser-only (`locked`).
-        if locked && !matches!(f.tier.as_str(), "brand" | "claimed") {
-            self.violate(
-                "L10",
-                pid,
-                "payment / ride-hailing must be brand or claimed",
-            );
+        // L10 is unchanged by the `claimed` tier: payment / ride-hailing stay `brand` (no page
+        // fetch at all), so Alipay / UnionPay keep the brand shell.
+        if locked && f.tier != "brand" {
+            self.violate("L10", pid, "payment / ride-hailing must be brand");
         }
         if locked && f.open.is_some() {
             self.violate("L10", pid, "payment / ride-hailing may not declare open");

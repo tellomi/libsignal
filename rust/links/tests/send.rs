@@ -1159,7 +1159,6 @@ fn fallback_generic_respects_the_region_gate() {
 #[test]
 fn fallback_generic_is_dropped_where_it_may_not_apply() {
     // Payment / ride-hailing (L10) and tellomi: a compatibility drop back to brand, not a reject.
-    // (Alipay is `claimed` since 2026-10-19; put it back on the brand tier to test the L10 lock.)
     for (id, url, level) in [
         (
             "alipay",
@@ -1170,12 +1169,7 @@ fn fallback_generic_is_dropped_where_it_may_not_apply() {
         // L24: a brand-tier platform (not payment) may not fall through to generic either.
         ("weibo", "https://weibo.com/", Level::Brand),
     ] {
-        let mut providers = base_providers();
-        if id == "alipay" {
-            providers.get_mut(id).unwrap()["tier"] = json!("brand");
-        }
-        providers.get_mut(id).unwrap()["fallback"] = json!("generic");
-        let registry = load_providers(&providers).expect("loads");
+        let registry = with_fallback(id, "generic");
         let dropped = registry.degraded_routes();
         assert_eq!(dropped.len(), 1, "{id}: {dropped:?}");
         assert_eq!(
@@ -1336,13 +1330,37 @@ fn claimed_apex_hosts_are_recognised() {
         ("https://taobao.com/", "taobao"),
         ("https://meituan.com/", "meituan"),
         ("https://ele.me/", "eleme"),
-        ("https://alipay.com/", "alipay"),
     ] {
         let got = registry
             .identify(url, false)
             .unwrap_or_else(|| panic!("{url}"));
         assert_eq!(got.provider, provider, "{url}");
         assert_eq!(got.fallback.as_deref(), Some("generic"), "{url}");
+    }
+}
+
+/// Payment platforms are not in the claimed tier (L10 unchanged, 2026-10-19): Alipay and UnionPay
+/// stay brand, so nothing is fetched for them and an unrouted link is a brand shell.
+#[test]
+fn payment_platforms_stay_brand() {
+    let registry = base_registry();
+    for (url, provider) in [
+        ("https://www.alipay.com/", "alipay"),
+        (
+            "https://render.alipay.com/p/f/fd-j5rqp49m/index.html",
+            "alipay",
+        ),
+        ("https://www.95516.com/", "unionpay"),
+        ("https://cn.unionpay.com/", "unionpay"),
+    ] {
+        let got = registry
+            .identify(url, false)
+            .unwrap_or_else(|| panic!("{url}"));
+        assert_eq!(got.provider, provider, "{url}");
+        assert_eq!(got.fallback.as_deref(), Some("brand"), "{url}");
+        let r = run(url, &Script::default());
+        assert!(r.requests.is_empty(), "{url}: {:?}", r.urls());
+        assert_eq!(r.out.level, Level::Brand, "{url}");
     }
 }
 

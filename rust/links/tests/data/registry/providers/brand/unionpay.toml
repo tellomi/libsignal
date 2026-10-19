@@ -4,12 +4,9 @@
 schema = 1
 id = "unionpay"
 name = { zh-Hans = "云闪付", en = "UnionPay" }
-# 2026-10-19（owner 定，#claimed-tier）：从 brand 挪到 claimed——注册表仍认领（随包图标、http / 没写协议的链接按 https 出卡片、仿冒提醒、
-# 打开规则照旧），但发送端像普通链接一样抓页面（标题、描述、图片或站点图标）；页面没给标题（风控页、JS 页）时退回品牌壳。
-# 2026-10-19 本机实测（WhatsApp/2 UA）：首页有标题和描述（95516.com TLS 出错，抓不到就退回品牌壳）。支付类照旧不着色、只在浏览器打开。
-tier = "claimed"
+tier = "brand"
 category = "payment"
 # 没找到分享短链主机（2026-09-27 检索 c. / t. / u. / d.95516.com 都没有）；活动与权益页在 *.95516.com，官网在 *.unionpay.com。
 # 官网没有声明 apple-touch-icon（yunshanfu.unionpay.com 大陆直连连不上），不配图标。
-domains = ["unionpay.com", "95516.com", "*.95516.com", "*.unionpay.com"]
+domains = ["*.95516.com", "*.unionpay.com"]
 evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「云闪付」；2026-09-27 首批复核（#1419 PR）"

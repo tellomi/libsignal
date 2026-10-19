@@ -11,7 +11,9 @@ libsignal cannot read super-repo paths at build time, so the tests read these co
 from links/ whenever the registry format or its samples change.
 
 2026-10-19 refresh (tellomi/tellomi branch bot/links-claimed-tier-r1, not yet merged): the `claimed` tier
-("claimed but fetched", owner 2026-10-19) — jd, meituan, eleme, iqiyi, alipay, unionpay, taobao, tmall and
+("claimed but fetched", owner 2026-10-19) — jd, meituan, eleme, iqiyi, taobao, tmall and
 pinduoduo moved from providers/brand/ to providers/claimed/ (apex hosts added to their domains), the bad
 sample hot-claimed-with-plan, and the rebuilt
 dist/links-2026101901.json (replaces links-2026092702.json).
+Second commit on that branch (2026-10-19): alipay and unionpay stay in providers/brand/ unchanged (payment,
+L10 unchanged: brand only); bad sample hot-claimed-payment; dist links-2026101901.json rebuilt.

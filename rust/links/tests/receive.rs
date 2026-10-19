@@ -283,7 +283,8 @@ fn claimed_platforms_show_the_page_with_their_icon() {
     assert_eq!(card.icon.as_deref(), Some("taobao.png"));
     assert!(!card.show_image);
 
-    // A payment platform stays untinted and payment-flagged.
+    // Payment platforms are never claimed (L10 unchanged): Alipay stays brand, so a snapshot
+    // without rich is handled exactly like any brand platform below — no bundled icon.
     let alipay = "https://render.alipay.com/p/f/fd-j5rqp49m/index.html";
     let card = registry.classify(
         &PreviewInput {
@@ -294,7 +295,8 @@ fn claimed_platforms_show_the_page_with_their_icon() {
         &msg,
     );
     assert_eq!(card.level, Level::Generic);
-    assert!(card.payment && !card.tintable);
+    assert_eq!(card.icon, None);
+    assert_ne!(card.reason, Some("claimed"));
 
     // A brand platform is unchanged: no rich → generic page card, no icon.
     let weibo = "https://weibo.com/2803301701/NEfBc8VJE";

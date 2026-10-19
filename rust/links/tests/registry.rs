@@ -204,7 +204,7 @@ fn every_bad_sample_is_refused_for_the_rule_it_breaks() {
         .map(|e| e.expect("entry").path())
         .collect();
     cases.sort();
-    assert_eq!(cases.len(), 21);
+    assert_eq!(cases.len(), 22);
     for dir in cases {
         let name = dir
             .file_name()
