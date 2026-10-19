@@ -3,10 +3,13 @@
 schema = 1
 id = "pinduoduo"
 name = { zh-Hans = "拼多多", en = "Pinduoduo" }
-tier = "brand"
+# 2026-10-19（owner 定，#claimed-tier）：从 brand 挪到 claimed——注册表仍认领（随包图标、http / 没写协议的链接按 https 出卡片、仿冒提醒、
+# 打开规则照旧），但发送端像普通链接一样抓页面（标题、描述、图片或站点图标）；页面没给标题（风控页、JS 页）时退回品牌壳。
+# 2026-10-19 本机实测（WhatsApp/2 UA）：首页有标题和描述；商品页只有通用的「拼多多商城」。
+tier = "claimed"
 category = "commerce"
 # 商品分享落在 mobile.yangkeduo.com；p.pinduoduo.com 是推广短链（302，过期的回到首页）。官网没有声明 apple-touch-icon，不配图标。
-domains = ["*.yangkeduo.com", "*.pinduoduo.com"]
+domains = ["pinduoduo.com", "yangkeduo.com", "*.yangkeduo.com", "*.pinduoduo.com"]
 short_domains = ["p.pinduoduo.com"]
 strip_params = ["page_from", "pxq_secret_key", "share_uin", "refer_share_id", "refer_share_uid", "refer_share_uin", "refer_share_channel", "refer_share_form", "_wv", "_wvx", "_x_*", "refer_*", "_pdd_*"]
 evidence = "ecosystem-2026-09-23/G2-commerce-local-pay-logistics.md「拼多多」（只有站点级 OG，B→C）；2026-09-27 首批复核（#1419 PR）"
